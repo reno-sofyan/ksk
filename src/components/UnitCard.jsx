@@ -4,6 +4,8 @@ import { Card } from '@/components/ui/card';
 import { Check } from 'lucide-react';
 import AnimatedBadge from '@/components/AnimatedBadge.jsx';
 import GradientText from '@/components/GradientText.jsx';
+import ResponsiveImage from '@/components/ResponsiveImage.jsx';
+import { imageUrl } from '@/lib/assets.js';
 
 const UnitCard = ({ type, description, oldPrice, newPrice, features = [], image, index = 0 }) => {
   return (
@@ -32,10 +34,12 @@ const UnitCard = ({ type, description, oldPrice, newPrice, features = [], image,
         {/* Image Header */}
         <div className="relative h-52 overflow-hidden sm:h-64">
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
-          <img 
-            src={image || "https://images.unsplash.com/photo-1692966811604-f4465742001b"} 
+          <ResponsiveImage 
+            src={image || imageUrl('COZ-1-edit.jpg')} 
             alt={`Unit Type ${type}`}
             loading="lazy"
+            decoding="async"
+            sizes="(min-width: 1024px) 45vw, 100vw"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute right-3 top-3 z-20 sm:right-4 sm:top-4">

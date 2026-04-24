@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 
 const ImageCarousel = ({ images, interval = 5000 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
+    if (!images?.length || images.length <= 1) {
+      return undefined;
+    }
+
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, interval);
     return () => clearInterval(timer);
   }, [images.length, interval]);
+
+  if (!images?.length) {
+    return null;
+  }
 
   const goToSlide = (index) => setCurrentIndex(index);
   const goToPrevious = () => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
@@ -27,11 +36,14 @@ const ImageCarousel = ({ images, interval = 5000 }) => {
           transition={{ duration: 0.8, ease: "easeInOut" }}
           className="absolute inset-0"
         >
-          <img
+          <ResponsiveImage
             src={images[currentIndex]}
             alt={`Luxury Resort Imagery ${currentIndex + 1}`}
             className="w-full h-full object-cover"
             loading={currentIndex === 0 ? "eager" : "lazy"}
+            decoding={currentIndex === 0 ? "sync" : "async"}
+            fetchPriority={currentIndex === 0 ? 'high' : 'auto'}
+            sizes="100vw"
           />
           {/* Premium Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />

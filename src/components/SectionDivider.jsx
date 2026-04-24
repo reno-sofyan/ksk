@@ -1,9 +1,8 @@
 import React from 'react';
-import { cn } from '@/lib/utils.js';
 
 const SectionDivider = ({ className, type = 'wave' }) => {
   return (
-    <div className={cn("w-full overflow-hidden leading-none", className)}>
+    <div className={['w-full overflow-hidden leading-none', className].filter(Boolean).join(' ')}>
       {type === 'wave' && (
         <svg
           className="relative block w-[calc(100%+1.3px)] h-[50px] md:h-[100px]"

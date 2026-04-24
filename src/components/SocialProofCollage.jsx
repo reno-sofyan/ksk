@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -31,10 +32,12 @@ const SocialProofCollage = ({ images }) => {
             index === 0 ? 'aspect-[4/5] md:col-span-2 md:row-span-2 md:aspect-auto' : 'aspect-square'
           }`}
         >
-          <img
+          <ResponsiveImage
             src={item.url}
             alt={`Dokumentasi investor KSK Co Living Resort ${index + 1}`}
             loading="lazy"
+            decoding="async"
+            sizes={index === 0 ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 33vw, 50vw"}
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
           {/* Gradient overlay for depth */}

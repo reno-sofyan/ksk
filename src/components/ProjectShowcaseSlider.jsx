@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 
 const ProjectShowcaseSlider = ({ slides, interval = 4500 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -35,16 +36,23 @@ const ProjectShowcaseSlider = ({ slides, interval = 4500 }) => {
     <div className="overflow-hidden rounded-[1.5rem] border border-border/60 bg-card shadow-[0_20px_50px_rgba(15,23,42,0.12)] sm:rounded-[2rem] sm:shadow-[0_30px_80px_rgba(15,23,42,0.14)]">
       <div className="relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] md:aspect-[16/7]">
         <AnimatePresence initial={false} mode="wait">
-          <motion.img
+          <motion.div
             key={currentIndex}
-            src={activeSlide.image}
-            alt={activeSlide.title}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0"
             initial={{ opacity: 0, scale: 1.06 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.7, ease: 'easeInOut' }}
-          />
+          >
+            <ResponsiveImage
+              src={activeSlide.image}
+              alt={activeSlide.title}
+              className="h-full w-full object-cover"
+              sizes="(min-width: 1024px) 80vw, 100vw"
+              loading={currentIndex === 0 ? 'eager' : 'lazy'}
+              fetchPriority={currentIndex === 0 ? 'high' : 'auto'}
+            />
+          </motion.div>
         </AnimatePresence>
 
         <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/25 to-transparent" />

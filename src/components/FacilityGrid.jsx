@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import IconCircle from '@/components/IconCircle.jsx';
 import { cn } from '@/lib/utils.js';
+import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 
 const iconMap = {
   Mosque, Shirt, ParkingCircle, Coffee, UtensilsCrossed, ShoppingCart, 
@@ -41,6 +42,11 @@ const FacilityGrid = ({ facilities, columns = 4, showImages = false }) => {
     3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
     4: 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
   };
+  const imageSizes = {
+    2: '(min-width: 1024px) 50vw, 100vw',
+    3: '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw',
+    4: '(min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw',
+  };
 
   return (
     <motion.div 
@@ -66,10 +72,12 @@ const FacilityGrid = ({ facilities, columns = 4, showImages = false }) => {
             {showImages && facility.image && (
               <div className="relative mb-5 h-32 w-full overflow-hidden rounded-xl shadow-md sm:mb-6 sm:h-40">
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity duration-300" />
-                <img 
+                <ResponsiveImage 
                   src={facility.image} 
                   alt={facility.label}
                   loading="lazy"
+                  decoding="async"
+                  sizes={imageSizes[columns]}
                   className={cn(
                     "w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110",
                     facility.imageClassName

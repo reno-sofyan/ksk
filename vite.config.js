@@ -292,7 +292,7 @@ export default defineConfig({
 	plugins: [
 		...(isDev ? [inlineEditPlugin(), editModeDevPlugin(), selectionModePlugin(), iframeRouteRestorationPlugin(), pocketbaseAuthPlugin()] : []),
 		react(),
-		addTransformIndexHtml
+		...(isDev ? [addTransformIndexHtml] : [])
 	],
 	server: {
 		port: 3000,
@@ -306,6 +306,7 @@ export default defineConfig({
 		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json',],
 		alias: {
 			'@': path.resolve(__dirname, './src'),
+			'framer-motion': path.resolve(__dirname, './src/lib/light-motion.js'),
 		},
 	},
 	build: {

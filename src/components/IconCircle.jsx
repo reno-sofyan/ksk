@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { cn } from '@/lib/utils.js';
 
 const IconCircle = ({ icon: Icon, className, iconClassName, size = 'md' }) => {
   const sizes = {
@@ -16,12 +15,12 @@ const IconCircle = ({ icon: Icon, className, iconClassName, size = 'md' }) => {
   };
 
   return (
-    <div className={cn(
-      "flex items-center justify-center rounded-full bg-primary/10",
+    <div className={[
+      'flex items-center justify-center rounded-full bg-primary/10',
       sizes[size],
       className
-    )}>
-      <Icon className={cn("text-primary", iconSizes[size], iconClassName)} />
+    ].filter(Boolean).join(' ')}>
+      <Icon className={['text-primary', iconSizes[size], iconClassName].filter(Boolean).join(' ')} />
     </div>
   );
 };
