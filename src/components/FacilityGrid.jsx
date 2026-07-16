@@ -5,7 +5,9 @@ import {
   Church as Mosque, Shirt, ParkingCircle, Coffee, UtensilsCrossed, 
   ShoppingCart, ShoppingBasket as Basketball, Users, Leaf, Sofa, 
   Tv, Wind, Droplet, ChefHat, Refrigerator, Wifi, Wrench, 
-  ShoppingBag, Hotel as Hospital, Stethoscope, Dribbble, Circle 
+  ShoppingBag, Hotel as Hospital, Stethoscope, Dribbble, Circle,
+  Building2, Cctv, Dumbbell, KeyRound, MapPin, Proportions,
+  ShieldCheck, Waves
 } from 'lucide-react';
 import IconCircle from '@/components/IconCircle.jsx';
 import { cn } from '@/lib/utils.js';
@@ -15,7 +17,8 @@ const iconMap = {
   Mosque, Shirt, ParkingCircle, Coffee, UtensilsCrossed, ShoppingCart, 
   Basketball, Users, Leaf, Sofa, Tv, Wind, Droplet, ChefHat, 
   Refrigerator, Wifi, Wrench, ShoppingBag, Hospital, Stethoscope, 
-  Dribbble, Circle
+  Dribbble, Circle, Building2, Cctv, Dumbbell, KeyRound, MapPin,
+  Proportions, ShieldCheck, Waves
 };
 
 const bgColors = [

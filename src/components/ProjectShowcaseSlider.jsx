@@ -33,7 +33,7 @@ const ProjectShowcaseSlider = ({ slides, interval = 4500 }) => {
   };
 
   return (
-    <div className="overflow-hidden rounded-[1.5rem] border border-border/60 bg-card shadow-[0_20px_50px_rgba(15,23,42,0.12)] sm:rounded-[2rem] sm:shadow-[0_30px_80px_rgba(15,23,42,0.14)]">
+    <div className="overflow-hidden rounded-[1.5rem] border border-border/60 bg-card shadow-[0_20px_50px_rgba(7,39,29,0.12)] sm:rounded-[2rem] sm:shadow-[0_30px_80px_rgba(7,39,29,0.14)]">
       <div className="relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] md:aspect-[16/7]">
         <AnimatePresence initial={false} mode="wait">
           <motion.div

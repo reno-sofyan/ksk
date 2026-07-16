@@ -38,13 +38,13 @@ export default function RegisterPage() {
 
   if (done) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-100 via-sky-50 to-blue-100 px-4">
-        <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-xl">
-          <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-2xl">
+      <div className="flex min-h-screen items-center justify-center bg-secondary px-4">
+        <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 text-center shadow-xl shadow-primary/10">
+          <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-2xl">
             ✉️
           </div>
-          <h2 className="text-xl font-semibold text-slate-900">Cek email Anda</h2>
-          <p className="mt-2 text-sm text-slate-500">
+          <h2 className="text-xl font-semibold text-primary">Cek email Anda</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
             Tautan verifikasi dikirim ke <strong>{form.email}</strong>. Klik tautan di
             email untuk mengaktifkan akun.
           </p>
@@ -61,10 +61,10 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-100 via-sky-50 to-blue-100 px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-xl">
-        <h1 className="mb-1 text-2xl font-semibold text-slate-900">Daftar</h1>
-        <p className="mb-6 text-sm text-slate-500">Buat akun KIKOST baru.</p>
+    <div className="flex min-h-screen items-center justify-center bg-secondary px-4">
+      <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-xl shadow-primary/10">
+        <h1 className="mb-1 text-2xl font-semibold text-primary">Daftar</h1>
+        <p className="mb-6 text-sm text-muted-foreground">Buat akun KIKOST baru.</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
@@ -128,9 +128,9 @@ export default function RegisterPage() {
           </Button>
         </form>
 
-        <p className="mt-5 text-center text-sm text-slate-500">
+        <p className="mt-5 text-center text-sm text-muted-foreground">
           Sudah punya akun?{" "}
-          <Link to="/login" className="font-medium text-sky-600 hover:text-sky-700">
+          <Link to="/login" className="font-medium text-primary hover:text-accent">
             Masuk
           </Link>
         </p>

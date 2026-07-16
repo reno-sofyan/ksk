@@ -34,7 +34,7 @@ const SocialProofCollage = ({ images }) => {
         >
           <ResponsiveImage
             src={item.url}
-            alt={`Dokumentasi investor KSK Co Living Resort ${index + 1}`}
+            alt={`Dokumentasi investor Rivere Kostaycation IPB ${index + 1}`}
             loading="lazy"
             decoding="async"
             sizes={index === 0 ? "(min-width: 768px) 66vw, 100vw" : "(min-width: 768px) 33vw, 50vw"}

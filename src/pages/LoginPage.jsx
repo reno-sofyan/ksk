@@ -36,10 +36,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-100 via-sky-50 to-blue-100 px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 shadow-xl">
-        <h1 className="mb-1 text-2xl font-semibold text-slate-900">Masuk</h1>
-        <p className="mb-6 text-sm text-slate-500">
+    <div className="flex min-h-screen items-center justify-center bg-secondary px-4">
+      <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-xl shadow-primary/10">
+        <h1 className="mb-1 text-2xl font-semibold text-primary">Masuk</h1>
+        <p className="mb-6 text-sm text-muted-foreground">
           Masuk ke akun KIKOST Anda.
         </p>
 
@@ -62,7 +62,7 @@ export default function LoginPage() {
               <Label htmlFor="password">Kata Sandi</Label>
               <Link
                 to="/forgot-password"
-                className="text-xs text-sky-600 hover:text-sky-700"
+                className="text-xs font-medium text-primary hover:text-accent"
               >
                 Lupa kata sandi?
               </Link>
@@ -87,9 +87,9 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <p className="mt-5 text-center text-sm text-slate-500">
+        <p className="mt-5 text-center text-sm text-muted-foreground">
           Belum punya akun?{" "}
-          <Link to="/register" className="font-medium text-sky-600 hover:text-sky-700">
+          <Link to="/register" className="font-medium text-primary hover:text-accent">
             Daftar
           </Link>
         </p>

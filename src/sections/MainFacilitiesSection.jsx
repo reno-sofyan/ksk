@@ -4,19 +4,14 @@ import { imageUrl } from '@/lib/assets.js';
 
 const mainFacilities = [
   {
-    icon: 'Mosque',
-    label: 'Mushala',
-    image: imageUrl('mushola.jpg')
+    icon: 'Waves',
+    label: 'Kolam Renang',
+    image: imageUrl('COZ-8-edit.jpg')
   },
   {
-    icon: 'Shirt',
-    label: 'Laundry',
-    image: imageUrl('interior 3.jpg')
-  },
-  {
-    icon: 'ParkingCircle',
-    label: 'Area Parkir Luas',
-    image: imageUrl('COZ-5.1-edit.jpg')
+    icon: 'Dumbbell',
+    label: 'Gym',
+    image: imageUrl('interior 1.jpg')
   },
   {
     icon: 'Coffee',
@@ -24,9 +19,14 @@ const mainFacilities = [
     image: imageUrl('interior 4.jpg')
   },
   {
-    icon: 'UtensilsCrossed',
-    label: 'Kantin',
-    image: imageUrl('interior 5.jpg')
+    icon: 'Building2',
+    label: 'Clubhouse',
+    image: imageUrl('COZ-6-edit.jpg')
+  },
+  {
+    icon: 'Users',
+    label: 'Ruang Komunal',
+    image: imageUrl('COZ-7-edit.jpg')
   },
   {
     icon: 'ShoppingCart',
@@ -34,54 +34,34 @@ const mainFacilities = [
     image: imageUrl('minimarket.jpg')
   },
   {
-    icon: 'Basketball',
-    label: 'Basket Court',
-    image: imageUrl('basket.jpg')
-  },
-  {
-    icon: 'Users',
-    label: 'Communal Area',
-    image: imageUrl('COZ-6-edit.jpg')
+    icon: 'Shirt',
+    label: 'Laundry',
+    image: imageUrl('interior 3.jpg')
   },
   {
     icon: 'Leaf',
-    label: 'Taman Hijau',
+    label: 'Area Hijau',
     image: imageUrl('COZ-7-edit.jpg')
   },
   {
-    icon: 'Sofa',
-    label: 'Full Furnished',
-    image: imageUrl('interior 4.jpg')
+    icon: 'ShieldCheck',
+    label: 'Keamanan 24 Jam',
+    image: imageUrl('pintu-ipb.jpg')
   },
   {
-    icon: 'Tv',
-    label: 'TV Tiap Kamar',
-    image: imageUrl('tv.jpg')
+    icon: 'Cctv',
+    label: 'CCTV',
+    image: imageUrl('COZ-2-edit.jpg')
   },
   {
-    icon: 'Wind',
-    label: 'AC',
-    image: imageUrl('interior 1.jpg')
+    icon: 'KeyRound',
+    label: 'Akses Gerbang Terintegrasi',
+    image: imageUrl('COZ-3-edit.jpg')
   },
   {
-    icon: 'Droplet',
-    label: 'Water Heater',
-    image: imageUrl('waterheater.jpg')
-  },
-  {
-    icon: 'ChefHat',
-    label: 'Dapur',
-    image: imageUrl('interior 1.jpg')
-  },
-  {
-    icon: 'Refrigerator',
-    label: 'Kulkas',
-    image: imageUrl('interior 2.jpg')
-  },
-  {
-    icon: 'Wifi',
-    label: 'Wifi',
-    image: imageUrl('interior 2.jpg')
+    icon: 'Proportions',
+    label: 'Smart Spatial Mezzanine',
+    image: imageUrl('denah2lt.jpg')
   }
 ];
 

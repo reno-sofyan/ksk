@@ -7,7 +7,10 @@ import GradientText from '@/components/GradientText.jsx';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import { imageUrl } from '@/lib/assets.js';
 
-const UnitCard = ({ type, description, oldPrice, newPrice, features = [], image, index = 0 }) => {
+const UnitCard = ({ type, description, oldPrice, newPrice, price, cashPrice, payment, features = [], image, index = 0 }) => {
+  const displayPrice = price || oldPrice;
+  const displayCashPrice = cashPrice || newPrice;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -36,17 +39,17 @@ const UnitCard = ({ type, description, oldPrice, newPrice, features = [], image,
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
           <ResponsiveImage 
             src={image || imageUrl('COZ-1-edit.jpg')} 
-            alt={`Unit Type ${type}`}
+            alt={`Unit ${type}`}
             loading="lazy"
             decoding="async"
             sizes="(min-width: 1024px) 45vw, 100vw"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute right-3 top-3 z-20 sm:right-4 sm:top-4">
-            <AnimatedBadge text="Special Offer" className="text-[10px] sm:text-xs" />
+            <AnimatedBadge text="Skema Fleksibel" className="text-[10px] sm:text-xs" />
           </div>
           <div className="absolute bottom-4 left-4 z-20 sm:left-6">
-            <h3 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">{type}</h3>
+            <h3 className="text-2xl font-extrabold text-white sm:text-3xl">{type}</h3>
           </div>
         </div>
 
@@ -58,23 +61,28 @@ const UnitCard = ({ type, description, oldPrice, newPrice, features = [], image,
           
           <div className="mb-8 space-y-4 rounded-xl bg-secondary/50 p-5 sm:rounded-2xl sm:p-6">
             <div>
-              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                Harga Normal
+              <p className="text-sm font-semibold text-muted-foreground mb-1">
+                Harga Unit
               </p>
-              <p className="text-lg text-muted-foreground/60 line-through font-medium">
-                {oldPrice}
+              <p className="text-lg font-bold text-primary sm:text-xl">
+                {displayPrice}
               </p>
             </div>
             <div>
-              <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-1">
-                Harga Promo
+              <p className="text-sm font-semibold text-primary mb-1">
+                Cash Keras
               </p>
               <div className="flex items-baseline gap-2">
-                <GradientText className="text-4xl font-black tracking-tighter sm:text-5xl">
-                  {newPrice}
+                <GradientText className="text-4xl font-black sm:text-5xl">
+                  {displayCashPrice}
                 </GradientText>
               </div>
             </div>
+            {payment && (
+              <p className="rounded-lg bg-background/80 px-3 py-2 text-sm font-semibold text-primary">
+                {payment}
+              </p>
+            )}
           </div>
 
           {/* Features List */}

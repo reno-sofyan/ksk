@@ -28,21 +28,21 @@ export default function VerifyEmailPage() {
   }, [token]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-100 via-sky-50 to-blue-100 px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-xl">
+    <div className="flex min-h-screen items-center justify-center bg-secondary px-4">
+      <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 text-center shadow-xl shadow-primary/10">
         {status === "loading" && (
           <>
             <div className="mb-4 text-3xl">⏳</div>
-            <h2 className="text-xl font-semibold text-slate-900">Memverifikasi...</h2>
-            <p className="mt-2 text-sm text-slate-500">Mohon tunggu sebentar.</p>
+            <h2 className="text-xl font-semibold text-primary">Memverifikasi...</h2>
+            <p className="mt-2 text-sm text-muted-foreground">Mohon tunggu sebentar.</p>
           </>
         )}
 
         {status === "success" && (
           <>
             <div className="mb-4 text-3xl">✅</div>
-            <h2 className="text-xl font-semibold text-slate-900">Email terverifikasi!</h2>
-            <p className="mt-2 text-sm text-slate-500">{message}</p>
+            <h2 className="text-xl font-semibold text-primary">Email terverifikasi!</h2>
+            <p className="mt-2 text-sm text-muted-foreground">{message}</p>
             <Button asChild className="mt-6 w-full">
               <Link to="/login">Masuk sekarang</Link>
             </Button>
@@ -52,8 +52,8 @@ export default function VerifyEmailPage() {
         {status === "error" && (
           <>
             <div className="mb-4 text-3xl">❌</div>
-            <h2 className="text-xl font-semibold text-slate-900">Verifikasi gagal</h2>
-            <p className="mt-2 text-sm text-slate-600">{message}</p>
+            <h2 className="text-xl font-semibold text-primary">Verifikasi gagal</h2>
+            <p className="mt-2 text-sm text-muted-foreground">{message}</p>
             <Button asChild variant="outline" className="mt-6 w-full">
               <Link to="/login">Kembali ke halaman masuk</Link>
             </Button>

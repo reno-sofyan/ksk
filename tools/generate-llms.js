@@ -2,6 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { BLOG_POSTS } from '../src/data/blogPosts.js';
 
 const CLEAN_CONTENT_REGEX = {
 	comments: /\/\*[\s\S]*?\*\/|\/\/.*$/gm,
@@ -103,7 +104,7 @@ function extractHelmetData(content, filePath, routes) {
 	const description = cleanText(descMatch?.[1]);
 
 	const fileName = path.basename(filePath, path.extname(filePath));
-	const url = routes.length && routes.has(fileName)
+	const url = routes.size && routes.has(fileName)
 		? routes.get(fileName)
 		: generateFallbackUrl(fileName);
 
@@ -165,6 +166,22 @@ function main() {
 	if (pages.length === 0) {
 		console.error('❌ No pages with Helmet components found!');
 		process.exit(1);
+	}
+
+	pages = pages
+		.filter(page => page.title !== 'Untitled Page')
+		.concat(BLOG_POSTS.map(post => ({
+			url: `/blog/${post.slug}/`,
+			title: post.seoTitle,
+			description: post.description
+		})));
+
+	if (!pages.some(page => page.url === '/')) {
+		pages.push({
+			url: '/',
+			title: 'Rivere Kostaycation IPB | Investasi Kost Premium',
+			description: 'Investasi properti premium berkonsep kost resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, dikelola profesional oleh Kyra Stay.'
+		});
 	}
 
 

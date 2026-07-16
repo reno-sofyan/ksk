@@ -30,9 +30,10 @@ function runNodeScript(args, env = {}) {
 rmSync(distDir, { recursive: true, force: true });
 
 try {
+	runNodeScript([path.join(projectRoot, 'tools', 'generate-sitemap.js')]);
 	runNodeScript([path.join(projectRoot, 'tools', 'generate-llms.js')]);
 } catch (error) {
-	console.warn('Skipping llms.txt generation:', error.message);
+	console.warn('Skipping SEO index generation:', error.message);
 }
 
 runNodeScript([path.join(projectRoot, 'tools', 'generate-responsive-images.js')]);
@@ -49,4 +50,15 @@ for (const target of buildTargets) {
 		],
 		{ VITE_CS_KEY: target.csKey }
 	);
+
+	if (target.outDir === 'dist') {
+		runNodeScript([
+			path.join(projectRoot, 'tools', 'generate-seo-pages.js'),
+			target.outDir
+		]);
+		runNodeScript([
+			path.join(projectRoot, 'tools', 'audit-seo.js'),
+			target.outDir
+		]);
+	}
 }

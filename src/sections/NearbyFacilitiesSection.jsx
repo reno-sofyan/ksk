@@ -4,20 +4,20 @@ import { imageUrl } from '@/lib/assets.js';
 
 const nearbyFacilities = [
   {
-    icon: 'UtensilsCrossed',
-    label: 'Mie Gacoan',
+    icon: 'Building2',
+    label: 'Gerbang Utama IPB',
     description: '2 Menit',
-    image: imageUrl('mie gacoan.webp')
+    image: imageUrl('pintu-ipb.jpg')
   },
   {
-    icon: 'Wrench',
-    label: 'Mr DIY',
-    description: '3 Menit',
-    image: imageUrl('minimarket.jpg')
+    icon: 'MapPin',
+    label: 'Ring 1 IPB',
+    description: 'Bebas Macet',
+    image: imageUrl('COZ-1-edit.jpg')
   },
   {
     icon: 'ShoppingBag',
-    label: 'Yogya Supermarket',
+    label: 'Area Komersial Dramaga',
     description: '5 Menit',
     image: imageUrl('yogya.jpg')
   },
@@ -29,10 +29,10 @@ const nearbyFacilities = [
     imageClassName: 'object-[center_18%] brightness-110 contrast-125 saturate-110'
   },
   {
-    icon: 'Dribbble',
-    label: 'Lap. Futsal',
+    icon: 'UtensilsCrossed',
+    label: 'Kuliner & Retail',
     description: 'Akses Mudah',
-    image: imageUrl('basket.jpg')
+    image: imageUrl('mie gacoan.webp')
   },
   {
     icon: 'Stethoscope',

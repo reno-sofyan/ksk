@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet';
 import { MapPin, Building2, Users, MessageCircle } from 'lucide-react';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import AnimatedBadge from '@/components/AnimatedBadge.jsx';
@@ -7,6 +8,7 @@ import GradientText from '@/components/GradientText.jsx';
 import SectionDivider from '@/components/SectionDivider.jsx';
 import IconCircle from '@/components/IconCircle.jsx';
 import { imageUrl } from '@/lib/assets.js';
+import BlogPreviewSection from '@/sections/BlogPreviewSection.jsx';
 
 const ImageCarousel = lazy(() => import('@/components/ImageCarousel.jsx'));
 const ProjectShowcaseSection = lazy(() => import('@/sections/ProjectShowcaseSection.jsx'));
@@ -23,6 +25,40 @@ const CS_PHONE_NUMBERS = {
 };
 
 const DEFAULT_CS_KEY = 'cs1';
+
+const HOME_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://kinaraland.com/#organization',
+      name: 'PT Kinara Land Indonesia',
+      url: 'https://kinaraland.com/',
+      brand: {
+        '@type': 'Brand',
+        name: 'Rivere Kostaycation IPB'
+      }
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://kinaraland.com/#website',
+      url: 'https://kinaraland.com/',
+      name: 'Rivere Kostaycation IPB',
+      inLanguage: 'id-ID',
+      publisher: { '@id': 'https://kinaraland.com/#organization' }
+    },
+    {
+      '@type': 'WebPage',
+      '@id': 'https://kinaraland.com/#webpage',
+      url: 'https://kinaraland.com/',
+      name: 'Rivere Kostaycation IPB | Investasi Kost Premium',
+      description: 'Investasi properti premium berkonsep kost resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, dikelola profesional oleh Kyra Stay.',
+      inLanguage: 'id-ID',
+      isPartOf: { '@id': 'https://kinaraland.com/#website' },
+      about: { '@id': 'https://kinaraland.com/#organization' }
+    }
+  ]
+};
 
 function normalizeWhatsAppPhone(phoneNumber) {
   const digits = phoneNumber.replace(/\D/g, '');
@@ -99,7 +135,7 @@ const HomePage = () => {
 
   const heroImages = heroImageFiles.map(imageUrl);
 
-  const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent('Halo, saya tertarik dengan KSK Co Living Resort')}`;
+  const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent('Halo, saya tertarik dengan Rivere Kostaycation IPB')}`;
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -136,18 +172,38 @@ const HomePage = () => {
     <div className="absolute inset-0">
       <ResponsiveImage
         src={heroImages[0]}
-        alt="Kinara Signature Kost hero"
+        alt="Rivere Kostaycation IPB hero"
         className="h-full w-full object-cover"
         loading="eager"
         decoding="sync"
         fetchPriority="high"
         sizes="100vw"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#041912]/95 via-[#082a1f]/60 to-[#082a1f]/25" />
     </div>
   );
   
   return <div className="min-h-screen bg-background selection:bg-accent/30 selection:text-primary">
+        <Helmet>
+          <title>Rivere Kostaycation IPB | Investasi Kost Premium</title>
+          <meta name="description" content="Investasi properti premium berkonsep kost resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, dikelola profesional oleh Kyra Stay." />
+          <meta name="robots" content="index, follow, max-image-preview:large" />
+          <link rel="canonical" href="https://kinaraland.com/" />
+          <meta property="og:type" content="website" />
+          <meta property="og:locale" content="id_ID" />
+          <meta property="og:site_name" content="Rivere Kostaycation IPB" />
+          <meta property="og:title" content="Rivere Kostaycation IPB | Investasi Kost Premium" />
+          <meta property="og:description" content="Investasi properti premium berkonsep kost resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, dikelola profesional oleh Kyra Stay." />
+          <meta property="og:url" content="https://kinaraland.com/" />
+          <meta property="og:image" content="https://kinaraland.com/images/COZ-1-edit.jpg" />
+          <meta property="og:image:alt" content="Rivere Kostaycation IPB, investasi kost resort premium dekat IPB" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="Rivere Kostaycation IPB | Investasi Kost Premium" />
+          <meta name="twitter:description" content="Investasi properti premium berkonsep kost resort di Ring 1 IPB dengan pengelolaan profesional." />
+          <meta name="twitter:image" content="https://kinaraland.com/images/COZ-1-edit.jpg" />
+          <meta name="twitter:image:alt" content="Rivere Kostaycation IPB, investasi kost resort premium dekat IPB" />
+          <script type="application/ld+json">{JSON.stringify(HOME_SCHEMA)}</script>
+        </Helmet>
         
         {/* HERO SECTION */}
         <section className="relative h-[100svh] min-h-[620px] overflow-hidden bg-primary sm:h-[100dvh] sm:min-h-[700px]">
@@ -172,8 +228,8 @@ const HomePage = () => {
               duration: 0.8,
               ease: "easeOut"
             }} className="mb-8">
-                <div className="mx-auto inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent backdrop-blur-md sm:px-5 sm:py-3 sm:text-sm">
-                  Kinara Signature Kost
+                <div className="mx-auto inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-accent backdrop-blur-md sm:px-5 sm:py-3 sm:text-sm">
+                  Rivere Kostaycation IPB
                 </div>
               </motion.div>
 
@@ -190,8 +246,8 @@ const HomePage = () => {
               delay: 0.2,
               ease: "easeOut"
             }}>
-                <h1 className="mb-6 text-4xl font-extrabold tracking-tight leading-[1.1] sm:text-5xl md:text-6xl lg:text-7xl">
-                  Investasi Untuk <GradientText className="drop-shadow-lg" from="from-white" to="to-accent">Mereka yang Teliti</GradientText>
+                <h1 className="mb-6 text-4xl font-extrabold leading-[1.1] sm:text-5xl md:text-6xl lg:text-7xl">
+                  Rivere <GradientText className="drop-shadow-lg" from="from-white" to="to-accent">Kostaycation IPB</GradientText>
                 </h1>
               </motion.div>
               
@@ -205,7 +261,7 @@ const HomePage = () => {
               duration: 0.8,
               delay: 0.4
             }} className="mb-6 text-lg font-medium text-white/90 sm:text-xl md:text-3xl">
-                Kami Memberikan Kenyamanan Penghuni Untuk Ketenangan Okupansi
+                Investasi properti premium berkonsep resort di Ring 1 IPB, hanya 2 menit dari gerbang utama dan bebas macet.
               </motion.p>
             </div>
           </div>
@@ -267,16 +323,16 @@ const HomePage = () => {
             }} className="group flex flex-col justify-between overflow-hidden rounded-[1.5rem] border border-accent/20 bg-primary p-6 text-primary-foreground shadow-2xl shadow-primary/20 hover-lift sm:rounded-[2rem] sm:p-8 lg:p-10">
                 <div>
                   <div className="relative mb-6 h-40 overflow-hidden rounded-[1.25rem] border border-white/10 shadow-2xl sm:mb-8 sm:h-52 sm:rounded-[1.5rem]">
-                    <ResponsiveImage src={imageUrl('pintu-ipb.jpg')} alt="Pintu depan IPB dekat Kinara Signature Kost" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" sizes="(min-width: 1024px) 33vw, 100vw" />
+                    <ResponsiveImage src={imageUrl('pintu-ipb.jpg')} alt="Pintu depan IPB dekat Rivere Kostaycation IPB" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" sizes="(min-width: 1024px) 33vw, 100vw" />
                     <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/35 to-transparent" />
                     <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-2 backdrop-blur-md sm:left-5 sm:top-5 sm:gap-3 sm:px-4">
                       <MapPin className="w-5 h-5 text-accent" />
-                      <span className="text-sm font-semibold text-white/90">Pintu Depan IPB</span>
+                      <span className="text-sm font-semibold text-white/90">Ring 1 IPB</span>
                     </div>
                   </div>
-                  <h3 className="mb-4 text-xl font-bold leading-tight text-accent sm:text-2xl">Lokasi Strategis Premium</h3>
+                  <h3 className="mb-4 text-xl font-bold leading-tight text-accent sm:text-2xl">Lokasi Ring 1 IPB</h3>
                   <p className="text-base leading-relaxed text-primary-foreground/80 sm:text-lg">
-                    Satu-satunya kawasan co-living resort mewah yang terletak tepat di pintu depan kampus IPB.
+                    Berada sangat dekat dari gerbang utama IPB, dirancang untuk menangkap captive market mahasiswa dengan akses praktis dan bebas macet.
                   </p>
                 </div>
               </motion.div>
@@ -297,15 +353,15 @@ const HomePage = () => {
             }} className="group flex flex-col justify-between overflow-hidden rounded-[1.5rem] border-2 border-accent bg-card p-6 shadow-lg hover-lift sm:rounded-[2rem] sm:p-8 lg:p-10">
                 <div>
                   <div className="relative mb-6 h-40 overflow-hidden rounded-[1.25rem] border border-border shadow-xl sm:mb-8 sm:h-52 sm:rounded-[1.5rem]">
-                    <ResponsiveImage src={imageUrl('COZ-8-edit.jpg')} alt="Suasana resort modern di Kinara Signature Kost" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" sizes="(min-width: 1024px) 33vw, 100vw" />
+                    <ResponsiveImage src={imageUrl('COZ-8-edit.jpg')} alt="Suasana resort modern di Rivere Kostaycation IPB" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" sizes="(min-width: 1024px) 33vw, 100vw" />
                     <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/15 to-transparent" />
                     <div className="absolute left-4 top-4 sm:left-5 sm:top-5">
                       <IconCircle icon={Building2} size="md" className="bg-white/90 shadow-lg backdrop-blur-sm" iconClassName="text-primary" />
                     </div>
                   </div>
-                  <h3 className="mb-4 text-xl font-bold leading-tight text-foreground sm:text-2xl">Konsep Resort Modern</h3>
+                  <h3 className="mb-4 text-xl font-bold leading-tight text-foreground sm:text-2xl">Hybrid Hospitality Ecosystem</h3>
                   <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                    Co-living resort dengan ekosistem full fasilitas paling lengkap untuk menunjang gaya hidup mahasiswa.
+                    Kost berkonsep resort dengan fasilitas terintegrasi untuk menjaga kenyamanan penghuni, okupansi, dan nilai aset jangka panjang.
                   </p>
                 </div>
               </motion.div>
@@ -333,9 +389,9 @@ const HomePage = () => {
                       <IconCircle icon={Users} size="md" className="bg-white/90 shadow-lg backdrop-blur-sm" iconClassName="text-primary" />
                     </div>
                   </div>
-                  <h3 className="mb-4 text-xl font-bold leading-tight text-foreground sm:text-2xl">Pengelolaan Profesional</h3>
+                  <h3 className="mb-4 text-xl font-bold leading-tight text-foreground sm:text-2xl">Dikelola Kyra Stay</h3>
                   <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                    Dikelola secara transparan dan profesional oleh Kyra Stay. Anda tinggal duduk manis menerima hasil.
+                    Operasional, penghuni, dan risiko kekosongan ditangani pengelola agar investor tetap nyaman tanpa beban harian.
                   </p>
                 </div>
               </motion.div>
@@ -361,7 +417,7 @@ const HomePage = () => {
           }} transition={{
             duration: 0.6
           }} className="mb-8 text-3xl font-extrabold sm:text-4xl md:text-5xl">
-              Investasilah Pada Yang Memberikan <GradientText from="from-primary" to="to-accent">Okupansi Asli</GradientText>
+              Investasi Stabil, Terukur, dan <GradientText from="from-primary" to="to-accent">Tanpa Ribet</GradientText>
             </motion.h2>
             <motion.p initial={{
             opacity: 0,
@@ -375,9 +431,36 @@ const HomePage = () => {
             duration: 0.6,
             delay: 0.1
           }} className="text-base font-light leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
-              Angka okupansi bukanlah sekadar janji, melainkan hasil dari kenyamanan nyata yang dirasakan penghuni. 
-              Berinvestasi di Kinara Signature Kost berarti memiliki aset dengan daya tarik permanen bagi mahasiswa.
+              Rivere Kostaycation IPB menggabungkan pengembangan properti dan hospitality ecosystem profesional dengan legalitas SHM, captive market mahasiswa IPB, serta positioning sebagai aset wealth preservation yang stabil dan berkelanjutan.
             </motion.p>
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.6,
+            delay: 0.2
+          }} className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+                <p className="text-xs font-semibold text-primary/60">Passive Income</p>
+                <p className="mt-3 text-2xl font-black text-primary sm:text-3xl">Rp 126 Jt</p>
+                <p className="mt-1 text-sm text-muted-foreground">Potensi per tahun per unit</p>
+              </div>
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+                <p className="text-xs font-semibold text-primary/60">Yield</p>
+                <p className="mt-3 text-2xl font-black text-primary sm:text-3xl">6%-9%</p>
+                <p className="mt-1 text-sm text-muted-foreground">Dengan capital gain 5%-8%</p>
+              </div>
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+                <p className="text-xs font-semibold text-primary/60">Total ROI</p>
+                <p className="mt-3 text-2xl font-black text-primary sm:text-3xl">8%-14%</p>
+                <p className="mt-1 text-sm text-muted-foreground">Bagi hasil 80% untuk investor</p>
+              </div>
+            </motion.div>
           </div>
         </section>
 
@@ -397,10 +480,10 @@ const HomePage = () => {
           }} className="text-center mb-12 sm:mb-16">
               <AnimatedBadge text="Fasilitas Premium" className="mb-4" />
               <h2 className="mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">
-                Kawasan Eksklusif <GradientText from="from-primary" to="to-accent">6000 m²</GradientText>
+                Ekosistem Hospitality <GradientText from="from-primary" to="to-accent">Terintegrasi</GradientText>
               </h2>
               <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg md:text-xl">
-                Fasilitas untuk menunjang kenyamanan dan okupansi. Menciptakan ekosistem tempat tinggal yang memenuhi seluruh kebutuhan hidup mahasiswa.
+                Fasilitas lengkap untuk menjaga okupansi tinggi, meningkatkan pengalaman tinggal, dan membuat operasional investasi lebih terukur.
               </p>
             </motion.div>
 
@@ -428,8 +511,8 @@ const HomePage = () => {
           }} transition={{
             duration: 0.6
           }} className="text-center mb-12 sm:mb-16">
-              <h2 className="mb-6 text-3xl font-bold text-primary sm:text-4xl">Kemudahan Akses Sekitar</h2>
-              <p className="text-base text-muted-foreground sm:text-lg md:text-xl">Langkah kaki menuju berbagai titik strategis.</p>
+              <h2 className="mb-6 text-3xl font-bold text-primary sm:text-4xl">Lokasi Ring 1 IPB</h2>
+              <p className="text-base text-muted-foreground sm:text-lg md:text-xl">2 menit dari gerbang utama IPB dengan akses harian yang praktis dan bebas macet.</p>
             </motion.div>
 
             <DeferredRender
@@ -458,7 +541,7 @@ const HomePage = () => {
           }} className="text-center mb-12 sm:mb-16">
               <h2 className="mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">Pilihan <GradientText from="from-primary" to="to-accent">Tipe Unit</GradientText></h2>
               <p className="text-base text-muted-foreground sm:text-lg md:text-xl">
-                Rancang portofolio investasi Anda dengan dua pilihan bangunan yang efisien.
+                Dua pilihan unit dengan skema pembayaran 6 bulan atau 1 tahun.
               </p>
             </motion.div>
 
@@ -486,8 +569,8 @@ const HomePage = () => {
           }} transition={{
             duration: 0.6
           }} className="text-center mb-12 sm:mb-16">
-              <h2 className="mb-4 text-3xl font-bold text-primary sm:text-4xl">Denah Tata Ruang</h2>
-              <p className="text-base text-muted-foreground sm:text-lg md:text-xl">Efisien, luas, dan memperhatikan sirkulasi udara.</p>
+              <h2 className="mb-4 text-3xl font-bold text-primary sm:text-4xl">Smart Spatial Mezzanine</h2>
+              <p className="text-base text-muted-foreground sm:text-lg md:text-xl">Optimalisasi ruang untuk unit kost resort yang efisien, fungsional, dan bernilai sewa tinggi.</p>
             </motion.div>
 
             <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
@@ -504,14 +587,14 @@ const HomePage = () => {
             }} className="overflow-hidden rounded-[1.5rem] border border-border bg-card p-4 shadow-2xl sm:rounded-[2rem] md:p-6">
                 <div className="mb-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/60">Denah Unit</p>
-                    <h3 className="mt-2 text-xl font-bold text-primary sm:text-2xl">2 Lantai</h3>
+                    <p className="text-xs font-semibold text-primary/60">Denah Unit</p>
+                    <h3 className="mt-2 text-xl font-bold text-primary sm:text-2xl">Type 62/31</h3>
                   </div>
                   <div className="rounded-full bg-accent/10 px-3 py-2 text-xs font-semibold text-primary sm:px-4 sm:text-sm">
-                    Tipe 1
+                    4 Kamar
                   </div>
                 </div>
-                <ResponsiveImage src={imageUrl('denah2lt.jpg')} alt="Denah unit 2 lantai Kinara Signature Kost" className="w-full h-auto rounded-xl object-cover" loading="lazy" decoding="async" sizes="(min-width: 1024px) 50vw, 100vw" />
+                <ResponsiveImage src={imageUrl('denah2lt.jpg')} alt="Denah Type 62/31 Rivere Kostaycation IPB" className="w-full h-auto rounded-xl object-cover" loading="lazy" decoding="async" sizes="(min-width: 1024px) 50vw, 100vw" />
               </motion.div>
 
               <motion.div initial={{
@@ -528,14 +611,14 @@ const HomePage = () => {
             }} className="overflow-hidden rounded-[1.5rem] border border-border bg-card p-4 shadow-2xl sm:rounded-[2rem] md:p-6">
                 <div className="mb-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/60">Denah Unit</p>
-                    <h3 className="mt-2 text-xl font-bold text-primary sm:text-2xl">3 Lantai</h3>
+                    <p className="text-xs font-semibold text-primary/60">Denah Unit</p>
+                    <h3 className="mt-2 text-xl font-bold text-primary sm:text-2xl">Type 94/31</h3>
                   </div>
                   <div className="rounded-full bg-accent/10 px-3 py-2 text-xs font-semibold text-primary sm:px-4 sm:text-sm">
-                    Tipe 2
+                    Skema Fleksibel
                   </div>
                 </div>
-                <ResponsiveImage src={imageUrl('denah3lt.jpg')} alt="Denah unit 3 lantai Kinara Signature Kost" className="w-full h-auto rounded-xl object-cover" loading="lazy" decoding="async" sizes="(min-width: 1024px) 50vw, 100vw" />
+                <ResponsiveImage src={imageUrl('denah3lt.jpg')} alt="Denah Type 94/31 Rivere Kostaycation IPB" className="w-full h-auto rounded-xl object-cover" loading="lazy" decoding="async" sizes="(min-width: 1024px) 50vw, 100vw" />
               </motion.div>
             </div>
           </div>
@@ -561,7 +644,7 @@ const HomePage = () => {
                   Mari bergabung bersama puluhan investor bahagia lainnya
                 </h2>
                 <div className="mb-8 inline-flex max-w-full flex-col items-start rounded-[1.5rem] border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-md shadow-2xl shadow-black/10 sm:rounded-[1.75rem] sm:px-6 sm:py-5">
-                  <span className="mb-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-accent/90 sm:text-xs sm:tracking-[0.35em]">
+                  <span className="mb-3 text-[10px] font-semibold text-accent/90 sm:text-xs">
                     Undangan Eksklusif
                   </span>
                   <p className="text-left text-xl font-semibold leading-tight text-white sm:text-2xl md:text-3xl">
@@ -602,7 +685,7 @@ const HomePage = () => {
             once: true
           }} transition={{
             duration: 0.6
-          }} className="mb-8 text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+          }} className="mb-8 text-3xl font-bold text-white sm:text-4xl md:text-5xl lg:text-6xl">
               Klik Untuk Survey & Buktikan Sendiri
             </motion.h2>
             <motion.div initial={{
@@ -618,19 +701,19 @@ const HomePage = () => {
             delay: 0.1
           }} className="mb-12 max-w-2xl mx-auto">
               <p className="text-base text-white/85 sm:text-lg md:text-xl">
-                Kami Akan Berikan Harga Khusus, Untuk Booking Bulan Ini
+                Konsultasikan tipe unit, cash keras, dan skema pembayaran terbaik untuk portofolio Anda.
               </p>
               <motion.p animate={{
               scale: [1, 1.04, 1],
               y: [0, -2, 0],
               opacity: [0.75, 1, 0.75],
-              textShadow: ['0 0 0 rgba(212, 175, 55, 0)', '0 0 18px rgba(212, 175, 55, 0.45)', '0 0 0 rgba(212, 175, 55, 0)']
+              textShadow: ['0 0 0 rgba(208, 173, 90, 0)', '0 0 18px rgba(208, 173, 90, 0.4)', '0 0 0 rgba(208, 173, 90, 0)']
             }} transition={{
               repeat: Infinity,
               duration: 2.4,
               ease: "easeInOut"
-            }} className="mt-5 text-lg font-semibold uppercase tracking-[0.18em] text-accent sm:text-xl sm:tracking-[0.22em] md:text-2xl md:tracking-[0.28em]">
-                Tersisa 6 Unit!
+            }} className="mt-5 text-lg font-semibold text-accent sm:text-xl md:text-2xl">
+                Skema 6 Bulan / 1 Tahun
               </motion.p>
             </motion.div>
             <motion.div initial={{
@@ -677,19 +760,22 @@ const HomePage = () => {
           }} className="relative">
               <span className="absolute -left-4 -top-8 text-6xl font-serif leading-none text-accent/20 sm:-left-8 sm:-top-12 sm:text-8xl">"</span>
               <blockquote className="text-2xl font-bold italic leading-tight text-primary/90 sm:text-3xl md:text-5xl">
-                Belajarlah Berenang Sebelum Anda Tenggelam
+                Dirancang sebagai aset wealth preservation yang stabil dan berkelanjutan
               </blockquote>
               <span className="absolute -bottom-8 -right-4 text-6xl font-serif leading-none text-accent/20 sm:-bottom-12 sm:-right-8 sm:text-8xl">"</span>
             </motion.div>
           </div>
         </section>
 
+        {/* BLOG SEO */}
+        <BlogPreviewSection />
+
         {/* FOOTER */}
-        <footer className="cv-auto bg-background pb-10 pt-16 sm:pt-20">
+        <footer className="cv-auto bg-primary pb-10 pt-16 text-primary-foreground sm:pt-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center text-center mb-12">
-              <h3 className="mb-4 text-xl font-bold text-primary sm:text-2xl">Masih Ada Pertanyaan?</h3>
-              <p className="mb-8 text-sm text-muted-foreground sm:text-base">Customer Service kami siap membantu Anda kapan saja.</p>
+              <h3 className="mb-4 text-xl font-bold text-white sm:text-2xl">Masih Ada Pertanyaan?</h3>
+              <p className="mb-8 text-sm text-white/70 sm:text-base">Customer Service kami siap membantu Anda kapan saja.</p>
               <motion.div animate={{
               scale: [1, 1.05, 1]
             }} transition={{
@@ -701,24 +787,24 @@ const HomePage = () => {
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-auto max-w-xs items-center justify-center gap-2 whitespace-normal rounded-full border border-accent/30 bg-primary px-6 py-4 text-center text-sm leading-snug text-accent shadow-sm transition-colors duration-300 hover:bg-primary/90 sm:max-w-md sm:px-8 sm:py-6 sm:text-base"
+                  className="inline-flex h-auto max-w-xs items-center justify-center gap-2 whitespace-normal rounded-full border border-accent bg-accent px-6 py-4 text-center text-sm font-semibold leading-snug text-primary shadow-sm transition-colors duration-300 hover:bg-white sm:max-w-md sm:px-8 sm:py-6 sm:text-base"
                 >
-                  <MessageCircle className="h-5 w-5 text-accent" />
+                  <MessageCircle className="h-5 w-5 text-primary" />
                   Klik ini untuk ngobrol dengan customer service
                 </a>
               </motion.div>
             </div>
             
-            <div className="border-t border-border pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+            <div className="flex flex-col items-center gap-6 border-t border-white/15 pt-10 text-center md:flex-row md:justify-between md:text-left">
               <div>
-                <p className="text-lg font-bold text-primary tracking-tight">Kinara Signature Kost</p>
-                <p className="text-sm text-muted-foreground">Investasi Properti Premium IPB</p>
+                <p className="text-lg font-bold text-white">Rivere Kostaycation IPB</p>
+                <p className="text-sm text-white/65">Investasi Properti Premium IPB</p>
               </div>
-              <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm text-muted-foreground">
+              <div className="flex flex-wrap justify-center gap-4 text-sm text-white/65 sm:gap-6">
+                <a href="/blog/" className="hover:text-accent transition-colors">Blog</a>
                 <a href="#" className="hover:text-accent transition-colors">Privacy Policy</a>
-                <a href="#" className="hover:text-accent transition-colors">Terms of Service</a>
               </div>
-              <p className="text-sm text-muted-foreground">© 2026 Kinara Signature Kost. All rights reserved.</p>
+              <p className="text-sm text-white/65">© 2026 Rivere Kostaycation IPB. All rights reserved.</p>
             </div>
           </div>
         </footer>
