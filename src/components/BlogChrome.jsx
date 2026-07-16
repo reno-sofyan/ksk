@@ -9,13 +9,14 @@ export const BlogHeader = () => (
     <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
       <Link to="/" className="min-w-0">
         <span className="block truncate text-base font-bold text-primary sm:text-lg">Rivere Kostaycation IPB</span>
-        <span className="hidden text-xs text-muted-foreground sm:block">Wawasan Investasi Properti</span>
+        <span className="hidden text-xs text-muted-foreground sm:block">Investasi Properti Premium</span>
       </Link>
       <nav aria-label="Navigasi utama" className="flex shrink-0 items-center gap-2 sm:gap-5">
         <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-primary">
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           <span className="hidden sm:inline">Beranda</span>
         </Link>
+        <Link to="/denah/" className="text-sm font-semibold text-primary transition-colors hover:text-accent">Denah</Link>
         <Link to="/blog/" className="text-sm font-semibold text-primary transition-colors hover:text-accent">Blog</Link>
         <a
           href={WHATSAPP_URL}
@@ -41,6 +42,7 @@ export const BlogFooter = () => (
       </div>
       <div className="flex flex-wrap justify-center gap-5 text-sm text-white/70 md:justify-end">
         <Link to="/" className="transition-colors hover:text-accent">Beranda</Link>
+        <Link to="/denah/" className="transition-colors hover:text-accent">Denah</Link>
         <Link to="/blog/" className="transition-colors hover:text-accent">Blog</Link>
         <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-accent">Konsultasi</a>
       </div>

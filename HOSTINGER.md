@@ -42,3 +42,29 @@ Kalau website kamu bukan di root domain, ubah `server-dir` pada workflow dari `/
 - `public/robots.txt` dan `public/sitemap.xml` masih mengarah ke `https://kinaraland.com/`. Ganti kalau domain final kamu berbeda.
 - Build khusus Hostinger ada di script `npm run build:hostinger`.
 - Untuk tes lokal hasil build Hostinger, jalankan `npm run build:hostinger` lalu upload isi folder `dist/`.
+
+## Visitor Analytics Global
+
+Dashboard admin memakai endpoint PHP di:
+
+- `/api/analytics.php`
+
+Setelah deploy, setiap pageview dari visitor akan dikirim ke endpoint tersebut dan disimpan server-side di:
+
+- `/public_html/.analytics-data/visitor-analytics.json`
+
+Folder `.analytics-data` sengaja di-exclude dari GitHub Actions FTP deploy supaya data visitor tidak terhapus saat deploy ulang. Endpoint akan otomatis membuat folder dan file JSON saat pageview pertama masuk.
+
+Checklist setelah deploy:
+
+1. Buka website dari browser biasa.
+2. Buka `https://domain-kamu.com/api/analytics.php`.
+3. Pastikan respons berupa JSON dan field `source` bernilai `server`.
+4. Login dashboard admin, lalu cek panel `Ringkasan Visitor Website`.
+5. Pastikan `Sumber data` berubah menjadi `Global dari server analytics`.
+
+Kalau dashboard masih menampilkan `Fallback lokal di browser admin`, biasanya penyebabnya:
+
+- Hosting tidak menjalankan PHP untuk file di `/api/analytics.php`.
+- Permission folder `public_html` tidak mengizinkan PHP membuat `.analytics-data`.
+- Website dideploy ke subfolder, tetapi `VITE_ANALYTICS_API_URL` belum disesuaikan.

@@ -1,41 +1,53 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { BookOpen, SearchCheck } from 'lucide-react';
 import BlogPostCard from '@/components/BlogPostCard.jsx';
 import { BlogFooter, BlogHeader } from '@/components/BlogChrome.jsx';
 import { AUTHOR_NAME, AUTHOR_URL, BLOG_POSTS, SITE_URL, getBlogPostUrl } from '@/data/blogPosts.js';
+import { mergePublishedBlogPosts, readPublishedBlogPosts } from '@/lib/adminBlogStore.js';
 
-const blogSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Blog',
-  name: 'Blog Rivere Kostaycation IPB',
-  description: 'Panduan investasi kost, properti dekat IPB, pengelolaan hospitality, yield, dan ROI untuk calon investor.',
-  url: `${SITE_URL}/blog/`,
-  '@id': `${SITE_URL}/blog/#blog`,
-  inLanguage: 'id-ID',
-  publisher: {
-    '@type': 'Organization',
-    name: 'PT Kinara Land Indonesia',
-    url: SITE_URL
-  },
-  blogPost: BLOG_POSTS.map((post) => ({
-    '@type': 'BlogPosting',
-    headline: post.title,
-    url: getBlogPostUrl(post),
-    datePublished: post.datePublished,
-    dateModified: post.dateModified,
-    description: post.description,
-    image: `${SITE_URL}${post.image}`,
-    author: {
+const getAbsoluteImageUrl = (image) => {
+  if (!image) return `${SITE_URL}/images/rivere/Design%201/1.png`;
+  if (/^(https?:|data:|blob:)/.test(image)) return image;
+  return `${SITE_URL}${image.startsWith('/') ? image : `/${image}`}`;
+};
+
+const createBlogSchema = (posts) => {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Blog Rivere Kostaycation IPB',
+    description: 'Panduan investasi kost, properti dekat IPB, pengelolaan hospitality, yield, dan ROI untuk calon investor.',
+    url: `${SITE_URL}/blog/`,
+    '@id': `${SITE_URL}/blog/#blog`,
+    inLanguage: 'id-ID',
+    publisher: {
       '@type': 'Organization',
-      name: AUTHOR_NAME,
-      url: AUTHOR_URL
-    }
-  }))
+      name: 'PT Kinara Land Indonesia',
+      url: SITE_URL
+    },
+    blogPost: posts.map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.title,
+      url: getBlogPostUrl(post),
+      datePublished: post.datePublished,
+      dateModified: post.dateModified,
+      description: post.description,
+      image: getAbsoluteImageUrl(post.image),
+      author: {
+        '@type': 'Organization',
+        name: AUTHOR_NAME,
+        url: AUTHOR_URL
+      }
+    }))
+  };
 };
 
 const BlogPage = () => {
-  const [featuredPost, ...otherPosts] = BLOG_POSTS;
+  const [publishedPosts] = useState(() => readPublishedBlogPosts());
+  const posts = useMemo(() => mergePublishedBlogPosts(BLOG_POSTS, publishedPosts), [publishedPosts]);
+  const blogSchema = useMemo(() => createBlogSchema(posts), [posts]);
+  const [featuredPost, ...otherPosts] = posts;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -50,12 +62,12 @@ const BlogPage = () => {
         <meta property="og:title" content="Blog Investasi Properti Dekat IPB | Rivere Kostaycation" />
         <meta property="og:description" content="Panduan investasi kost, analisis yield dan ROI, serta wawasan properti hospitality di kawasan IPB." />
         <meta property="og:url" content={`${SITE_URL}/blog/`} />
-        <meta property="og:image" content={`${SITE_URL}/images/COZ-8-edit.jpg`} />
+        <meta property="og:image" content={`${SITE_URL}/images/rivere/Design%201/1.png`} />
         <meta property="og:image:alt" content="Blog investasi properti Rivere Kostaycation IPB" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Blog Investasi Properti Dekat IPB | Rivere Kostaycation" />
         <meta name="twitter:description" content="Panduan investasi kost, analisis yield dan ROI, serta wawasan properti hospitality di kawasan IPB." />
-        <meta name="twitter:image" content={`${SITE_URL}/images/COZ-8-edit.jpg`} />
+        <meta name="twitter:image" content={`${SITE_URL}/images/rivere/Design%201/1.png`} />
         <meta name="twitter:image:alt" content="Blog investasi properti Rivere Kostaycation IPB" />
         <script type="application/ld+json">{JSON.stringify(blogSchema)}</script>
       </Helmet>

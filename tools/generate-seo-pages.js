@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { AUTHOR_NAME, AUTHOR_URL, BLOG_POSTS, SITE_URL, getBlogPostUrl } from '../src/data/blogPosts.js';
+import { DENAH_PAGE, DENAH_PLANS } from '../src/data/riverePlans.js';
 
 const outputDir = path.resolve(process.cwd(), process.argv[2] || 'dist');
 const sourceIndexPath = path.join(outputDir, 'index.html');
@@ -36,6 +37,7 @@ function renderHeader() {
         <a href="/" class="font-bold text-primary">Rivere Kostaycation IPB</a>
         <nav aria-label="Navigasi utama" class="flex items-center gap-5 text-sm font-semibold">
           <a href="/" class="text-muted-foreground">Beranda</a>
+          <a href="/denah/" class="text-primary">Denah</a>
           <a href="/blog/" class="text-primary">Blog</a>
         </nav>
       </div>
@@ -48,8 +50,46 @@ function renderFooter() {
       <div class="mx-auto flex max-w-7xl flex-col gap-3 px-4 sm:px-6 lg:px-8">
         <p class="font-bold">Rivere Kostaycation IPB</p>
         <p class="text-sm text-white/70">Investasi properti premium di Ring 1 IPB</p>
+        <p class="text-sm text-white/70"><a href="/denah/">Denah</a> · <a href="/blog/">Blog</a></p>
       </div>
     </footer>`;
+}
+
+function renderDenahPage() {
+  const cards = DENAH_PLANS.map((plan) => `
+      <article id="${escapeHtml(plan.id)}" class="grid overflow-hidden border border-primary/15 bg-card shadow-[0_24px_70px_rgba(7,39,29,0.09)] lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)]">
+        <a href="${escapeHtml(plan.image)}" class="block bg-white p-5" aria-label="Buka gambar penuh ${escapeHtml(plan.title)}">
+          <img src="${escapeHtml(plan.image)}" alt="${escapeHtml(plan.imageAlt)}" loading="lazy" class="h-full w-full object-contain" />
+        </a>
+        <div class="border-t border-primary/10 bg-secondary/45 p-6 lg:border-l lg:border-t-0 lg:p-8">
+          <p class="text-sm font-semibold uppercase tracking-normal text-accent">Denah Lantai 1 & Lantai 2-3</p>
+          <h2 class="mt-3 text-2xl font-bold leading-tight text-primary sm:text-3xl">${escapeHtml(plan.title)}</h2>
+          <p class="mt-2 text-lg font-semibold text-foreground/80">${escapeHtml(plan.subtitle)}</p>
+          <p class="mt-5 text-base leading-7 text-muted-foreground">${escapeHtml(plan.description)}</p>
+          <dl class="mt-7 grid gap-3 sm:grid-cols-2">
+            <div class="border border-primary/10 bg-white p-3"><dt class="text-xs font-semibold uppercase text-muted-foreground">Jumlah Kamar</dt><dd class="mt-1 font-bold text-primary">${escapeHtml(plan.rooms)}</dd></div>
+            <div class="border border-primary/10 bg-white p-3"><dt class="text-xs font-semibold uppercase text-muted-foreground">Jumlah Lantai</dt><dd class="mt-1 font-bold text-primary">${escapeHtml(plan.floors)}</dd></div>
+            <div class="border border-primary/10 bg-white p-3"><dt class="text-xs font-semibold uppercase text-muted-foreground">Luas Tanah</dt><dd class="mt-1 font-bold text-primary">${escapeHtml(plan.landArea)}</dd></div>
+            <div class="border border-primary/10 bg-white p-3"><dt class="text-xs font-semibold uppercase text-muted-foreground">Luas Bangunan</dt><dd class="mt-1 font-bold text-primary">${escapeHtml(plan.buildingArea)}</dd></div>
+          </dl>
+          <p class="mt-7 text-sm font-semibold uppercase tracking-normal text-primary">Fasilitas pada denah</p>
+          <div class="mt-3 flex flex-wrap gap-2">${plan.facilities.map((facility) => `<span class="border border-primary/10 bg-white px-3 py-2 text-xs font-semibold text-primary">${escapeHtml(facility)}</span>`).join('')}</div>
+        </div>
+      </article>`).join('');
+
+  return `${renderHeader()}
+    <main>
+      <section class="bg-primary py-16 text-white sm:py-20">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p class="font-semibold uppercase tracking-normal text-accent">Denah Unit Rivere Kostaycation IPB</p>
+          <h1 class="mt-4 max-w-4xl text-4xl font-bold leading-tight sm:text-5xl">Denah Type 62/31 dan Type 94/31</h1>
+          <p class="mt-6 max-w-3xl text-lg leading-8 text-white/75">Dua pilihan denah menampilkan komposisi lantai 1 dan lantai 2-3, jumlah kamar, luas lahan, luas bangunan, serta fasilitas pendukung.</p>
+        </div>
+      </section>
+      <section class="py-14 sm:py-20">
+        <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:px-8">${cards}</div>
+      </section>
+    </main>${renderFooter()}`;
 }
 
 function renderBlogIndex() {
@@ -211,6 +251,26 @@ function blogSchema() {
   };
 }
 
+function denahSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${SITE_URL}${DENAH_PAGE.path}#webpage`,
+    url: `${SITE_URL}${DENAH_PAGE.path}`,
+    name: DENAH_PAGE.title,
+    description: DENAH_PAGE.description,
+    inLanguage: 'id-ID',
+    isPartOf: { '@type': 'WebSite', name: 'Rivere Kostaycation IPB', url: SITE_URL },
+    publisher: { '@type': 'Organization', name: 'PT Kinara Land Indonesia', url: SITE_URL },
+    mainEntity: DENAH_PLANS.map((plan) => ({
+      '@type': 'ImageObject',
+      name: plan.title,
+      description: `${plan.subtitle}, ${plan.rooms}, ${plan.floors}. ${plan.description}`,
+      contentUrl: `${SITE_URL}${plan.image}`
+    }))
+  };
+}
+
 function applySeo(sourceHtml, { title, description, canonical, image, imageAlt, type, schema, article }, rootMarkup) {
   let html = sourceHtml
     .replace(/\s*<!-- SEO_DEFAULT_START -->[\s\S]*?<!-- SEO_DEFAULT_END -->/i, '')
@@ -267,11 +327,21 @@ function main() {
   const sourceHtml = fs.readFileSync(sourceIndexPath, 'utf8');
   const blogDescription = 'Panduan investasi kost dekat IPB, cara menghitung yield dan ROI properti, serta wawasan kost resort dari Rivere Kostaycation IPB.';
 
+  writePage('denah', applySeo(sourceHtml, {
+    title: DENAH_PAGE.title,
+    description: DENAH_PAGE.description,
+    canonical: `${SITE_URL}${DENAH_PAGE.path}`,
+    image: `${SITE_URL}${DENAH_PAGE.image}`,
+    imageAlt: DENAH_PAGE.imageAlt,
+    type: 'website',
+    schema: denahSchema()
+  }, renderDenahPage()));
+
   writePage('blog', applySeo(sourceHtml, {
     title: 'Blog Investasi Properti Dekat IPB | Rivere Kostaycation',
     description: blogDescription,
     canonical: `${SITE_URL}/blog/`,
-    image: `${SITE_URL}/images/COZ-8-edit.jpg`,
+    image: `${SITE_URL}/images/rivere/Design%201/1.png`,
     imageAlt: 'Blog investasi properti Rivere Kostaycation IPB',
     type: 'website',
     schema: blogSchema()
@@ -290,7 +360,7 @@ function main() {
     }, renderArticle(post)));
   }
 
-  console.log(`Generated ${BLOG_POSTS.length + 1} static SEO blog pages in ${outputDir}`);
+  console.log(`Generated ${BLOG_POSTS.length + 2} static SEO pages in ${outputDir}`);
 }
 
 main();

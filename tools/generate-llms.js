@@ -3,6 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import { BLOG_POSTS } from '../src/data/blogPosts.js';
+import { DENAH_PAGE } from '../src/data/riverePlans.js';
 
 const CLEAN_CONTENT_REGEX = {
 	comments: /\/\*[\s\S]*?\*\/|\/\/.*$/gm,
@@ -170,6 +171,11 @@ function main() {
 
 	pages = pages
 		.filter(page => page.title !== 'Untitled Page')
+		.concat({
+			url: DENAH_PAGE.path,
+			title: DENAH_PAGE.title,
+			description: DENAH_PAGE.description
+		})
 		.concat(BLOG_POSTS.map(post => ({
 			url: `/blog/${post.slug}/`,
 			title: post.seoTitle,
@@ -179,8 +185,8 @@ function main() {
 	if (!pages.some(page => page.url === '/')) {
 		pages.push({
 			url: '/',
-			title: 'Rivere Kostaycation IPB | Investasi Kost Premium',
-			description: 'Investasi properti premium berkonsep kost resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, dikelola profesional oleh Kyra Stay.'
+			title: 'Rivere Kostaycation IPB | Smart Property Investment Ring 1 IPB',
+			description: 'Rivere Kostaycation IPB adalah investasi properti premium berkonsep resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, legalitas SHM, dan dikelola profesional oleh Kyra Stay.'
 		});
 	}
 

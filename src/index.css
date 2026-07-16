@@ -4,11 +4,11 @@
 
 @layer base {
   :root {
-    --background: 150 23% 98%; /* #f8faf9 Green White */
+    --background: 150 29% 94%; /* #e8f2ed Light Sage */
     --foreground: 140 9% 14%; /* #202622 Charcoal */
     --primary: 160 56% 14%; /* #10382b Deep Green */
     --primary-foreground: 0 0% 100%;
-    --secondary: 150 18% 94%; /* #edf3f0 Soft Sage */
+    --secondary: 150 25% 88%; /* #d8e9e1 Sage */
     --secondary-foreground: 160 56% 14%;
     --accent: 42 56% 58%; /* #d0ad5a Gold */
     --accent-foreground: 160 56% 14%;

@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { BLOG_POSTS, SITE_URL, getBlogPostUrl } from '../src/data/blogPosts.js';
+import { DENAH_PAGE } from '../src/data/riverePlans.js';
 
 const errors = [];
 const outputDir = process.argv[2] ? path.resolve(process.cwd(), process.argv[2]) : null;
@@ -50,7 +51,7 @@ function auditSourceData() {
 
   for (const post of BLOG_POSTS) {
     const label = `Article ${post.slug}`;
-    const imagePath = path.join(process.cwd(), 'public', post.image.replace(/^\//, ''));
+    const imagePath = path.join(process.cwd(), 'public', decodeURIComponent(post.image).replace(/^\//, ''));
     const words = articleWordCount(post);
 
     check(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(post.slug), `${label}: slug must be lowercase and hyphenated`);
@@ -76,6 +77,7 @@ function auditSourceData() {
   const robots = fs.readFileSync(robotsPath, 'utf8');
 
   check(sitemap.includes(`<loc>${SITE_URL}/</loc>`), 'Sitemap: homepage URL is missing');
+  check(sitemap.includes(`<loc>${SITE_URL}${DENAH_PAGE.path}</loc>`), 'Sitemap: denah URL is missing');
   check(sitemap.includes(`<loc>${SITE_URL}/blog/</loc>`), 'Sitemap: blog URL is missing');
   check(robots.includes(`Sitemap: ${SITE_URL}/sitemap.xml`), 'robots.txt: sitemap declaration is missing');
 
@@ -88,9 +90,11 @@ function auditBuiltHtml() {
   if (!outputDir) return;
 
   const homePath = path.join(outputDir, 'index.html');
+  const denahPath = path.join(outputDir, 'denah', 'index.html');
   const blogPath = path.join(outputDir, 'blog', 'index.html');
 
   check(fs.existsSync(homePath), `Build: missing ${homePath}`);
+  check(fs.existsSync(denahPath), `Build: missing ${denahPath}`);
   check(fs.existsSync(blogPath), `Build: missing ${blogPath}`);
 
   if (fs.existsSync(homePath)) {
@@ -102,6 +106,15 @@ function auditBuiltHtml() {
     check(types.has('Organization'), 'Homepage schema: Organization is missing');
     check(types.has('WebSite'), 'Homepage schema: WebSite is missing');
     check(types.has('WebPage'), 'Homepage schema: WebPage is missing');
+  }
+
+  if (fs.existsSync(denahPath)) {
+    const denahHtml = fs.readFileSync(denahPath, 'utf8');
+    check(countMatches(denahHtml, /<link[^>]*rel="canonical"/gi) === 1, 'Denah page: expected exactly one canonical link');
+    check(countMatches(denahHtml, /<meta[^>]*name="description"/gi) === 1, 'Denah page: expected exactly one meta description');
+    check(countMatches(denahHtml, /<h1[\s>]/gi) === 1, 'Denah page: expected exactly one H1');
+    const types = new Set(extractJsonLd(denahHtml, 'Denah page').flatMap((schema) => [...flattenSchemaTypes(schema)]));
+    check(types.has('CollectionPage'), 'Denah page schema: CollectionPage is missing');
   }
 
   if (fs.existsSync(blogPath)) {

@@ -8,7 +8,12 @@ export function withBase(assetPath) {
 }
 
 export function imageUrl(fileName) {
-  return withBase(`images/${encodeURIComponent(fileName)}`);
+  const encodedPath = fileName
+    .split('/')
+    .map((segment) => encodeURIComponent(segment))
+    .join('/');
+
+  return withBase(`images/${encodedPath}`);
 }
 
 export function resolveLocalImageEntry(src) {

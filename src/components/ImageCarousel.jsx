@@ -3,7 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 
-const ImageCarousel = ({ images, interval = 5000 }) => {
+const ImageCarousel = ({
+  images,
+  interval = 5000,
+  altPrefix = 'Visual Rivere Kostaycation IPB',
+  imageClassName = 'h-full w-full object-cover',
+  overlayClassName = 'bg-gradient-to-t from-[#041912]/95 via-[#082a1f]/60 to-[#082a1f]/25',
+  sizes = '100vw'
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -38,15 +45,14 @@ const ImageCarousel = ({ images, interval = 5000 }) => {
         >
           <ResponsiveImage
             src={images[currentIndex]}
-            alt={`Luxury Resort Imagery ${currentIndex + 1}`}
-            className="w-full h-full object-cover"
+            alt={`${altPrefix} ${currentIndex + 1}`}
+            className={imageClassName}
             loading={currentIndex === 0 ? "eager" : "lazy"}
             decoding={currentIndex === 0 ? "sync" : "async"}
             fetchPriority={currentIndex === 0 ? 'high' : 'auto'}
-            sizes="100vw"
+            sizes={sizes}
           />
-          {/* Premium Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />
+          <div className={`absolute inset-0 ${overlayClassName}`} />
         </motion.div>
       </AnimatePresence>
 

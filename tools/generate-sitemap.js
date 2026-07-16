@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { BLOG_POSTS, SITE_URL, getBlogPostUrl } from '../src/data/blogPosts.js';
+import { DENAH_PAGE } from '../src/data/riverePlans.js';
 
 function renderUrl({ location, lastModified, changeFrequency, priority }) {
   return `  <url>
@@ -30,6 +31,12 @@ function main() {
       location: `${SITE_URL}/blog/`,
       lastModified: latestModified,
       changeFrequency: 'weekly',
+      priority: '0.8'
+    },
+    {
+      location: `${SITE_URL}${DENAH_PAGE.path}`,
+      lastModified: latestModified,
+      changeFrequency: 'monthly',
       priority: '0.8'
     },
     ...BLOG_POSTS.map((post) => ({

@@ -36,6 +36,28 @@ function toSlug(fileName) {
     .replace(/^-+|-+$/g, '');
 }
 
+function findImageFiles(dirPath, relativeDir = '') {
+  return readdirSync(dirPath, { withFileTypes: true })
+    .flatMap((entry) => {
+      if (entry.name === 'optimized') {
+        return [];
+      }
+
+      const relativePath = relativeDir ? path.join(relativeDir, entry.name) : entry.name;
+      const absolutePath = path.join(dirPath, entry.name);
+
+      if (entry.isDirectory()) {
+        return findImageFiles(absolutePath, relativePath);
+      }
+
+      if (!imageExtensions.has(path.extname(entry.name).toLowerCase())) {
+        return [];
+      }
+
+      return relativePath.replaceAll(path.sep, '/');
+    });
+}
+
 function getOutputFormat(extension, hasAlpha) {
   if (extension === '.png' && hasAlpha) {
     return 'png';
@@ -75,8 +97,7 @@ function main() {
   ensureDir(outputDir);
 
   const manifest = {};
-  const files = readdirSync(sourceDir)
-    .filter((fileName) => imageExtensions.has(path.extname(fileName).toLowerCase()))
+  const files = findImageFiles(sourceDir)
     .sort((left, right) => left.localeCompare(right));
 
   for (const fileName of files) {

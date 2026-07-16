@@ -63,7 +63,7 @@ export const BLOG_POSTS = [
         heading: '5. Ukur kualitas pengelola properti',
         paragraphs: [
           'Properti kost adalah bisnis operasional. Pemasaran kamar, seleksi penghuni, penagihan, kebersihan, penanganan keluhan, dan perawatan fasilitas akan memengaruhi pendapatan yang benar-benar diterima investor.',
-          'Pada skema pengelolaan profesional, pelajari pembagian hasil, komponen biaya, periode pelaporan, standar okupansi, serta penanganan kamar kosong. Rivere Kostaycation IPB menggunakan pembagian 80% untuk investor dan 20% untuk pengelola, dengan operasional dibebankan kepada penghuni dan risiko kekosongan ditangani pengelola sesuai ketentuan perjanjian.'
+          'Pada skema pengelolaan profesional, pelajari pembagian hasil, komponen biaya, periode pelaporan, standar okupansi, serta penanganan kamar kosong. Rivere Kostaycation IPB menggunakan skema bagi hasil terkelola, dengan operasional dibebankan kepada penghuni dan risiko kekosongan ditangani pengelola sesuai ketentuan perjanjian.'
         ]
       },
       {
@@ -99,8 +99,8 @@ export const BLOG_POSTS = [
     datePublished: '2026-07-12',
     dateModified: '2026-07-14',
     readTime: '8 menit baca',
-    image: '/images/denah2lt.jpg',
-    imageAlt: 'Denah unit kost sebagai bagian dari perhitungan investasi properti',
+    image: '/images/rivere/Design%201/2.png',
+    imageAlt: 'Visual unit Rivere Kostaycation IPB sebagai bagian dari perhitungan investasi properti',
     keywords: [
       'cara menghitung yield kost',
       'ROI investasi properti',
@@ -116,7 +116,7 @@ export const BLOG_POSTS = [
         heading: '1. Bedakan omzet dan pendapatan bersih',
         paragraphs: [
           'Omzet adalah seluruh pendapatan sewa sebelum biaya. Pendapatan bersih adalah jumlah yang tersisa setelah biaya pengelolaan, perawatan, pajak yang relevan, periode kosong, dan pengeluaran lain sesuai skema properti.',
-          'Jika sebuah unit menghasilkan omzet Rp126 juta per tahun, angka tersebut belum otomatis menjadi uang bersih investor. Periksa struktur bagi hasil dan biaya yang menjadi tanggung jawab masing-masing pihak. Dalam skema Rivere, pembagian hasil adalah 80% untuk investor dan 20% untuk pengelola sesuai ketentuan perjanjian.'
+          'Jika sebuah unit menghasilkan omzet Rp126 juta per tahun, angka tersebut belum otomatis menjadi uang bersih investor. Periksa struktur bagi hasil dan biaya yang menjadi tanggung jawab masing-masing pihak. Dalam skema Rivere, pembagian hasil antara investor dan pengelola mengikuti ketentuan perjanjian.'
         ]
       },
       {
@@ -190,7 +190,7 @@ export const BLOG_POSTS = [
     datePublished: '2026-07-10',
     dateModified: '2026-07-14',
     readTime: '6 menit baca',
-    image: '/images/COZ-8-edit.jpg',
+    image: '/images/rivere/Design%203/1.png',
     imageAlt: 'Visual kawasan kost resort Rivere Kostaycation IPB',
     keywords: [
       'kost resort dekat IPB',
@@ -228,13 +228,13 @@ export const BLOG_POSTS = [
         heading: '4. Peran Kyra Stay sebagai pengelola',
         paragraphs: [
           'Hospitality ecosystem memerlukan pengelola yang menyatukan pemasaran, layanan penghuni, kebersihan, keamanan, pemeliharaan, dan pelaporan. Kyra Stay menangani pengelolaan profesional Rivere agar investor tidak perlu menjalankan operasional kost sendiri.',
-          'Skema bagi hasil yang ditawarkan adalah 80% untuk investor dan 20% untuk pengelola. Biaya operasional dibebankan kepada penghuni dan risiko kekosongan ditangani pengelola berdasarkan syarat dalam perjanjian. Calon investor perlu membaca detail kontrak untuk memahami cakupan dan batas setiap ketentuan.'
+          'Rivere menawarkan skema bagi hasil terkelola antara investor dan pengelola. Biaya operasional dibebankan kepada penghuni dan risiko kekosongan ditangani pengelola berdasarkan syarat dalam perjanjian. Calon investor perlu membaca detail kontrak untuk memahami cakupan dan batas setiap ketentuan.'
         ]
       },
       {
         heading: '5. Pilihan unit dan positioning aset',
         paragraphs: [
-          'Rivere menawarkan Type 62/31 dengan empat kamar seharga Rp1 miliar atau Rp925 juta untuk cash keras. Type 94/31 ditawarkan seharga Rp1,6 miliar atau Rp1,45 miliar untuk cash keras, dengan pilihan skema pembayaran enam bulan atau satu tahun.',
+          'Rivere menawarkan Type 62/31 dengan empat kamar seharga Rp1 miliar atau Rp925 juta untuk cash keras. Type 94/31 dengan enam kamar ditawarkan seharga Rp1,6 miliar atau Rp1,45 miliar untuk cash keras, dengan pilihan skema pembayaran enam bulan atau satu tahun.',
           'Pilihan unit sebaiknya disesuaikan dengan modal, tujuan arus kas, horizon investasi, dan toleransi risiko. Legalitas SHM serta lokasi dekat captive market IPB memperkuat positioning sebagai aset wealth preservation, tetapi keputusan tetap perlu didasarkan pada pemeriksaan dokumen dan proyeksi finansial pribadi.'
         ]
       },
@@ -394,7 +394,7 @@ export const BLOG_POSTS = [
       {
         heading: '5. Memahami skema pengelolaan Rivere',
         paragraphs: [
-          'Rivere Kostaycation IPB dikelola oleh Kyra Stay dengan skema bagi hasil 80% untuk investor dan 20% untuk pengelola. Biaya operasional dibebankan kepada penghuni dan risiko kekosongan ditangani pengelola sesuai ketentuan perjanjian.',
+          'Rivere Kostaycation IPB dikelola oleh Kyra Stay dengan skema bagi hasil terkelola. Biaya operasional dibebankan kepada penghuni dan risiko kekosongan ditangani pengelola sesuai ketentuan perjanjian.',
           'Calon investor perlu membaca definisi pendapatan, jadwal pembagian, ruang lingkup operasional, dan batas tanggung jawab setiap pihak. Pemahaman kontrak akan membantu menyelaraskan ekspektasi sejak awal.'
         ],
         bullets: [
@@ -429,8 +429,8 @@ export const BLOG_POSTS = [
     datePublished: '2026-07-14',
     dateModified: '2026-07-14',
     readTime: '6 menit baca',
-    image: '/images/denah3lt.jpg',
-    imageAlt: 'Denah unit smart spatial mezzanine Rivere Kostaycation IPB',
+    image: '/images/rivere/Design%202/2.png',
+    imageAlt: 'Visual smart spatial design Rivere Kostaycation IPB',
     keywords: [
       'smart spatial mezzanine',
       'desain kamar kost mezzanine',

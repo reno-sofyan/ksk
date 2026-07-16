@@ -5,37 +5,37 @@ import { imageUrl } from '@/lib/assets.js';
 const socialProofImages = [
   {
     url: imageUrl('investor 1.jpeg'),
-    title: 'Penandatanganan Akad',
-    subtitle: 'Bersama Notaris'
+    title: 'Dokumentasi Proyek',
+    subtitle: 'Rivere Kostaycation'
   },
   {
     url: imageUrl('investor 2.jpeg'),
-    title: 'Serah Terima',
-    subtitle: 'Kunci Unit'
+    title: 'Kunjungan Lokasi',
+    subtitle: 'Ring 1 IPB'
   },
   {
     url: imageUrl('investor 3.jpeg'),
     title: 'Survei Lokasi',
-    subtitle: 'Calon Investor'
+    subtitle: 'Rivere Kostaycation'
   },
   {
     url: imageUrl('investor 4.jpeg'),
-    title: 'Progres Pembangunan',
-    subtitle: 'On Schedule'
+    title: 'Visual Pengembangan',
+    subtitle: 'PT Kinara Land Indonesia'
   },
   {
     url: imageUrl('investor 5.jpeg'),
-    title: 'Gathering Investor',
-    subtitle: 'Community Event'
+    title: 'Konsultasi Properti',
+    subtitle: 'Smart Property Investment'
   },
   {
     url: imageUrl('investor 6.jpeg'),
     title: 'Kunjungan Investor',
-    subtitle: 'Survey Langsung'
+    subtitle: 'Survey Lokasi'
   },
   {
     url: imageUrl('investor 7.jpeg'),
-    title: 'Momen Bahagia',
+    title: 'Ekosistem Bebas Repot',
     subtitle: 'Bersama Kyra Stay'
   }
 ];

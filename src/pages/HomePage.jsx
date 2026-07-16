@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { MapPin, Building2, Users, MessageCircle } from 'lucide-react';
+import { MapPin, Building2, Users, MessageCircle, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import AnimatedBadge from '@/components/AnimatedBadge.jsx';
 import GradientText from '@/components/GradientText.jsx';
@@ -9,13 +9,13 @@ import SectionDivider from '@/components/SectionDivider.jsx';
 import IconCircle from '@/components/IconCircle.jsx';
 import { imageUrl } from '@/lib/assets.js';
 import BlogPreviewSection from '@/sections/BlogPreviewSection.jsx';
+import { RIVERE_DESIGN_IMAGES } from '@/data/rivereImages.js';
 
 const ImageCarousel = lazy(() => import('@/components/ImageCarousel.jsx'));
 const ProjectShowcaseSection = lazy(() => import('@/sections/ProjectShowcaseSection.jsx'));
 const MainFacilitiesSection = lazy(() => import('@/sections/MainFacilitiesSection.jsx'));
 const NearbyFacilitiesSection = lazy(() => import('@/sections/NearbyFacilitiesSection.jsx'));
 const UnitCardsSection = lazy(() => import('@/sections/UnitCardsSection.jsx'));
-const SocialProofSection = lazy(() => import('@/sections/SocialProofSection.jsx'));
 
 const CS_PHONE_NUMBERS = {
   cs1: '082111124005',
@@ -25,6 +25,93 @@ const CS_PHONE_NUMBERS = {
 };
 
 const DEFAULT_CS_KEY = 'cs1';
+const KYRA_STAY_IMAGES = [
+  imageUrl('kyra-stay-1.jpg'),
+  imageUrl('kyra-stay-2.jpg'),
+  imageUrl('kyra-stay-3.jpg')
+];
+
+const INVESTMENT_HIGHLIGHTS = [
+  {
+    title: 'Lokasi Super Strategis',
+    text: 'Berada di Ring 1 IPB University, hanya 2 menit dari gerbang utama dan bebas macet.'
+  },
+  {
+    title: 'Kepemilikan SHM',
+    text: 'Sertifikat Hak Milik langsung atas nama Anda sebagai dasar kepemilikan aset.'
+  },
+  {
+    title: 'Dikelola Profesional',
+    text: 'Management Estate Profesional Kyra Stay menangani operasional agar investasi berjalan tanpa ribet.'
+  }
+];
+
+const BUILDING_SPECS = [
+  'Listrik 1.300 W per kamar dan utama',
+  'Pondasi cakar ayam',
+  'Dinding Hebel 10 cm',
+  'Rangka atap baja ringan',
+  'Kusen alumunium',
+  'Penutup atap Alderon',
+  'PDAM + toren 1000L',
+  'Pintu Baja Fortress / setara',
+  'Lantai granit tile 60x60',
+  'Plafon PVC',
+  'Sanitair TOTO / setara'
+];
+
+const RIVERE_PILLARS = [
+  {
+    title: 'Lokasi Ring 1 IPB',
+    text: 'Hanya 2 menit dari gerbang utama IPB dengan akses bebas macet.'
+  },
+  {
+    title: 'Legalitas SHM',
+    text: 'Sertifikat Hak Milik langsung atas nama investor.'
+  },
+  {
+    title: 'Kyra Stay Management',
+    text: 'Pengelolaan profesional untuk operasional investasi tanpa ribet.'
+  },
+  {
+    title: 'Integrated Resort Facilities',
+    text: 'Fasilitas terintegrasi untuk kenyamanan dan stabilitas okupansi.'
+  },
+  {
+    title: 'Smart Spatial Design',
+    text: 'Konsep mezzanine untuk optimalisasi ruang istirahat dan produktivitas.'
+  },
+  {
+    title: 'Financial Perspective',
+    text: 'Potensi passive income, yield, capital gain, dan ROI yang terukur.'
+  },
+  {
+    title: 'Developer Portfolio',
+    text: 'Didukung portofolio PT Kinara Land Indonesia di berbagai proyek properti.'
+  }
+];
+
+const PUBLIC_NAVIGATION_ANCHORS = [
+  { sectionId: 'hero', label: 'Overview', href: '/#hero' },
+  { sectionId: 'konsep', label: 'Konsep', href: '/#konsep' },
+  { sectionId: 'fasilitas', label: 'Fasilitas', href: '/#fasilitas' },
+  { sectionId: 'unit', label: 'Unit', href: '/#unit' },
+  { sectionId: 'denah', label: 'Denah', href: '/#denah' },
+  { sectionId: 'blog', label: 'Blog', href: '/#blog' },
+  { sectionId: 'konsultasi', label: 'Hubungi', href: '/#konsultasi' }
+];
+
+const DEVELOPER_PORTFOLIO = [
+  'Rabbani Bintaro Residence',
+  'Green Forest Cifor',
+  'Villa Rabbani Padjajaran',
+  'Rabbani Townhouse Cimanggu',
+  'Kikost Manunggal',
+  'Kikost Cifor',
+  'Kikost Classic IPB',
+  'Kikost Cozy IPB',
+  'Bogor City Kost Cimanggu'
+];
 
 const HOME_SCHEMA = {
   '@context': 'https://schema.org',
@@ -51,8 +138,8 @@ const HOME_SCHEMA = {
       '@type': 'WebPage',
       '@id': 'https://kinaraland.com/#webpage',
       url: 'https://kinaraland.com/',
-      name: 'Rivere Kostaycation IPB | Investasi Kost Premium',
-      description: 'Investasi properti premium berkonsep kost resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, dikelola profesional oleh Kyra Stay.',
+      name: 'Rivere Kostaycation IPB | Smart Property Investment Ring 1 IPB',
+      description: 'Rivere Kostaycation IPB adalah investasi properti premium berkonsep resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, legalitas SHM, dan dikelola profesional oleh Kyra Stay.',
       inLanguage: 'id-ID',
       isPartOf: { '@id': 'https://kinaraland.com/#website' },
       about: { '@id': 'https://kinaraland.com/#organization' }
@@ -121,19 +208,9 @@ const HomePage = () => {
   const currentPhoneNumber = CS_PHONE_NUMBERS[currentCsKey];
   const whatsappPhone = normalizeWhatsAppPhone(currentPhoneNumber);
   const [shouldEnhanceHero, setShouldEnhanceHero] = useState(false);
+  const [isAnchorOpen, setIsAnchorOpen] = useState(false);
   
-  const heroImageFiles = [
-    'COZ-1-edit.jpg',
-    'COZ-2-edit.jpg',
-    'COZ-3-edit.jpg',
-    'COZ-4-edit.jpg',
-    'COZ-5-edit.jpg',
-    'COZ-6-edit.jpg',
-    'COZ-7-edit.jpg',
-    'COZ-8-edit.jpg'
-  ];
-
-  const heroImages = heroImageFiles.map(imageUrl);
+  const heroImages = RIVERE_DESIGN_IMAGES.map(({ file }) => imageUrl(file));
 
   const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent('Halo, saya tertarik dengan Rivere Kostaycation IPB')}`;
 
@@ -185,28 +262,28 @@ const HomePage = () => {
   
   return <div className="min-h-screen bg-background selection:bg-accent/30 selection:text-primary">
         <Helmet>
-          <title>Rivere Kostaycation IPB | Investasi Kost Premium</title>
-          <meta name="description" content="Investasi properti premium berkonsep kost resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, dikelola profesional oleh Kyra Stay." />
+          <title>Rivere Kostaycation IPB | Smart Property Investment Ring 1 IPB</title>
+          <meta name="description" content="Rivere Kostaycation IPB adalah investasi properti premium berkonsep resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, legalitas SHM, dan dikelola profesional oleh Kyra Stay." />
           <meta name="robots" content="index, follow, max-image-preview:large" />
           <link rel="canonical" href="https://kinaraland.com/" />
           <meta property="og:type" content="website" />
           <meta property="og:locale" content="id_ID" />
           <meta property="og:site_name" content="Rivere Kostaycation IPB" />
-          <meta property="og:title" content="Rivere Kostaycation IPB | Investasi Kost Premium" />
-          <meta property="og:description" content="Investasi properti premium berkonsep kost resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, dikelola profesional oleh Kyra Stay." />
+          <meta property="og:title" content="Rivere Kostaycation IPB | Smart Property Investment Ring 1 IPB" />
+          <meta property="og:description" content="Investasi properti premium berkonsep resort di Ring 1 IPB, legalitas SHM, dan pengelolaan Kyra Stay." />
           <meta property="og:url" content="https://kinaraland.com/" />
-          <meta property="og:image" content="https://kinaraland.com/images/COZ-1-edit.jpg" />
+          <meta property="og:image" content="https://kinaraland.com/images/rivere/Design%201/1.png" />
           <meta property="og:image:alt" content="Rivere Kostaycation IPB, investasi kost resort premium dekat IPB" />
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="Rivere Kostaycation IPB | Investasi Kost Premium" />
-          <meta name="twitter:description" content="Investasi properti premium berkonsep kost resort di Ring 1 IPB dengan pengelolaan profesional." />
-          <meta name="twitter:image" content="https://kinaraland.com/images/COZ-1-edit.jpg" />
+          <meta name="twitter:title" content="Rivere Kostaycation IPB | Smart Property Investment Ring 1 IPB" />
+          <meta name="twitter:description" content="Investasi properti premium berkonsep resort di Ring 1 IPB dengan legalitas SHM dan pengelolaan profesional." />
+          <meta name="twitter:image" content="https://kinaraland.com/images/rivere/Design%201/1.png" />
           <meta name="twitter:image:alt" content="Rivere Kostaycation IPB, investasi kost resort premium dekat IPB" />
           <script type="application/ld+json">{JSON.stringify(HOME_SCHEMA)}</script>
         </Helmet>
         
         {/* HERO SECTION */}
-        <section className="relative h-[100svh] min-h-[620px] overflow-hidden bg-primary sm:h-[100dvh] sm:min-h-[700px]">
+        <section id="hero" className="relative h-[100svh] min-h-[620px] scroll-mt-24 overflow-hidden bg-primary sm:h-[100dvh] sm:min-h-[700px]">
           {shouldEnhanceHero ? (
             <Suspense fallback={heroBackground}>
               <motion.div className="absolute inset-0 h-[120%]">
@@ -261,7 +338,19 @@ const HomePage = () => {
               duration: 0.8,
               delay: 0.4
             }} className="mb-6 text-lg font-medium text-white/90 sm:text-xl md:text-3xl">
-                Investasi properti premium berkonsep resort di Ring 1 IPB, hanya 2 menit dari gerbang utama dan bebas macet.
+                Lebih dari investasi properti: kost berkonsep resort di Ring 1 IPB, hanya 2 menit dari gerbang utama dan bebas macet.
+              </motion.p>
+              <motion.p initial={{
+              opacity: 0,
+              y: 14
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} transition={{
+              duration: 0.8,
+              delay: 0.55
+            }} className="mx-auto max-w-2xl text-sm font-semibold uppercase tracking-normal text-accent sm:text-base">
+                The New Standard of Smart Property Investment
               </motion.p>
             </div>
           </div>
@@ -274,7 +363,55 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="relative z-30 -mt-10 bg-background pb-8 pt-2 sm:-mt-16 sm:pb-10 sm:pt-6 md:-mt-20">
+        <nav aria-label="Navigasi sales Rivere mobile" className="fixed left-3 right-3 top-3 z-50 rounded-2xl border border-primary/10 bg-white/95 px-3 py-2 shadow-[0_18px_45px_rgba(4,25,18,0.14)] backdrop-blur-md lg:hidden">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+            {PUBLIC_NAVIGATION_ANCHORS.map((anchor) => (
+              <a
+                key={anchor.sectionId}
+                href={anchor.href}
+                className={`relative py-1.5 text-[11px] font-semibold transition-colors after:absolute after:bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform hover:after:scale-x-100 focus-visible:outline-none ${anchor.sectionId === 'konsultasi' ? 'text-primary' : 'text-primary/72 hover:text-primary'}`}
+              >
+                {anchor.label}
+              </a>
+            ))}
+          </div>
+        </nav>
+
+        <nav aria-label="Navigasi sales Rivere desktop" className="fixed right-0 top-1/2 z-50 hidden -translate-y-1/2 lg:block">
+          <div className={`flex items-stretch transition-transform duration-300 ease-out ${isAnchorOpen ? 'translate-x-0' : 'translate-x-[10rem]'}`}>
+            <button
+              type="button"
+              className="flex w-11 flex-col items-center justify-center gap-2 rounded-l-2xl border-y border-l border-accent/60 bg-accent py-4 text-primary shadow-[0_18px_45px_rgba(208,173,90,0.28)] backdrop-blur-md transition-colors hover:bg-primary hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              onClick={() => setIsAnchorOpen((current) => !current)}
+              aria-expanded={isAnchorOpen}
+              aria-controls="desktop-anchor-panel"
+            >
+              {isAnchorOpen ? (
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+              )}
+              <span className="rotate-180 text-[11px] font-bold uppercase tracking-normal [writing-mode:vertical-rl]">
+                Navigasi
+              </span>
+            </button>
+            <div id="desktop-anchor-panel" className="max-h-[calc(100vh-6rem)] w-40 overflow-y-auto rounded-l-2xl border border-accent/35 bg-white/95 px-4 py-3 shadow-[0_24px_70px_rgba(208,173,90,0.18)] backdrop-blur-md">
+              <div className="grid gap-1.5">
+                {PUBLIC_NAVIGATION_ANCHORS.map((anchor) => (
+                  <a
+                    key={anchor.sectionId}
+                    href={anchor.href}
+                    className={`relative py-1.5 text-xs font-semibold transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform hover:after:scale-x-100 focus-visible:outline-none ${anchor.sectionId === 'konsultasi' ? 'text-primary' : 'text-primary/72 hover:text-primary'}`}
+                  >
+                    {anchor.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <section id="galeri" className="relative z-30 -mt-10 scroll-mt-28 bg-background pb-8 pt-2 sm:-mt-16 sm:pb-10 sm:pt-6 md:-mt-20">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div initial={{
             opacity: 0,
@@ -289,8 +426,11 @@ const HomePage = () => {
             }} className="text-center mb-8 sm:mb-10">
               <AnimatedBadge text="Galeri Proyek" className="mb-4" />
               <h2 className="mb-4 text-3xl font-bold text-primary sm:text-4xl md:text-5xl">
-                Kenali <GradientText from="from-primary" to="to-accent">Suasana Proyek</GradientText> Lebih Dekat
+                Lebih dari <GradientText from="from-primary" to="to-accent">Investasi Properti</GradientText>
               </h2>
+              <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg">
+                Visual desain Rivere Kostaycation sebagai standar baru investasi properti cerdas dekat IPB.
+              </p>
             </motion.div>
 
             <DeferredRender
@@ -304,9 +444,9 @@ const HomePage = () => {
         </section>
 
         {/* REDESIGNED SECTION DECK */}
-        <section className="cv-auto relative z-30 bg-background py-16 sm:py-20 lg:py-24">
+        <section id="konsep" className="cv-auto relative z-30 scroll-mt-28 bg-background py-16 sm:py-20 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
+            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
               
               {/* Card 1: Gradient Premium */}
               <motion.div initial={{
@@ -330,9 +470,9 @@ const HomePage = () => {
                       <span className="text-sm font-semibold text-white/90">Ring 1 IPB</span>
                     </div>
                   </div>
-                  <h3 className="mb-4 text-xl font-bold leading-tight text-accent sm:text-2xl">Lokasi Ring 1 IPB</h3>
+                  <h3 className="mb-4 text-xl font-bold leading-tight text-accent sm:text-2xl">Lokasi Emas di Ring 1 IPB University</h3>
                   <p className="text-base leading-relaxed text-primary-foreground/80 sm:text-lg">
-                    Berada sangat dekat dari gerbang utama IPB, dirancang untuk menangkap captive market mahasiswa dengan akses praktis dan bebas macet.
+                    Satu-satunya kost berkonsep resort di depan gerbang utama IPB, dikelilingi captive market ribuan mahasiswa dalam kawasan Dramaga University Town.
                   </p>
                 </div>
               </motion.div>
@@ -353,49 +493,112 @@ const HomePage = () => {
             }} className="group flex flex-col justify-between overflow-hidden rounded-[1.5rem] border-2 border-accent bg-card p-6 shadow-lg hover-lift sm:rounded-[2rem] sm:p-8 lg:p-10">
                 <div>
                   <div className="relative mb-6 h-40 overflow-hidden rounded-[1.25rem] border border-border shadow-xl sm:mb-8 sm:h-52 sm:rounded-[1.5rem]">
-                    <ResponsiveImage src={imageUrl('COZ-8-edit.jpg')} alt="Suasana resort modern di Rivere Kostaycation IPB" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" sizes="(min-width: 1024px) 33vw, 100vw" />
+                    <ResponsiveImage src={imageUrl('rivere/Design 1/1.png')} alt="Fasad Rivere Kostaycation IPB Design 1" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" sizes="(min-width: 1024px) 33vw, 100vw" />
                     <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/15 to-transparent" />
                     <div className="absolute left-4 top-4 sm:left-5 sm:top-5">
                       <IconCircle icon={Building2} size="md" className="bg-white/90 shadow-lg backdrop-blur-sm" iconClassName="text-primary" />
                     </div>
                   </div>
-                  <h3 className="mb-4 text-xl font-bold leading-tight text-foreground sm:text-2xl">Hybrid Hospitality Ecosystem</h3>
+                  <h3 className="mb-4 text-xl font-bold leading-tight text-foreground sm:text-2xl">Hybrid Property Development & Hospitality Ecosystem</h3>
                   <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                    Kost berkonsep resort dengan fasilitas terintegrasi untuk menjaga kenyamanan penghuni, okupansi, dan nilai aset jangka panjang.
+                    Hunian kost produktif yang elegan, tertata, dan dikelola profesional untuk menciptakan investasi yang stabil, terukur, dan nyaman dijalani.
                   </p>
                 </div>
               </motion.div>
 
-              {/* Card 3: Soft Background */}
+            </div>
+          </div>
+        </section>
+
+        {/* KYRA STAY MANAGEMENT */}
+        <section id="kyra-stay" aria-labelledby="kyra-stay-title" className="cv-auto relative scroll-mt-28 overflow-hidden border-y border-white/10 bg-primary py-16 text-primary-foreground sm:py-20 lg:py-24">
+          <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(90deg,rgba(208,173,90,0.22)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:44px_44px]" aria-hidden="true"></div>
+          <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+            <motion.div initial={{
+            opacity: 0,
+            y: 24
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true,
+            margin: "-50px"
+          }} transition={{
+            duration: 0.6
+          }} className="mx-auto max-w-4xl text-center">
+              <div className="mb-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-normal text-accent">
+                <Users className="h-4 w-4" aria-hidden="true" />
+                Ekosistem Bebas Repot Bersama Kyra Stay
+              </div>
+              <h2 id="kyra-stay-title" className="text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+                Dikelola oleh Management Estate Profesional Kyra Stay
+              </h2>
+              <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-white/75 sm:text-lg">
+                Kyra Stay menangani pengelolaan Rivere Kostaycation IPB secara profesional, mulai dari operasional hunian, layanan penghuni, perawatan, hingga sistem pelaporan, sehingga investor memiliki aset produktif tanpa beban operasional harian.
+              </p>
+            </motion.div>
+
+            <div className="mt-10 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-8">
               <motion.div initial={{
               opacity: 0,
-              y: 30
+              x: -24
             }} whileInView={{
               opacity: 1,
-              y: 0
+              x: 0
             }} viewport={{
               once: true,
               margin: "-50px"
             }} transition={{
               duration: 0.6,
-              delay: 0.2
-            }} className="group relative flex flex-col justify-between overflow-hidden rounded-[1.5rem] border border-border bg-secondary p-6 shadow-md hover-lift sm:rounded-[2rem] sm:p-8 lg:p-10">
-                <div className="absolute right-0 top-0 -mr-6 -mt-6 h-28 w-28 rounded-full bg-accent/10 blur-3xl sm:-mr-8 sm:-mt-8 sm:h-40 sm:w-40"></div>
-                <div className="relative z-10">
-                  <div className="relative mb-6 h-40 overflow-hidden rounded-[1.25rem] border border-white/70 shadow-xl sm:mb-8 sm:h-52 sm:rounded-[1.5rem]">
-                    <ResponsiveImage src={imageUrl('tim-kyrastay.png')} alt="Tim Kyra Stay dan pengelolaan profesional" className="w-full h-full object-cover object-[center_12%] brightness-110 contrast-110 saturate-125 transition-transform duration-700 group-hover:scale-105" sizes="(min-width: 1024px) 33vw, 100vw" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/55 via-primary/10 to-transparent" />
-                    <div className="absolute left-4 top-4 sm:left-5 sm:top-5">
-                      <IconCircle icon={Users} size="md" className="bg-white/90 shadow-lg backdrop-blur-sm" iconClassName="text-primary" />
+              delay: 0.08
+            }} className="rounded-lg border border-white/10 bg-white/[0.055] p-5 backdrop-blur-md sm:p-6">
+                <div className="grid gap-3">
+                  {[
+                    ['Operasional terkelola', 'Kebutuhan operasional, pelayanan penghuni, dan perawatan ditangani oleh tim pengelola.'],
+                    ['Kamar kosong ditangani pengelola', 'Biaya perawatan dan pengelolaan saat kamar belum terisi ditanggung oleh pengelola sesuai skema proyek.'],
+                    ['Skema bagi hasil terkelola', 'Pembagian hasil dikelola secara profesional, dengan biaya operasional dibebankan kepada penghuni.']
+                  ].map(([title, text], index) => (
+                    <div key={title} className="group flex gap-4 border border-white/10 bg-primary/35 p-4 transition-colors duration-300 hover:border-accent/45 hover:bg-primary/55">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent/35 bg-accent/10 text-sm font-bold text-accent">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <div>
+                        <h3 className="font-semibold text-white">{title}</h3>
+                        <p className="mt-1 text-sm leading-6 text-white/65 sm:text-base">{text}</p>
+                      </div>
                     </div>
-                  </div>
-                  <h3 className="mb-4 text-xl font-bold leading-tight text-foreground sm:text-2xl">Dikelola Kyra Stay</h3>
-                  <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                    Operasional, penghuni, dan risiko kekosongan ditangani pengelola agar investor tetap nyaman tanpa beban harian.
-                  </p>
+                  ))}
                 </div>
               </motion.div>
-              
+
+              <motion.div initial={{
+              opacity: 0,
+              x: 24
+            }} whileInView={{
+              opacity: 1,
+              x: 0
+            }} viewport={{
+              once: true,
+              margin: "-50px"
+            }} transition={{
+              duration: 0.6,
+              delay: 0.12
+            }} className="relative">
+                <figure className="h-full overflow-hidden rounded-lg border border-white/15 bg-white/5 shadow-2xl shadow-black/25">
+                  <div className="relative h-full min-h-[360px] overflow-hidden bg-[#06261b] sm:min-h-[430px]">
+                    <Suspense fallback={<ResponsiveImage src={KYRA_STAY_IMAGES[0]} alt="Tim profesional Kyra Stay" className="h-full w-full object-cover" sizes="(min-width: 1024px) 54vw, 100vw" />}>
+                      <ImageCarousel
+                        images={KYRA_STAY_IMAGES}
+                        interval={4000}
+                        altPrefix="Tim profesional Kyra Stay"
+                        imageClassName="h-full w-full object-cover object-center brightness-[0.98] contrast-[1.04] saturate-[0.92]"
+                        overlayClassName="bg-gradient-to-t from-[#041912]/28 via-transparent to-transparent"
+                        sizes="(min-width: 1024px) 54vw, 100vw"
+                      />
+                    </Suspense>
+                  </div>
+                </figure>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -403,9 +606,9 @@ const HomePage = () => {
         <SectionDivider type="straight" />
 
         {/* VALUE STATEMENT */}
-        <section className="cv-auto relative overflow-hidden bg-background py-16 sm:py-20 lg:py-24">
+        <section id="investasi" className="cv-auto relative scroll-mt-28 overflow-hidden bg-background py-16 sm:py-20 lg:py-24">
           <div className="pointer-events-none absolute left-0 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-accent/5 blur-[90px] sm:h-96 sm:w-96 sm:blur-[100px]"></div>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <motion.h2 initial={{
             opacity: 0,
             y: 20
@@ -417,7 +620,7 @@ const HomePage = () => {
           }} transition={{
             duration: 0.6
           }} className="mb-8 text-3xl font-extrabold sm:text-4xl md:text-5xl">
-              Investasi Stabil, Terukur, dan <GradientText from="from-primary" to="to-accent">Tanpa Ribet</GradientText>
+              Investasi Properti Premium & <GradientText from="from-primary" to="to-accent">Tanpa Ribet</GradientText>
             </motion.h2>
             <motion.p initial={{
             opacity: 0,
@@ -443,8 +646,30 @@ const HomePage = () => {
             once: true
           }} transition={{
             duration: 0.6,
+            delay: 0.18
+          }} className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+              {INVESTMENT_HIGHLIGHTS.map((item) => (
+                <div key={item.title} className="rounded-lg border border-primary/15 bg-card p-5 text-left shadow-sm">
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary text-accent">
+                    <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <h3 className="text-lg font-bold text-primary">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-muted-foreground">{item.text}</p>
+                </div>
+              ))}
+            </motion.div>
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.6,
             delay: 0.2
-          }} className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          }} className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                 <p className="text-xs font-semibold text-primary/60">Passive Income</p>
                 <p className="mt-3 text-2xl font-black text-primary sm:text-3xl">Rp 126 Jt</p>
@@ -458,14 +683,14 @@ const HomePage = () => {
               <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                 <p className="text-xs font-semibold text-primary/60">Total ROI</p>
                 <p className="mt-3 text-2xl font-black text-primary sm:text-3xl">8%-14%</p>
-                <p className="mt-1 text-sm text-muted-foreground">Bagi hasil 80% untuk investor</p>
+                <p className="mt-1 text-sm text-muted-foreground">Dengan skema bagi hasil terkelola</p>
               </div>
             </motion.div>
           </div>
         </section>
 
         {/* FASILITAS UTAMA */}
-        <section className="cv-auto border-y border-border/50 bg-secondary/50 py-16 sm:py-20 lg:py-24">
+        <section id="fasilitas" className="cv-auto scroll-mt-28 border-y border-border/50 bg-secondary/50 py-16 sm:py-20 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div initial={{
             opacity: 0,
@@ -478,19 +703,19 @@ const HomePage = () => {
           }} transition={{
             duration: 0.6
           }} className="text-center mb-12 sm:mb-16">
-              <AnimatedBadge text="Fasilitas Premium" className="mb-4" />
+              <AnimatedBadge text="Concentric Circles of Comfort" className="mb-4" />
               <h2 className="mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">
-                Ekosistem Hospitality <GradientText from="from-primary" to="to-accent">Terintegrasi</GradientText>
+                Ekosistem Fasilitas <GradientText from="from-primary" to="to-accent">Terintegrasi</GradientText>
               </h2>
               <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg md:text-xl">
-                Fasilitas lengkap untuk menjaga okupansi tinggi, meningkatkan pengalaman tinggal, dan membuat operasional investasi lebih terukur.
+                Didesain secara spesifik untuk stabilitas okupansi dengan konsep Concentric Circles of Comfort.
               </p>
             </motion.div>
 
             <DeferredRender
-              fallback={<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">{Array.from({ length: 8 }).map((_, index) => <div key={index} className="h-48 rounded-2xl bg-slate-100" />)}</div>}
+              fallback={<div className="h-80 rounded-lg bg-white/60" />}
             >
-              <Suspense fallback={<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">{Array.from({ length: 8 }).map((_, index) => <div key={index} className="h-48 rounded-2xl bg-slate-100" />)}</div>}>
+              <Suspense fallback={<div className="h-80 rounded-lg bg-white/60" />}>
                 <MainFacilitiesSection />
               </Suspense>
             </DeferredRender>
@@ -498,7 +723,7 @@ const HomePage = () => {
         </section>
 
         {/* FASILITAS SEKITAR */}
-        <section className="cv-auto bg-background py-16 sm:py-20 lg:py-24">
+        <section id="lokasi" className="cv-auto scroll-mt-28 bg-background py-16 sm:py-20 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div initial={{
             opacity: 0,
@@ -511,14 +736,15 @@ const HomePage = () => {
           }} transition={{
             duration: 0.6
           }} className="text-center mb-12 sm:mb-16">
-              <h2 className="mb-6 text-3xl font-bold text-primary sm:text-4xl">Lokasi Ring 1 IPB</h2>
-              <p className="text-base text-muted-foreground sm:text-lg md:text-xl">2 menit dari gerbang utama IPB dengan akses harian yang praktis dan bebas macet.</p>
+              <AnimatedBadge text="Fasilitas Sekitar" className="mb-4" />
+              <h2 className="mb-6 text-3xl font-bold text-primary sm:text-4xl">Fasilitas Kawasan Sekitar Cluster</h2>
+              <p className="text-base text-muted-foreground sm:text-lg md:text-xl">Dikelilingi kebutuhan harian, layanan kesehatan, olahraga, kuliner, dan akses transportasi Dramaga.</p>
             </motion.div>
 
             <DeferredRender
-              fallback={<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-48 rounded-2xl bg-slate-100" />)}</div>}
+              fallback={<div className="grid gap-8 md:grid-cols-2">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-44 border-t border-primary/10 bg-white/30" />)}</div>}
             >
-              <Suspense fallback={<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }).map((_, index) => <div key={index} className="h-48 rounded-2xl bg-slate-100" />)}</div>}>
+              <Suspense fallback={<div className="grid gap-8 md:grid-cols-2">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-44 border-t border-primary/10 bg-white/30" />)}</div>}>
                 <NearbyFacilitiesSection />
               </Suspense>
             </DeferredRender>
@@ -526,7 +752,7 @@ const HomePage = () => {
         </section>
 
         {/* TIPE UNIT */}
-        <section className="cv-auto bg-secondary/50 py-16 sm:py-20 lg:py-24">
+        <section id="unit" className="cv-auto scroll-mt-28 bg-secondary/50 py-16 sm:py-20 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div initial={{
             opacity: 0,
@@ -545,22 +771,119 @@ const HomePage = () => {
               </p>
             </motion.div>
 
-            <DeferredRender
-              fallback={<div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10"><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /></div>}
-            >
-              <Suspense fallback={<div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10"><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /></div>}>
-                <UnitCardsSection />
-              </Suspense>
-            </DeferredRender>
+            <div id="denah" className="scroll-mt-28">
+              <DeferredRender
+                fallback={<div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10"><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /></div>}
+              >
+                <Suspense fallback={<div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10"><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /></div>}>
+                  <UnitCardsSection />
+                </Suspense>
+              </DeferredRender>
+            </div>
           </div>
         </section>
 
-        {/* DENAH KAMAR */}
-        <section className="cv-auto relative bg-background py-16 sm:py-20 lg:py-24">
+        {/* SMART SPATIAL DESIGN */}
+        <section id="smart-spatial" className="cv-auto relative scroll-mt-28 overflow-hidden bg-background py-16 sm:py-20 lg:py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
+              <motion.div initial={{
+              opacity: 0,
+              y: 24
+            }} whileInView={{
+              opacity: 1,
+              y: 0
+            }} viewport={{
+              once: true
+            }} transition={{
+              duration: 0.6
+            }}>
+                <AnimatedBadge text="Smart Spatial Design" className="mb-5" />
+                <h2 className="text-3xl font-bold leading-tight text-primary sm:text-4xl md:text-5xl">
+                  Smart Spatial Design: Optimalisasi Ruang Maksimal
+                </h2>
+                <p className="mt-6 text-base leading-8 text-muted-foreground sm:text-lg">
+                  Konsep mezzanine memisahkan area istirahat dan produktivitas dengan proporsi yang ergonomis. Setiap inci ruang dirancang untuk memberi kenyamanan resort dalam compact footprint.
+                </p>
+                <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                  {[
+                    ['Rest Area', 'Area istirahat terasa lebih privat dan tertata.'],
+                    ['Productive Zone', 'Ruang belajar dan aktivitas harian lebih fungsional.'],
+                    ['Compact Comfort', 'Kenyamanan resort dalam footprint yang efisien.']
+                  ].map(([title, text]) => (
+                    <div key={title} className="border-l-2 border-accent bg-white/70 px-4 py-4 shadow-sm">
+                      <p className="text-sm font-bold text-primary">{title}</p>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">{text}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.div initial={{
+              opacity: 0,
+              y: 24
+            }} whileInView={{
+              opacity: 1,
+              y: 0
+            }} viewport={{
+              once: true
+            }} transition={{
+              duration: 0.6,
+              delay: 0.1
+            }} className="relative">
+                <figure className="overflow-hidden rounded-lg border border-primary/15 bg-card shadow-[0_24px_70px_rgba(7,39,29,0.16)]">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-primary/10">
+                    <ResponsiveImage src={imageUrl('rivere/Design 3/2.png')} alt="Visual desain smart spatial Rivere Kostaycation IPB" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" decoding="async" sizes="(min-width: 1024px) 45vw, 100vw" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/10 to-transparent" />
+                    <div className="absolute bottom-5 left-5 right-5 border border-white/15 bg-primary/75 p-5 text-white backdrop-blur-md">
+                      <p className="text-xs font-semibold uppercase tracking-normal text-accent">Konsep Mezzanine</p>
+                      <p className="mt-2 text-xl font-bold leading-tight">Memisahkan area istirahat dan produktivitas secara elegan.</p>
+                    </div>
+                  </div>
+                </figure>
+              </motion.div>
+            </div>
+
             <motion.div initial={{
             opacity: 0,
-            y: 20
+            y: 24
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.6,
+            delay: 0.12
+          }} className="mx-auto mt-12 max-w-6xl border-t border-primary/15 pt-8">
+              <div className="mb-7 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-normal text-accent">Spesifikasi Bangunan</p>
+                  <h3 className="mt-2 text-2xl font-bold text-primary sm:text-3xl">Dibangun untuk aset produktif jangka panjang</h3>
+                </div>
+                <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
+                  Spesifikasi inti dipilih untuk mendukung kenyamanan penghuni, kemudahan perawatan, dan daya tahan aset hospitality.
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {BUILDING_SPECS.map((spec) => (
+                  <div key={spec} className="flex items-start gap-3 rounded-lg border border-primary/10 bg-white/80 p-3 shadow-sm">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                    <span className="text-sm font-medium leading-6 text-foreground/80">{spec}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* RIVERE ADVANTAGE */}
+        <section id="advantage" className="cv-auto relative scroll-mt-28 overflow-hidden bg-primary py-16 text-primary-foreground sm:py-20 lg:py-24">
+          <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(rgba(255,255,255,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.16)_1px,transparent_1px)] [background-size:42px_42px]"></div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <motion.div initial={{
+            opacity: 0,
+            y: 24
           }} whileInView={{
             opacity: 1,
             y: 0
@@ -568,67 +891,17 @@ const HomePage = () => {
             once: true
           }} transition={{
             duration: 0.6
-          }} className="text-center mb-12 sm:mb-16">
-              <h2 className="mb-4 text-3xl font-bold text-primary sm:text-4xl">Smart Spatial Mezzanine</h2>
-              <p className="text-base text-muted-foreground sm:text-lg md:text-xl">Optimalisasi ruang untuk unit kost resort yang efisien, fungsional, dan bernilai sewa tinggi.</p>
+          }} className="mx-auto max-w-4xl text-center">
+              <AnimatedBadge text="The 7 Pillars of Rivere Advantage" className="mb-5" />
+              <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
+                Tujuh Pilar Keamanan Finansial Rivere
+              </h2>
+              <p className="mx-auto mt-6 max-w-3xl text-base leading-8 text-white/75 sm:text-lg">
+                Rivere Kostaycation bukan sekadar properti, tetapi kendaraan wealth preservation yang dirancang dengan lokasi, legalitas, desain, fasilitas, pengelolaan, dan perspektif finansial yang terukur.
+              </p>
             </motion.div>
 
-            <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
-              <motion.div initial={{
-              opacity: 0,
-              scale: 0.95
-            }} whileInView={{
-              opacity: 1,
-              scale: 1
-            }} viewport={{
-              once: true
-            }} transition={{
-              duration: 0.8
-            }} className="overflow-hidden rounded-[1.5rem] border border-border bg-card p-4 shadow-2xl sm:rounded-[2rem] md:p-6">
-                <div className="mb-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-xs font-semibold text-primary/60">Denah Unit</p>
-                    <h3 className="mt-2 text-xl font-bold text-primary sm:text-2xl">Type 62/31</h3>
-                  </div>
-                  <div className="rounded-full bg-accent/10 px-3 py-2 text-xs font-semibold text-primary sm:px-4 sm:text-sm">
-                    4 Kamar
-                  </div>
-                </div>
-                <ResponsiveImage src={imageUrl('denah2lt.jpg')} alt="Denah Type 62/31 Rivere Kostaycation IPB" className="w-full h-auto rounded-xl object-cover" loading="lazy" decoding="async" sizes="(min-width: 1024px) 50vw, 100vw" />
-              </motion.div>
-
-              <motion.div initial={{
-              opacity: 0,
-              scale: 0.95
-            }} whileInView={{
-              opacity: 1,
-              scale: 1
-            }} viewport={{
-              once: true
-            }} transition={{
-              duration: 0.8,
-              delay: 0.1
-            }} className="overflow-hidden rounded-[1.5rem] border border-border bg-card p-4 shadow-2xl sm:rounded-[2rem] md:p-6">
-                <div className="mb-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-xs font-semibold text-primary/60">Denah Unit</p>
-                    <h3 className="mt-2 text-xl font-bold text-primary sm:text-2xl">Type 94/31</h3>
-                  </div>
-                  <div className="rounded-full bg-accent/10 px-3 py-2 text-xs font-semibold text-primary sm:px-4 sm:text-sm">
-                    Skema Fleksibel
-                  </div>
-                </div>
-                <ResponsiveImage src={imageUrl('denah3lt.jpg')} alt="Denah Type 94/31 Rivere Kostaycation IPB" className="w-full h-auto rounded-xl object-cover" loading="lazy" decoding="async" sizes="(min-width: 1024px) 50vw, 100vw" />
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* SOCIAL PROOF */}
-        <section className="cv-auto relative overflow-hidden bg-primary py-16 text-primary-foreground sm:py-20 lg:py-24">
-          <div className="absolute inset-0 opacity-10 [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.35)_1px,transparent_0)] [background-size:18px_18px]"></div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
+            <div className="mt-12 grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12 lg:gap-8">
               <motion.div initial={{
               opacity: 0,
               x: -30
@@ -639,40 +912,82 @@ const HomePage = () => {
               once: true
             }} transition={{
               duration: 0.6
-            }} className="lg:col-span-4">
-                <h2 className="mb-6 text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
-                  Mari bergabung bersama puluhan investor bahagia lainnya
-                </h2>
-                <div className="mb-8 inline-flex max-w-full flex-col items-start rounded-[1.5rem] border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-md shadow-2xl shadow-black/10 sm:rounded-[1.75rem] sm:px-6 sm:py-5">
-                  <span className="mb-3 text-[10px] font-semibold text-accent/90 sm:text-xs">
-                    Undangan Eksklusif
-                  </span>
-                  <p className="text-left text-xl font-semibold leading-tight text-white sm:text-2xl md:text-3xl">
-                    <span className="text-accent">Datang.</span>{' '}
-                    <span className="text-white">Buktikan.</span>
-                    <br />
-                    <GradientText className="drop-shadow-sm" from="from-white" to="to-accent">
-                      Bergabunglah Bersama Kami
-                    </GradientText>
-                  </p>
-                </div>
+            }} className="lg:col-span-5">
+                <figure className="h-full overflow-hidden rounded-lg border border-white/15 bg-white/5 shadow-2xl shadow-black/20">
+                  <div className="relative min-h-[420px] overflow-hidden">
+                    <ResponsiveImage src={imageUrl('rivere/Design 3/1.png')} alt="Visual pengembangan Rivere Kostaycation IPB oleh PT Kinara Land Indonesia" className="h-full min-h-[420px] w-full object-cover" loading="lazy" decoding="async" sizes="(min-width: 1024px) 40vw, 100vw" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/35 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+                      <p className="text-sm font-semibold uppercase tracking-normal text-accent">Data, Transparansi, dan Hasil Nyata</p>
+                      <p className="mt-3 text-2xl font-bold leading-tight text-white sm:text-3xl">
+                        Investasi yang dirancang untuk stabilitas jangka panjang.
+                      </p>
+                    </div>
+                  </div>
+                </figure>
               </motion.div>
               
-              <div className="lg:col-span-8">
-                <DeferredRender
-                  fallback={<div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6">{Array.from({ length: 6 }).map((_, index) => <div key={index} className="aspect-square rounded-2xl bg-white/10" />)}</div>}
-                >
-                  <Suspense fallback={<div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6">{Array.from({ length: 6 }).map((_, index) => <div key={index} className="aspect-square rounded-2xl bg-white/10" />)}</div>}>
-                    <SocialProofSection />
-                  </Suspense>
-                </DeferredRender>
-              </div>
+              <motion.div initial={{
+              opacity: 0,
+              y: 24
+            }} whileInView={{
+              opacity: 1,
+              y: 0
+            }} viewport={{
+              once: true
+            }} transition={{
+              duration: 0.6,
+              delay: 0.1
+            }} className="grid gap-3 lg:col-span-7 sm:grid-cols-2">
+                {RIVERE_PILLARS.map((pillar, index) => (
+                  <div key={pillar.title} className={`${index === 6 ? 'sm:col-span-2' : ''} rounded-lg border border-white/10 bg-white/[0.055] p-4 backdrop-blur-md transition-colors duration-300 hover:border-accent/45 hover:bg-white/[0.08]`}>
+                    <div className="mb-4 flex items-center gap-3">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/35 bg-accent/10 text-sm font-bold text-accent">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <h3 className="text-base font-bold leading-tight text-white">{pillar.title}</h3>
+                    </div>
+                    <p className="text-sm leading-6 text-white/68">{pillar.text}</p>
+                  </div>
+                ))}
+              </motion.div>
             </div>
+
+            <motion.div initial={{
+            opacity: 0,
+            y: 24
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.6,
+            delay: 0.14
+          }} className="mt-10 border-t border-white/10 pt-8">
+              <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-normal text-accent">Developer Track Record</p>
+                  <h3 className="mt-2 text-2xl font-bold text-white sm:text-3xl">Portofolio Developer PT Kinara Land Indonesia</h3>
+                </div>
+                <p className="max-w-xl text-sm leading-6 text-white/65">
+                  Portofolio pengembangan yang memperkuat kredibilitas Rivere sebagai aset properti premium.
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {DEVELOPER_PORTFOLIO.map((project) => (
+                  <div key={project} className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                    <span className="text-sm font-semibold leading-6 text-white/82">{project}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </section>
 
         {/* BOLD CTA */}
-        <section className="cv-auto relative overflow-hidden bg-primary py-20 sm:py-24 lg:py-32">
+        <section id="konsultasi" className="cv-auto relative scroll-mt-28 overflow-hidden bg-primary py-20 sm:py-24 lg:py-32">
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-accent via-transparent to-transparent mix-blend-overlay"></div>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <motion.h2 initial={{
@@ -686,7 +1001,7 @@ const HomePage = () => {
           }} transition={{
             duration: 0.6
           }} className="mb-8 text-3xl font-bold text-white sm:text-4xl md:text-5xl lg:text-6xl">
-              Klik Untuk Survey & Buktikan Sendiri
+              Hubungi Kami Sekarang untuk Konsultasi Investasi Properti Terbaik Anda
             </motion.h2>
             <motion.div initial={{
             opacity: 0,
@@ -698,23 +1013,11 @@ const HomePage = () => {
             once: true
           }} transition={{
             duration: 0.6,
-            delay: 0.1
+              delay: 0.1
           }} className="mb-12 max-w-2xl mx-auto">
               <p className="text-base text-white/85 sm:text-lg md:text-xl">
-                Konsultasikan tipe unit, cash keras, dan skema pembayaran terbaik untuk portofolio Anda.
+                Diskusikan pilihan Type 62/31, Type 94/31, skema pembayaran, dan potensi investasi Rivere Kostaycation IPB bersama tim kami.
               </p>
-              <motion.p animate={{
-              scale: [1, 1.04, 1],
-              y: [0, -2, 0],
-              opacity: [0.75, 1, 0.75],
-              textShadow: ['0 0 0 rgba(208, 173, 90, 0)', '0 0 18px rgba(208, 173, 90, 0.4)', '0 0 0 rgba(208, 173, 90, 0)']
-            }} transition={{
-              repeat: Infinity,
-              duration: 2.4,
-              ease: "easeInOut"
-            }} className="mt-5 text-lg font-semibold text-accent sm:text-xl md:text-2xl">
-                Skema 6 Bulan / 1 Tahun
-              </motion.p>
             </motion.div>
             <motion.div initial={{
             opacity: 0,
@@ -737,7 +1040,7 @@ const HomePage = () => {
                 className="inline-flex h-auto items-center justify-center gap-2 rounded-full border-2 border-accent bg-primary px-6 py-5 text-base font-medium text-accent shadow-2xl transition-colors duration-300 hover:bg-accent hover:text-primary sm:px-8 sm:py-6 sm:text-lg md:px-12 md:py-8 md:text-xl"
               >
                 <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-                Jadwalkan Survey Sekarang
+                Konsultasi via WhatsApp
               </a>
             </motion.div>
           </div>
@@ -760,7 +1063,7 @@ const HomePage = () => {
           }} className="relative">
               <span className="absolute -left-4 -top-8 text-6xl font-serif leading-none text-accent/20 sm:-left-8 sm:-top-12 sm:text-8xl">"</span>
               <blockquote className="text-2xl font-bold italic leading-tight text-primary/90 sm:text-3xl md:text-5xl">
-                Dirancang sebagai aset wealth preservation yang stabil dan berkelanjutan
+                Rivere Kostaycation - The New Standard of Smart Property Investment.
               </blockquote>
               <span className="absolute -bottom-8 -right-4 text-6xl font-serif leading-none text-accent/20 sm:-bottom-12 sm:-right-8 sm:text-8xl">"</span>
             </motion.div>
@@ -768,7 +1071,9 @@ const HomePage = () => {
         </section>
 
         {/* BLOG SEO */}
-        <BlogPreviewSection />
+        <div id="blog" className="scroll-mt-28">
+          <BlogPreviewSection />
+        </div>
 
         {/* FOOTER */}
         <footer className="cv-auto bg-primary pb-10 pt-16 text-primary-foreground sm:pt-20">
@@ -798,9 +1103,10 @@ const HomePage = () => {
             <div className="flex flex-col items-center gap-6 border-t border-white/15 pt-10 text-center md:flex-row md:justify-between md:text-left">
               <div>
                 <p className="text-lg font-bold text-white">Rivere Kostaycation IPB</p>
-                <p className="text-sm text-white/65">Investasi Properti Premium IPB</p>
+                <p className="text-sm text-white/65">The New Standard of Smart Property Investment</p>
               </div>
               <div className="flex flex-wrap justify-center gap-4 text-sm text-white/65 sm:gap-6">
+                <a href="/#denah" className="hover:text-accent transition-colors">Denah</a>
                 <a href="/blog/" className="hover:text-accent transition-colors">Blog</a>
                 <a href="#" className="hover:text-accent transition-colors">Privacy Policy</a>
               </div>

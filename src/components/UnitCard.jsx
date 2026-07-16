@@ -1,13 +1,25 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
-import { Check } from 'lucide-react';
+import { Check, CreditCard } from 'lucide-react';
 import AnimatedBadge from '@/components/AnimatedBadge.jsx';
-import GradientText from '@/components/GradientText.jsx';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import { imageUrl } from '@/lib/assets.js';
 
-const UnitCard = ({ type, description, oldPrice, newPrice, price, cashPrice, payment, features = [], image, index = 0 }) => {
+const UnitCard = ({
+  type,
+  description,
+  oldPrice,
+  newPrice,
+  price,
+  cashPrice,
+  payment,
+  features = [],
+  image,
+  floorPlanImage,
+  floorPlanAlt,
+  index = 0
+}) => {
   const displayPrice = price || oldPrice;
   const displayCashPrice = cashPrice || newPrice;
 
@@ -38,7 +50,7 @@ const UnitCard = ({ type, description, oldPrice, newPrice, price, cashPrice, pay
         <div className="relative h-52 overflow-hidden sm:h-64">
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
           <ResponsiveImage 
-            src={image || imageUrl('COZ-1-edit.jpg')} 
+            src={image || imageUrl('rivere/Design 1/1.png')} 
             alt={`Unit ${type}`}
             loading="lazy"
             decoding="async"
@@ -59,31 +71,59 @@ const UnitCard = ({ type, description, oldPrice, newPrice, price, cashPrice, pay
             {description}
           </p>
           
-          <div className="mb-8 space-y-4 rounded-xl bg-secondary/50 p-5 sm:rounded-2xl sm:p-6">
-            <div>
-              <p className="text-sm font-semibold text-muted-foreground mb-1">
-                Harga Unit
-              </p>
-              <p className="text-lg font-bold text-primary sm:text-xl">
-                {displayPrice}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-primary mb-1">
-                Cash Keras
-              </p>
-              <div className="flex items-baseline gap-2">
-                <GradientText className="text-4xl font-black sm:text-5xl">
+          <div className="mb-8 overflow-hidden rounded-2xl border border-primary/10 bg-white shadow-sm">
+            <div className="grid divide-y divide-primary/10 sm:grid-cols-[0.9fr_1.1fr] sm:divide-x sm:divide-y-0">
+              <div className="px-5 py-5 sm:px-6">
+                <p className="text-xs font-bold uppercase tracking-normal text-muted-foreground">
+                  Harga Unit
+                </p>
+                <p className="mt-2 text-2xl font-black leading-none text-muted-foreground line-through decoration-primary/40 decoration-2 sm:text-3xl">
+                  {displayPrice}
+                </p>
+                <p className="mt-2 text-xs font-medium text-muted-foreground">Harga normal</p>
+              </div>
+              <div className="bg-secondary/45 px-5 py-5 sm:px-6">
+                <p className="text-xs font-bold uppercase tracking-normal text-primary/70">
+                  Cash Keras
+                </p>
+                <p className="mt-2 text-3xl font-black leading-none text-primary sm:text-4xl">
                   {displayCashPrice}
-                </GradientText>
+                </p>
+                <p className="mt-2 text-xs font-semibold text-accent">Harga prioritas</p>
               </div>
             </div>
             {payment && (
-              <p className="rounded-lg bg-background/80 px-3 py-2 text-sm font-semibold text-primary">
-                {payment}
-              </p>
+              <div className="border-t border-primary/10 bg-background/80 px-5 py-4 sm:px-6">
+                <div className="flex items-start gap-3">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <CreditCard className="h-4 w-4" aria-hidden="true" />
+                  </span>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-normal text-primary">Skema cicilan</p>
+                    <p className="mt-1 text-sm font-medium leading-6 text-muted-foreground">{payment}</p>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
+
+          {floorPlanImage && (
+            <div className="mb-8 overflow-hidden rounded-xl border border-primary/10 bg-white sm:rounded-2xl">
+              <div className="border-b border-primary/10 px-4 py-3">
+                <p className="text-sm font-semibold uppercase tracking-normal text-primary">Denah Unit</p>
+              </div>
+              <a href={floorPlanImage} target="_blank" rel="noopener noreferrer" className="block p-3" aria-label={`Buka denah ${type}`}>
+                <ResponsiveImage
+                  src={floorPlanImage}
+                  alt={floorPlanAlt || `Denah unit ${type}`}
+                  loading="lazy"
+                  decoding="async"
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="aspect-[4/3] w-full object-contain"
+                />
+              </a>
+            </div>
+          )}
 
           {/* Features List */}
           {features.length > 0 && (

@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { ArrowLeft, CalendarDays, Clock, MessageCircle } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import BlogPostCard from '@/components/BlogPostCard.jsx';
 import { BlogFooter, BlogHeader, WHATSAPP_URL } from '@/components/BlogChrome.jsx';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
-import { AUTHOR_NAME, AUTHOR_URL, BLOG_POSTS, SITE_URL, getBlogPost, getBlogPostUrl } from '@/data/blogPosts.js';
+import { AUTHOR_NAME, AUTHOR_URL, BLOG_POSTS, SITE_URL, getBlogPostUrl } from '@/data/blogPosts.js';
+import { findMergedBlogPost, mergePublishedBlogPosts, readPublishedBlogPosts } from '@/lib/adminBlogStore.js';
 
 const formatDate = (date) => new Intl.DateTimeFormat('id-ID', {
   day: 'numeric',
   month: 'long',
   year: 'numeric'
 }).format(new Date(`${date}T00:00:00+07:00`));
+
+const getAbsoluteImageUrl = (image) => {
+  if (!image) return `${SITE_URL}/images/rivere/Design%201/1.png`;
+  if (/^(https?:|data:|blob:)/.test(image)) return image;
+  return `${SITE_URL}${image.startsWith('/') ? image : `/${image}`}`;
+};
 
 function createArticleSchema(article) {
   const articleUrl = getBlogPostUrl(article);
@@ -21,66 +28,73 @@ function createArticleSchema(article) {
   ].join(' ');
   const wordCount = articleText.trim().split(/\s+/).length;
 
+  const graph = [
+    {
+      '@type': 'BlogPosting',
+      '@id': `${articleUrl}#article`,
+      headline: article.title,
+      description: article.description,
+      image: {
+        '@type': 'ImageObject',
+        url: getAbsoluteImageUrl(article.image)
+      },
+      datePublished: article.datePublished,
+      dateModified: article.dateModified,
+      inLanguage: 'id-ID',
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': articleUrl
+      },
+      articleSection: article.category,
+      isAccessibleForFree: true,
+      wordCount,
+      keywords: article.keywords.join(', '),
+      author: {
+        '@type': 'Organization',
+        name: AUTHOR_NAME,
+        url: AUTHOR_URL
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'PT Kinara Land Indonesia',
+        url: SITE_URL
+      }
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Beranda', item: `${SITE_URL}/` },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog/` },
+        { '@type': 'ListItem', position: 3, name: article.title, item: articleUrl }
+      ]
+    }
+  ];
+
+  if (article.faq.length) {
+    graph.push({
+      '@type': 'FAQPage',
+      mainEntity: article.faq.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer
+        }
+      }))
+    });
+  }
+
   return {
     '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'BlogPosting',
-        '@id': `${articleUrl}#article`,
-        headline: article.title,
-        description: article.description,
-        image: {
-          '@type': 'ImageObject',
-          url: `${SITE_URL}${article.image}`
-        },
-        datePublished: article.datePublished,
-        dateModified: article.dateModified,
-        inLanguage: 'id-ID',
-        mainEntityOfPage: {
-          '@type': 'WebPage',
-          '@id': articleUrl
-        },
-        articleSection: article.category,
-        isAccessibleForFree: true,
-        wordCount,
-        keywords: article.keywords.join(', '),
-        author: {
-          '@type': 'Organization',
-          name: AUTHOR_NAME,
-          url: AUTHOR_URL
-        },
-        publisher: {
-          '@type': 'Organization',
-          name: 'PT Kinara Land Indonesia',
-          url: SITE_URL
-        }
-      },
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Beranda', item: `${SITE_URL}/` },
-          { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog/` },
-          { '@type': 'ListItem', position: 3, name: article.title, item: articleUrl }
-        ]
-      },
-      {
-        '@type': 'FAQPage',
-        mainEntity: article.faq.map((item) => ({
-          '@type': 'Question',
-          name: item.question,
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: item.answer
-          }
-        }))
-      }
-    ]
+    '@graph': graph
   };
 }
 
 const BlogArticlePage = () => {
   const { slug } = useParams();
-  const article = getBlogPost(slug);
+  const [publishedPosts] = useState(() => readPublishedBlogPosts());
+  const allPosts = useMemo(() => mergePublishedBlogPosts(BLOG_POSTS, publishedPosts), [publishedPosts]);
+  const article = useMemo(() => findMergedBlogPost(BLOG_POSTS, slug, publishedPosts), [slug, publishedPosts]);
 
   if (!article) {
     return (
@@ -105,7 +119,7 @@ const BlogArticlePage = () => {
   }
 
   const canonicalUrl = getBlogPostUrl(article);
-  const relatedPosts = BLOG_POSTS.filter((post) => post.slug !== article.slug).slice(0, 2);
+  const relatedPosts = allPosts.filter((post) => post.slug !== article.slug).slice(0, 2);
   const schema = createArticleSchema(article);
 
   return (
@@ -122,7 +136,7 @@ const BlogArticlePage = () => {
         <meta property="og:title" content={article.seoTitle} />
         <meta property="og:description" content={article.description} />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content={`${SITE_URL}${article.image}`} />
+        <meta property="og:image" content={getAbsoluteImageUrl(article.image)} />
         <meta property="og:image:alt" content={article.imageAlt} />
         <meta property="article:published_time" content={article.datePublished} />
         <meta property="article:modified_time" content={article.dateModified} />
@@ -130,7 +144,7 @@ const BlogArticlePage = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={article.seoTitle} />
         <meta name="twitter:description" content={article.description} />
-        <meta name="twitter:image" content={`${SITE_URL}${article.image}`} />
+        <meta name="twitter:image" content={getAbsoluteImageUrl(article.image)} />
         <meta name="twitter:image:alt" content={article.imageAlt} />
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
       </Helmet>
@@ -188,7 +202,9 @@ const BlogArticlePage = () => {
                     {section.heading}
                   </a>
                 ))}
-                <a href="#pertanyaan-umum" className="block text-sm leading-6 text-muted-foreground transition-colors hover:text-primary">Pertanyaan umum</a>
+                {article.faq.length ? (
+                  <a href="#pertanyaan-umum" className="block text-sm leading-6 text-muted-foreground transition-colors hover:text-primary">Pertanyaan umum</a>
+                ) : null}
               </nav>
             </aside>
 
@@ -211,17 +227,19 @@ const BlogArticlePage = () => {
                 </section>
               ))}
 
-              <section id="pertanyaan-umum" className="scroll-mt-28 pt-12">
-                <h2 className="text-2xl font-bold text-primary sm:text-3xl">Pertanyaan Umum</h2>
-                <div className="mt-6 divide-y divide-border border-y border-border">
-                  {article.faq.map((item) => (
-                    <details key={item.question} className="group py-5">
-                      <summary className="cursor-pointer list-none pr-8 font-semibold text-primary marker:content-none">{item.question}</summary>
-                      <p className="mt-3 text-base leading-7 text-muted-foreground">{item.answer}</p>
-                    </details>
-                  ))}
-                </div>
-              </section>
+              {article.faq.length ? (
+                <section id="pertanyaan-umum" className="scroll-mt-28 pt-12">
+                  <h2 className="text-2xl font-bold text-primary sm:text-3xl">Pertanyaan Umum</h2>
+                  <div className="mt-6 divide-y divide-border border-y border-border">
+                    {article.faq.map((item) => (
+                      <details key={item.question} className="group py-5">
+                        <summary className="cursor-pointer list-none pr-8 font-semibold text-primary marker:content-none">{item.question}</summary>
+                        <p className="mt-3 text-base leading-7 text-muted-foreground">{item.answer}</p>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+              ) : null}
 
               <div className="mt-12 border-l-4 border-accent bg-secondary/60 p-5 text-sm leading-7 text-muted-foreground sm:p-6">
                 <strong className="text-primary">Catatan:</strong> Informasi dan proyeksi dalam artikel ini bersifat edukatif, bukan jaminan hasil investasi. Verifikasi dokumen, kontrak, biaya, dan asumsi finansial sebelum mengambil keputusan.

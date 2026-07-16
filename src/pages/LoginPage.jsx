@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext.jsx";
 import { Button } from "@/components/ui/button.jsx";
 import { Input } from "@/components/ui/input.jsx";
@@ -24,7 +24,7 @@ export default function LoginPage() {
       await login(email, password);
       navigate(from, { replace: true });
     } catch (err) {
-      const msg = err.response?.data?.msg || "Login gagal. Coba lagi.";
+      const msg = err.response?.data?.msg || err.message || "Login gagal. Coba lagi.";
       if (err.response?.data?.code === "EMAIL_NOT_VERIFIED") {
         setError("Email belum diverifikasi. Cek inbox kamu.");
       } else {
@@ -40,7 +40,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-xl shadow-primary/10">
         <h1 className="mb-1 text-2xl font-semibold text-primary">Masuk</h1>
         <p className="mb-6 text-sm text-muted-foreground">
-          Masuk ke akun KIKOST Anda.
+          Masuk memakai akun admin Rivere yang sudah dibuat.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -52,21 +52,13 @@ export default function LoginPage() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="nama@email.com"
+              placeholder="admin@kinaraland.com"
               required
             />
           </div>
 
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Kata Sandi</Label>
-              <Link
-                to="/forgot-password"
-                className="text-xs font-medium text-primary hover:text-accent"
-              >
-                Lupa kata sandi?
-              </Link>
-            </div>
+            <Label htmlFor="password">Kata Sandi</Label>
             <Input
               id="password"
               type="password"
@@ -86,13 +78,6 @@ export default function LoginPage() {
             {loading ? "Masuk..." : "Masuk"}
           </Button>
         </form>
-
-        <p className="mt-5 text-center text-sm text-muted-foreground">
-          Belum punya akun?{" "}
-          <Link to="/register" className="font-medium text-primary hover:text-accent">
-            Daftar
-          </Link>
-        </p>
       </div>
     </div>
   );

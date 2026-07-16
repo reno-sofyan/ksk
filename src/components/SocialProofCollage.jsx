@@ -45,8 +45,8 @@ const SocialProofCollage = ({ images }) => {
           
           {/* Hover Text Reveal */}
           <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-100 transition-all duration-300 md:translate-y-4 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:p-6">
-            <p className="text-base font-semibold text-white sm:text-lg">{item.title || "Akad Berhasil"}</p>
-            <p className="text-xs text-white/80 sm:text-sm">{item.subtitle || "Investor Bahagia"}</p>
+            <p className="text-base font-semibold text-white sm:text-lg">{item.title || "Dokumentasi Proyek"}</p>
+            <p className="text-xs text-white/80 sm:text-sm">{item.subtitle || "Rivere Kostaycation IPB"}</p>
           </div>
         </motion.div>
       ))}

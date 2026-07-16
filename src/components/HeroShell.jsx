@@ -1,19 +1,13 @@
 import React from 'react';
-import { withBase } from '@/lib/assets.js';
+import { imageUrl } from '@/lib/assets.js';
+import { RIVERE_DESIGN_IMAGES } from '@/data/rivereImages.js';
 
 const HeroShell = () => {
   return (
     <section className="relative min-h-[620px] bg-[#10382b] text-white sm:min-h-[700px]">
       <div className="absolute inset-0">
         <img
-          src={withBase('images/optimized/coz-1-edit/1200.jpg')}
-          srcSet={[
-            `${withBase('images/optimized/coz-1-edit/480.jpg')} 480w`,
-            `${withBase('images/optimized/coz-1-edit/768.jpg')} 768w`,
-            `${withBase('images/optimized/coz-1-edit/1200.jpg')} 1200w`,
-            `${withBase('images/optimized/coz-1-edit/1600.jpg')} 1600w`,
-            `${withBase('images/optimized/coz-1-edit/1920.jpg')} 1920w`
-          ].join(', ')}
+          src={imageUrl(RIVERE_DESIGN_IMAGES[0].file)}
           sizes="100vw"
           alt="Rivere Kostaycation IPB hero"
           className="h-full w-full object-cover"
@@ -35,7 +29,10 @@ const HeroShell = () => {
             Rivere <span className="bg-gradient-to-r from-white to-[#d0ad5a] bg-clip-text text-transparent">Kostaycation IPB</span>
           </h1>
           <p className="text-lg font-medium text-white/90 sm:text-xl md:text-3xl">
-            Investasi properti premium berkonsep resort di Ring 1 IPB, hanya 2 menit dari gerbang utama dan bebas macet.
+            Lebih dari investasi properti: kost berkonsep resort di Ring 1 IPB, hanya 2 menit dari gerbang utama dan bebas macet.
+          </p>
+          <p className="mx-auto mt-5 max-w-2xl text-sm font-semibold uppercase tracking-normal text-[#d0ad5a] sm:text-base">
+            The New Standard of Smart Property Investment
           </p>
         </div>
       </div>

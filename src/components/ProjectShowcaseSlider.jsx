@@ -64,6 +64,9 @@ const ProjectShowcaseSlider = ({ slides, interval = 4500 }) => {
           <h3 className="mt-2 max-w-2xl text-xl font-bold leading-tight text-white sm:mt-3 sm:text-2xl md:text-4xl">
             {activeSlide.title}
           </h3>
+          <p className="mt-2 max-w-2xl text-xs leading-relaxed text-white/75 sm:text-sm md:text-base">
+            {activeSlide.description}
+          </p>
         </div>
 
         <button
