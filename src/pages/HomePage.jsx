@@ -1,13 +1,16 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { MapPin, Building2, Users, MessageCircle, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, Building2, Users, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import AnimatedBadge from '@/components/AnimatedBadge.jsx';
-import GradientText from '@/components/GradientText.jsx';
 import SectionDivider from '@/components/SectionDivider.jsx';
 import IconCircle from '@/components/IconCircle.jsx';
+import ChunkErrorBoundary from '@/components/ChunkErrorBoundary.jsx';
+import FloatingWhatsAppButton from '@/components/FloatingWhatsAppButton.jsx';
+import WhatsAppCtaButton from '@/components/WhatsAppCtaButton.jsx';
 import { imageUrl } from '@/lib/assets.js';
+import { RIVERE_SITE_URL } from '@/lib/site.js';
 import BlogPreviewSection from '@/sections/BlogPreviewSection.jsx';
 import { RIVERE_DESIGN_IMAGES } from '@/data/rivereImages.js';
 
@@ -25,10 +28,15 @@ const CS_PHONE_NUMBERS = {
 };
 
 const DEFAULT_CS_KEY = 'cs1';
+const CTWA_MESSAGES = {
+  floating: 'Halo Kinara Land, saya tertarik ingin tahu lebih lanjut tentang proyek Rivere.',
+  simulation: 'Halo Kinara Land, saya ingin konsultasi simulasi cicilan dan promo Rivere.'
+};
+
 const KYRA_STAY_IMAGES = [
-  imageUrl('kyra-stay-1.jpg'),
-  imageUrl('kyra-stay-2.jpg'),
-  imageUrl('kyra-stay-3.jpg')
+  imageUrl('K1.png'),
+  imageUrl('K2.png'),
+  imageUrl('K3.png')
 ];
 
 const INVESTMENT_HIGHLIGHTS = [
@@ -96,9 +104,8 @@ const PUBLIC_NAVIGATION_ANCHORS = [
   { sectionId: 'konsep', label: 'Konsep', href: '/#konsep' },
   { sectionId: 'fasilitas', label: 'Fasilitas', href: '/#fasilitas' },
   { sectionId: 'unit', label: 'Unit', href: '/#unit' },
-  { sectionId: 'denah', label: 'Denah', href: '/#denah' },
-  { sectionId: 'blog', label: 'Blog', href: '/#blog' },
-  { sectionId: 'konsultasi', label: 'Hubungi', href: '/#konsultasi' }
+  { sectionId: 'konsultasi', label: 'Hubungi', href: '/#konsultasi' },
+  { sectionId: 'blog', label: 'Blog', href: '/#blog' }
 ];
 
 const DEVELOPER_PORTFOLIO = [
@@ -118,7 +125,7 @@ const HOME_SCHEMA = {
   '@graph': [
     {
       '@type': 'Organization',
-      '@id': 'https://kinaraland.com/#organization',
+      '@id': `${RIVERE_SITE_URL}/#organization`,
       name: 'PT Kinara Land Indonesia',
       url: 'https://kinaraland.com/',
       brand: {
@@ -128,21 +135,21 @@ const HOME_SCHEMA = {
     },
     {
       '@type': 'WebSite',
-      '@id': 'https://kinaraland.com/#website',
-      url: 'https://kinaraland.com/',
+      '@id': `${RIVERE_SITE_URL}/#website`,
+      url: `${RIVERE_SITE_URL}/`,
       name: 'Rivere Kostaycation IPB',
       inLanguage: 'id-ID',
-      publisher: { '@id': 'https://kinaraland.com/#organization' }
+      publisher: { '@id': `${RIVERE_SITE_URL}/#organization` }
     },
     {
       '@type': 'WebPage',
-      '@id': 'https://kinaraland.com/#webpage',
-      url: 'https://kinaraland.com/',
+      '@id': `${RIVERE_SITE_URL}/#webpage`,
+      url: `${RIVERE_SITE_URL}/`,
       name: 'Rivere Kostaycation IPB | Smart Property Investment Ring 1 IPB',
       description: 'Rivere Kostaycation IPB adalah investasi properti premium berkonsep resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, legalitas SHM, dan dikelola profesional oleh Kyra Stay.',
       inLanguage: 'id-ID',
-      isPartOf: { '@id': 'https://kinaraland.com/#website' },
-      about: { '@id': 'https://kinaraland.com/#organization' }
+      isPartOf: { '@id': `${RIVERE_SITE_URL}/#website` },
+      about: { '@id': `${RIVERE_SITE_URL}/#organization` }
     }
   ]
 };
@@ -207,43 +214,14 @@ const HomePage = () => {
   const currentCsKey = CS_PHONE_NUMBERS[envCsKey] ? envCsKey : getCurrentCsKey(pathname);
   const currentPhoneNumber = CS_PHONE_NUMBERS[currentCsKey];
   const whatsappPhone = normalizeWhatsAppPhone(currentPhoneNumber);
-  const [shouldEnhanceHero, setShouldEnhanceHero] = useState(false);
+  const shouldEnhanceHero = false;
   const [isAnchorOpen, setIsAnchorOpen] = useState(false);
   
   const heroImages = RIVERE_DESIGN_IMAGES.map(({ file }) => imageUrl(file));
-
-  const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent('Halo, saya tertarik dengan Rivere Kostaycation IPB')}`;
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return undefined;
-    }
-
-    const activateHero = () => {
-      setShouldEnhanceHero(true);
-    };
-
-    const idleId = 'requestIdleCallback' in window
-      ? window.requestIdleCallback(activateHero, { timeout: 1600 })
-      : null;
-    const timeoutId = idleId === null ? window.setTimeout(activateHero, 1200) : null;
-
-    window.addEventListener('pointerdown', activateHero, { once: true, passive: true });
-    window.addEventListener('keydown', activateHero, { once: true });
-
-    return () => {
-      if (idleId !== null && 'cancelIdleCallback' in window) {
-        window.cancelIdleCallback(idleId);
-      }
-
-      if (timeoutId !== null) {
-        window.clearTimeout(timeoutId);
-      }
-
-      window.removeEventListener('pointerdown', activateHero);
-      window.removeEventListener('keydown', activateHero);
-    };
-  }, []);
+  const createWhatsAppUrl = (message) => `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
+  const ctaLinks = {
+    simulation: createWhatsAppUrl(CTWA_MESSAGES.simulation)
+  };
 
   const heroBackground = (
     <div className="absolute inset-0">
@@ -263,33 +241,39 @@ const HomePage = () => {
   return <div className="min-h-screen bg-background selection:bg-accent/30 selection:text-primary">
         <Helmet>
           <title>Rivere Kostaycation IPB | Smart Property Investment Ring 1 IPB</title>
+          <link rel="icon" href="/favicon.ico?v=kinara-20260721" sizes="any" />
+          <link rel="icon" type="image/png" href="/favicon.png?v=kinara-20260721" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kinara-20260721" />
           <meta name="description" content="Rivere Kostaycation IPB adalah investasi properti premium berkonsep resort di Ring 1 IPB, 2 menit dari gerbang utama IPB, legalitas SHM, dan dikelola profesional oleh Kyra Stay." />
           <meta name="robots" content="index, follow, max-image-preview:large" />
-          <link rel="canonical" href="https://kinaraland.com/" />
+          <link rel="canonical" href={`${RIVERE_SITE_URL}/`} />
           <meta property="og:type" content="website" />
           <meta property="og:locale" content="id_ID" />
           <meta property="og:site_name" content="Rivere Kostaycation IPB" />
           <meta property="og:title" content="Rivere Kostaycation IPB | Smart Property Investment Ring 1 IPB" />
           <meta property="og:description" content="Investasi properti premium berkonsep resort di Ring 1 IPB, legalitas SHM, dan pengelolaan Kyra Stay." />
-          <meta property="og:url" content="https://kinaraland.com/" />
-          <meta property="og:image" content="https://kinaraland.com/images/rivere/Design%201/1.png" />
+          <meta property="og:url" content={`${RIVERE_SITE_URL}/`} />
+          <meta property="og:image" content={`${RIVERE_SITE_URL}/images/rivere/Design%201/1.png`} />
           <meta property="og:image:alt" content="Rivere Kostaycation IPB, investasi kost resort premium dekat IPB" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="Rivere Kostaycation IPB | Smart Property Investment Ring 1 IPB" />
           <meta name="twitter:description" content="Investasi properti premium berkonsep resort di Ring 1 IPB dengan legalitas SHM dan pengelolaan profesional." />
-          <meta name="twitter:image" content="https://kinaraland.com/images/rivere/Design%201/1.png" />
+          <meta name="twitter:image" content={`${RIVERE_SITE_URL}/images/rivere/Design%201/1.png`} />
           <meta name="twitter:image:alt" content="Rivere Kostaycation IPB, investasi kost resort premium dekat IPB" />
           <script type="application/ld+json">{JSON.stringify(HOME_SCHEMA)}</script>
         </Helmet>
+        <FloatingWhatsAppButton phoneNumber={whatsappPhone} message={CTWA_MESSAGES.floating} />
         
         {/* HERO SECTION */}
         <section id="hero" className="relative h-[100svh] min-h-[620px] scroll-mt-24 overflow-hidden bg-primary sm:h-[100dvh] sm:min-h-[700px]">
           {shouldEnhanceHero ? (
-            <Suspense fallback={heroBackground}>
-              <motion.div className="absolute inset-0 h-[120%]">
-                <ImageCarousel images={heroImages} />
-              </motion.div>
-            </Suspense>
+            <ChunkErrorBoundary fallback={heroBackground}>
+              <Suspense fallback={heroBackground}>
+                <motion.div className="absolute inset-0 h-[120%]">
+                  <ImageCarousel images={heroImages} />
+                </motion.div>
+              </Suspense>
+            </ChunkErrorBoundary>
           ) : heroBackground}
           
           <div className="absolute inset-0 z-10 flex items-center justify-center">
@@ -324,7 +308,7 @@ const HomePage = () => {
               ease: "easeOut"
             }}>
                 <h1 className="mb-6 text-4xl font-extrabold leading-[1.1] sm:text-5xl md:text-6xl lg:text-7xl">
-                  Rivere <GradientText className="drop-shadow-lg" from="from-white" to="to-accent">Kostaycation IPB</GradientText>
+                  Rivere Kostaycation IPB
                 </h1>
               </motion.div>
               
@@ -352,6 +336,26 @@ const HomePage = () => {
             }} className="mx-auto max-w-2xl text-sm font-semibold uppercase tracking-normal text-accent sm:text-base">
                 The New Standard of Smart Property Investment
               </motion.p>
+              <motion.div initial={{
+              opacity: 0,
+              y: 14
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} transition={{
+              duration: 0.8,
+              delay: 0.7
+            }} className="mt-8 flex justify-center px-2">
+                <WhatsAppCtaButton
+                  href="#konsultasi"
+                  ctaLabel="Above the Fold - Brosur Eksklusif"
+                  variant="hero"
+                  external={false}
+                  className="w-full max-w-sm sm:w-auto sm:max-w-none"
+                >
+                  Kirim Brosur Eksklusif ke WhatsApp
+                </WhatsAppCtaButton>
+              </motion.div>
             </div>
           </div>
           
@@ -363,13 +367,17 @@ const HomePage = () => {
           </div>
         </section>
 
-        <nav aria-label="Navigasi sales Rivere mobile" className="fixed left-3 right-3 top-3 z-50 rounded-2xl border border-primary/10 bg-white/95 px-3 py-2 shadow-[0_18px_45px_rgba(4,25,18,0.14)] backdrop-blur-md lg:hidden">
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+        <nav aria-label="Navigasi sales Rivere mobile" className="fixed left-2 right-2 top-2 z-50 rounded-[1.35rem] border border-primary/10 bg-white/96 px-2.5 py-2.5 shadow-[0_18px_45px_rgba(4,25,18,0.16)] backdrop-blur-md sm:left-4 sm:right-4 sm:top-3 sm:px-3 lg:hidden">
+          <div className="grid grid-cols-3 items-center gap-2">
             {PUBLIC_NAVIGATION_ANCHORS.map((anchor) => (
               <a
                 key={anchor.sectionId}
                 href={anchor.href}
-                className={`relative py-1.5 text-[11px] font-semibold transition-colors after:absolute after:bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform hover:after:scale-x-100 focus-visible:outline-none ${anchor.sectionId === 'konsultasi' ? 'text-primary' : 'text-primary/72 hover:text-primary'}`}
+                className={`inline-flex min-h-10 items-center justify-center rounded-full border px-2.5 py-2 text-center text-xs font-bold leading-tight shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:min-h-11 sm:px-3 sm:text-[13px] ${
+                  anchor.sectionId === 'konsultasi'
+                    ? 'col-start-2 row-start-2 border-accent bg-accent text-primary shadow-[0_12px_28px_rgba(208,173,90,0.28)] hover:bg-primary hover:text-accent'
+                    : 'border-primary/10 bg-secondary/80 text-primary/80 hover:border-primary/25 hover:bg-primary hover:text-accent'
+                }`}
               >
                 {anchor.label}
               </a>
@@ -378,10 +386,10 @@ const HomePage = () => {
         </nav>
 
         <nav aria-label="Navigasi sales Rivere desktop" className="fixed right-0 top-1/2 z-50 hidden -translate-y-1/2 lg:block">
-          <div className={`flex items-stretch transition-transform duration-300 ease-out ${isAnchorOpen ? 'translate-x-0' : 'translate-x-[10rem]'}`}>
+          <div className={`flex items-stretch transition-transform duration-300 ease-out ${isAnchorOpen ? 'translate-x-0' : 'translate-x-[13rem]'}`}>
             <button
               type="button"
-              className="flex w-11 flex-col items-center justify-center gap-2 rounded-l-2xl border-y border-l border-accent/60 bg-accent py-4 text-primary shadow-[0_18px_45px_rgba(208,173,90,0.28)] backdrop-blur-md transition-colors hover:bg-primary hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="flex w-12 flex-col items-center justify-center gap-2 rounded-l-2xl border-y border-l border-accent/60 bg-accent py-5 text-primary shadow-[0_18px_45px_rgba(208,173,90,0.28)] backdrop-blur-md transition-colors hover:bg-primary hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent xl:w-14"
               onClick={() => setIsAnchorOpen((current) => !current)}
               aria-expanded={isAnchorOpen}
               aria-controls="desktop-anchor-panel"
@@ -391,17 +399,21 @@ const HomePage = () => {
               ) : (
                 <ChevronLeft className="h-4 w-4" aria-hidden="true" />
               )}
-              <span className="rotate-180 text-[11px] font-bold uppercase tracking-normal [writing-mode:vertical-rl]">
+              <span className="rotate-180 text-xs font-bold uppercase tracking-normal [writing-mode:vertical-rl]">
                 Navigasi
               </span>
             </button>
-            <div id="desktop-anchor-panel" className="max-h-[calc(100vh-6rem)] w-40 overflow-y-auto rounded-l-2xl border border-accent/35 bg-white/95 px-4 py-3 shadow-[0_24px_70px_rgba(208,173,90,0.18)] backdrop-blur-md">
-              <div className="grid gap-1.5">
+            <div id="desktop-anchor-panel" className="max-h-[calc(100vh-6rem)] w-52 overflow-y-auto rounded-l-2xl border border-accent/35 bg-white/95 px-4 py-4 shadow-[0_24px_70px_rgba(208,173,90,0.18)] backdrop-blur-md">
+              <div className="grid gap-2">
                 {PUBLIC_NAVIGATION_ANCHORS.map((anchor) => (
                   <a
                     key={anchor.sectionId}
                     href={anchor.href}
-                    className={`relative py-1.5 text-xs font-semibold transition-colors after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-accent after:transition-transform hover:after:scale-x-100 focus-visible:outline-none ${anchor.sectionId === 'konsultasi' ? 'text-primary' : 'text-primary/72 hover:text-primary'}`}
+                    className={`inline-flex min-h-10 items-center rounded-xl border px-3 py-2 text-sm font-bold leading-tight shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                      anchor.sectionId === 'konsultasi'
+                        ? 'my-1 justify-center border-accent bg-accent text-primary shadow-[0_14px_32px_rgba(208,173,90,0.28)] hover:bg-primary hover:text-accent'
+                        : 'justify-start border-primary/10 bg-secondary/80 text-primary/80 hover:border-primary/25 hover:bg-primary hover:text-accent'
+                    }`}
                   >
                     {anchor.label}
                   </a>
@@ -426,20 +438,45 @@ const HomePage = () => {
             }} className="text-center mb-8 sm:mb-10">
               <AnimatedBadge text="Galeri Proyek" className="mb-4" />
               <h2 className="mb-4 text-3xl font-bold text-primary sm:text-4xl md:text-5xl">
-                Lebih dari <GradientText from="from-primary" to="to-accent">Investasi Properti</GradientText>
+                Lebih dari Investasi Properti
               </h2>
-              <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg">
-                Visual desain Rivere Kostaycation sebagai standar baru investasi properti cerdas dekat IPB.
+              <p className="mx-auto max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+                Lihat potensi unit Rivere dari desain, lokasi, dan skema pengelolaan. Konsultasikan pilihan terbaik sebelum kuota prioritas berubah.
               </p>
             </motion.div>
 
             <DeferredRender
               fallback={<div className="aspect-[4/5] rounded-[1.5rem] bg-slate-100 sm:aspect-[16/10] md:aspect-[16/7]" />}
             >
-              <Suspense fallback={<div className="aspect-[4/5] rounded-[1.5rem] bg-slate-100 sm:aspect-[16/10] md:aspect-[16/7]" />}>
-                <ProjectShowcaseSection />
-              </Suspense>
+              <ChunkErrorBoundary fallback={<div className="aspect-[4/5] rounded-[1.5rem] bg-slate-100 sm:aspect-[16/10] md:aspect-[16/7]" />}>
+                <Suspense fallback={<div className="aspect-[4/5] rounded-[1.5rem] bg-slate-100 sm:aspect-[16/10] md:aspect-[16/7]" />}>
+                  <ProjectShowcaseSection />
+                </Suspense>
+              </ChunkErrorBoundary>
             </DeferredRender>
+
+            <motion.div initial={{
+            opacity: 0,
+            y: 18
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.6,
+            delay: 0.12
+          }} className="mt-12 flex justify-center px-2 sm:mt-14">
+              <WhatsAppCtaButton
+                href="#konsultasi"
+                ctaLabel="Mid Page - Ketersediaan Unit dan Masterplan"
+                variant="light"
+                external={false}
+                className="w-full max-w-sm sm:w-auto sm:max-w-none"
+              >
+                Cek Ketersediaan Unit & Masterplan
+              </WhatsAppCtaButton>
+            </motion.div>
           </div>
         </section>
 
@@ -586,16 +623,18 @@ const HomePage = () => {
             }} className="relative">
                 <figure className="h-full overflow-hidden rounded-lg border border-white/15 bg-white/5 shadow-2xl shadow-black/25">
                   <div className="relative h-full min-h-[360px] overflow-hidden bg-[#06261b] sm:min-h-[430px]">
-                    <Suspense fallback={<ResponsiveImage src={KYRA_STAY_IMAGES[0]} alt="Tim profesional Kyra Stay" className="h-full w-full object-cover" sizes="(min-width: 1024px) 54vw, 100vw" />}>
-                      <ImageCarousel
-                        images={KYRA_STAY_IMAGES}
-                        interval={4000}
-                        altPrefix="Tim profesional Kyra Stay"
-                        imageClassName="h-full w-full object-cover object-center brightness-[0.98] contrast-[1.04] saturate-[0.92]"
-                        overlayClassName="bg-gradient-to-t from-[#041912]/28 via-transparent to-transparent"
-                        sizes="(min-width: 1024px) 54vw, 100vw"
-                      />
-                    </Suspense>
+                    <ChunkErrorBoundary fallback={<ResponsiveImage src={KYRA_STAY_IMAGES[0]} alt="Tim profesional Kyra Stay" className="h-full w-full object-cover" sizes="(min-width: 1024px) 54vw, 100vw" />}>
+                      <Suspense fallback={<ResponsiveImage src={KYRA_STAY_IMAGES[0]} alt="Tim profesional Kyra Stay" className="h-full w-full object-cover" sizes="(min-width: 1024px) 54vw, 100vw" />}>
+                        <ImageCarousel
+                          images={KYRA_STAY_IMAGES}
+                          interval={4000}
+                          altPrefix="Tim profesional Kyra Stay"
+                          imageClassName="h-full w-full object-cover object-center brightness-[0.98] contrast-[1.04] saturate-[0.92]"
+                          overlayClassName="bg-gradient-to-t from-[#041912]/28 via-transparent to-transparent"
+                          sizes="(min-width: 1024px) 54vw, 100vw"
+                        />
+                      </Suspense>
+                    </ChunkErrorBoundary>
                   </div>
                 </figure>
               </motion.div>
@@ -620,7 +659,7 @@ const HomePage = () => {
           }} transition={{
             duration: 0.6
           }} className="mb-8 text-3xl font-extrabold sm:text-4xl md:text-5xl">
-              Investasi Properti Premium & <GradientText from="from-primary" to="to-accent">Tanpa Ribet</GradientText>
+              Investasi Properti Premium & Tanpa Ribet
             </motion.h2>
             <motion.p initial={{
             opacity: 0,
@@ -705,7 +744,7 @@ const HomePage = () => {
           }} className="text-center mb-12 sm:mb-16">
               <AnimatedBadge text="Concentric Circles of Comfort" className="mb-4" />
               <h2 className="mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">
-                Ekosistem Fasilitas <GradientText from="from-primary" to="to-accent">Terintegrasi</GradientText>
+                Ekosistem Fasilitas Terintegrasi
               </h2>
               <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg md:text-xl">
                 Didesain secara spesifik untuk stabilitas okupansi dengan konsep Concentric Circles of Comfort.
@@ -715,9 +754,11 @@ const HomePage = () => {
             <DeferredRender
               fallback={<div className="h-80 rounded-lg bg-white/60" />}
             >
-              <Suspense fallback={<div className="h-80 rounded-lg bg-white/60" />}>
-                <MainFacilitiesSection />
-              </Suspense>
+              <ChunkErrorBoundary fallback={<div className="h-80 rounded-lg bg-white/60" />}>
+                <Suspense fallback={<div className="h-80 rounded-lg bg-white/60" />}>
+                  <MainFacilitiesSection />
+                </Suspense>
+              </ChunkErrorBoundary>
             </DeferredRender>
           </div>
         </section>
@@ -744,9 +785,11 @@ const HomePage = () => {
             <DeferredRender
               fallback={<div className="grid gap-8 md:grid-cols-2">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-44 border-t border-primary/10 bg-white/30" />)}</div>}
             >
-              <Suspense fallback={<div className="grid gap-8 md:grid-cols-2">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-44 border-t border-primary/10 bg-white/30" />)}</div>}>
-                <NearbyFacilitiesSection />
-              </Suspense>
+              <ChunkErrorBoundary fallback={<div className="grid gap-8 md:grid-cols-2">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-44 border-t border-primary/10 bg-white/30" />)}</div>}>
+                <Suspense fallback={<div className="grid gap-8 md:grid-cols-2">{Array.from({ length: 4 }).map((_, index) => <div key={index} className="h-44 border-t border-primary/10 bg-white/30" />)}</div>}>
+                  <NearbyFacilitiesSection />
+                </Suspense>
+              </ChunkErrorBoundary>
             </DeferredRender>
           </div>
         </section>
@@ -765,7 +808,7 @@ const HomePage = () => {
           }} transition={{
             duration: 0.6
           }} className="text-center mb-12 sm:mb-16">
-              <h2 className="mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">Pilihan <GradientText from="from-primary" to="to-accent">Tipe Unit</GradientText></h2>
+              <h2 className="mb-6 text-3xl font-bold sm:text-4xl md:text-5xl">Pilihan Tipe Unit</h2>
               <p className="text-base text-muted-foreground sm:text-lg md:text-xl">
                 Dua pilihan unit dengan skema pembayaran 6 bulan atau 1 tahun.
               </p>
@@ -775,9 +818,11 @@ const HomePage = () => {
               <DeferredRender
                 fallback={<div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10"><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /></div>}
               >
-                <Suspense fallback={<div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10"><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /></div>}>
-                  <UnitCardsSection />
-                </Suspense>
+                <ChunkErrorBoundary fallback={<div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10"><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /></div>}>
+                  <Suspense fallback={<div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-10"><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /><div className="h-[32rem] rounded-[1.75rem] bg-slate-100" /></div>}>
+                    <UnitCardsSection />
+                  </Suspense>
+                </ChunkErrorBoundary>
               </DeferredRender>
             </div>
           </div>
@@ -833,7 +878,7 @@ const HomePage = () => {
             }} className="relative">
                 <figure className="overflow-hidden rounded-lg border border-primary/15 bg-card shadow-[0_24px_70px_rgba(7,39,29,0.16)]">
                   <div className="relative aspect-[4/3] overflow-hidden bg-primary/10">
-                    <ResponsiveImage src={imageUrl('rivere/Design 3/2.png')} alt="Visual desain smart spatial Rivere Kostaycation IPB" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" decoding="async" sizes="(min-width: 1024px) 45vw, 100vw" />
+                    <ResponsiveImage src={imageUrl('mezzanine.png')} alt="Visual desain smart spatial Rivere Kostaycation IPB" className="h-full w-full object-cover transition-transform duration-700 hover:scale-105" loading="lazy" decoding="async" sizes="(min-width: 1024px) 45vw, 100vw" />
                     <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/10 to-transparent" />
                     <div className="absolute bottom-5 left-5 right-5 border border-white/15 bg-primary/75 p-5 text-white backdrop-blur-md">
                       <p className="text-xs font-semibold uppercase tracking-normal text-accent">Konsep Mezzanine</p>
@@ -913,17 +958,21 @@ const HomePage = () => {
             }} transition={{
               duration: 0.6
             }} className="lg:col-span-5">
-                <figure className="h-full overflow-hidden rounded-lg border border-white/15 bg-white/5 shadow-2xl shadow-black/20">
-                  <div className="relative min-h-[420px] overflow-hidden">
-                    <ResponsiveImage src={imageUrl('rivere/Design 3/1.png')} alt="Visual pengembangan Rivere Kostaycation IPB oleh PT Kinara Land Indonesia" className="h-full min-h-[420px] w-full object-cover" loading="lazy" decoding="async" sizes="(min-width: 1024px) 40vw, 100vw" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/35 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                      <p className="text-sm font-semibold uppercase tracking-normal text-accent">Data, Transparansi, dan Hasil Nyata</p>
-                      <p className="mt-3 text-2xl font-bold leading-tight text-white sm:text-3xl">
-                        Investasi yang dirancang untuk stabilitas jangka panjang.
-                      </p>
-                    </div>
+                <figure className="h-full overflow-hidden rounded-lg border border-white/15 bg-white shadow-2xl shadow-black/20">
+                  <div className="aspect-[4/3] overflow-hidden bg-primary/20">
+                    <ResponsiveImage src={imageUrl('data.png')} alt="Visual pengembangan Rivere Kostaycation IPB oleh PT Kinara Land Indonesia" className="h-full w-full object-cover" loading="lazy" decoding="async" sizes="(min-width: 1024px) 40vw, 100vw" />
                   </div>
+                  <figcaption className="border-t-4 border-accent bg-white p-6 text-primary sm:p-7">
+                    <p className="text-sm font-bold uppercase tracking-normal text-accent">Dashboard Owner dan Laporan Profit</p>
+                    <h3 className="mt-3 text-2xl font-black leading-tight sm:text-3xl">
+                      Pemilik dapat memantau performa properti yang dimiliki.
+                    </h3>
+                    <div className="mt-5 grid gap-3 text-sm leading-6 text-primary/78">
+                      <p><strong className="text-primary">Pantau keuntungan:</strong> owner dapat melihat estimasi pendapatan, bagi hasil, dan histori performa unit.</p>
+                      <p><strong className="text-primary">Status properti:</strong> okupansi, aktivitas pengelolaan, dan kondisi unit dapat dipantau lebih transparan.</p>
+                      <p><strong className="text-primary">Laporan terukur:</strong> data membantu pemilik memahami perkembangan aset tanpa harus mengurus operasional harian.</p>
+                    </div>
+                  </figcaption>
                 </figure>
               </motion.div>
               
@@ -986,66 +1035,6 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* BOLD CTA */}
-        <section id="konsultasi" className="cv-auto relative scroll-mt-28 overflow-hidden bg-primary py-20 sm:py-24 lg:py-32">
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-accent via-transparent to-transparent mix-blend-overlay"></div>
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <motion.h2 initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.6
-          }} className="mb-8 text-3xl font-bold text-white sm:text-4xl md:text-5xl lg:text-6xl">
-              Hubungi Kami Sekarang untuk Konsultasi Investasi Properti Terbaik Anda
-            </motion.h2>
-            <motion.div initial={{
-            opacity: 0,
-            y: 20
-          }} whileInView={{
-            opacity: 1,
-            y: 0
-          }} viewport={{
-            once: true
-          }} transition={{
-            duration: 0.6,
-              delay: 0.1
-          }} className="mb-12 max-w-2xl mx-auto">
-              <p className="text-base text-white/85 sm:text-lg md:text-xl">
-                Diskusikan pilihan Type 62/31, Type 94/31, skema pembayaran, dan potensi investasi Rivere Kostaycation IPB bersama tim kami.
-              </p>
-            </motion.div>
-            <motion.div initial={{
-            opacity: 0,
-            y: 20,
-            scale: 0.9
-          }} whileInView={{
-            opacity: 1,
-            y: 0,
-            scale: 1
-          }} viewport={{
-            once: true
-            }} transition={{
-              duration: 0.6,
-              delay: 0.2
-            }}>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-auto items-center justify-center gap-2 rounded-full border-2 border-accent bg-primary px-6 py-5 text-base font-medium text-accent shadow-2xl transition-colors duration-300 hover:bg-accent hover:text-primary sm:px-8 sm:py-6 sm:text-lg md:px-12 md:py-8 md:text-xl"
-              >
-                <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-                Konsultasi via WhatsApp
-              </a>
-            </motion.div>
-          </div>
-        </section>
-
         {/* CLOSING QUOTE */}
         <section className="cv-auto relative border-b border-border bg-background py-20 sm:py-24 lg:py-32">
           <div className="absolute left-1/2 top-0 -translate-x-1/2 w-px h-16 bg-gradient-to-b from-border to-transparent"></div>
@@ -1075,31 +1064,44 @@ const HomePage = () => {
           <BlogPreviewSection />
         </div>
 
+        {/* BOTTOM CTWA */}
+        <section id="konsultasi" className="cv-auto scroll-mt-28 bg-background py-16 sm:py-20">
+          <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+            <motion.div initial={{
+            opacity: 0,
+            y: 22
+          }} whileInView={{
+            opacity: 1,
+            y: 0
+          }} viewport={{
+            once: true
+          }} transition={{
+            duration: 0.6
+          }} className="border-y border-primary/15 py-12 sm:py-16">
+              <AnimatedBadge text="Simulasi Pembayaran" className="mb-5" />
+              <h2 className="mx-auto max-w-3xl text-3xl font-bold leading-tight text-primary sm:text-4xl md:text-5xl">
+                Diskusikan skema cicilan dan promo unit Rivere
+              </h2>
+              <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+                Tim kami dapat membantu menyesuaikan pilihan Type 62/31 atau Type 94/31 dengan budget, jadwal pembayaran, dan prioritas investasi Anda.
+              </p>
+              <div className="mt-8 flex justify-center px-2">
+                <WhatsAppCtaButton
+                  href={ctaLinks.simulation}
+                  ctaLabel="Bottom Funnel - Simulasi Cicilan dan Promo"
+                  variant="dark"
+                  className="w-full max-w-md sm:w-auto sm:max-w-none"
+                >
+                  Konsultasi Simulasi Cicilan & Promo Rivere
+                </WhatsAppCtaButton>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
         {/* FOOTER */}
         <footer className="cv-auto bg-primary pb-10 pt-16 text-primary-foreground sm:pt-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col items-center text-center mb-12">
-              <h3 className="mb-4 text-xl font-bold text-white sm:text-2xl">Masih Ada Pertanyaan?</h3>
-              <p className="mb-8 text-sm text-white/70 sm:text-base">Customer Service kami siap membantu Anda kapan saja.</p>
-              <motion.div animate={{
-              scale: [1, 1.05, 1]
-            }} transition={{
-              repeat: Infinity,
-              duration: 2.5,
-              ease: "easeInOut"
-            }}>
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-auto max-w-xs items-center justify-center gap-2 whitespace-normal rounded-full border border-accent bg-accent px-6 py-4 text-center text-sm font-semibold leading-snug text-primary shadow-sm transition-colors duration-300 hover:bg-white sm:max-w-md sm:px-8 sm:py-6 sm:text-base"
-                >
-                  <MessageCircle className="h-5 w-5 text-primary" />
-                  Klik ini untuk ngobrol dengan customer service
-                </a>
-              </motion.div>
-            </div>
-            
             <div className="flex flex-col items-center gap-6 border-t border-white/15 pt-10 text-center md:flex-row md:justify-between md:text-left">
               <div>
                 <p className="text-lg font-bold text-white">Rivere Kostaycation IPB</p>

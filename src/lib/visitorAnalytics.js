@@ -5,6 +5,7 @@ const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 const MAX_EVENTS = 250;
 const REMOTE_ANALYTICS_URL = import.meta.env.VITE_ANALYTICS_API_URL || '/api/analytics.php';
 const REMOTE_TIMEOUT_MS = 5000;
+const ANALYTICS_TIME_ZONE = 'Asia/Jakarta';
 
 function canUseStorage() {
   return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
@@ -26,6 +27,29 @@ function readAnalytics() {
 function writeAnalytics(data) {
   if (!canUseStorage()) return;
   window.localStorage.setItem(ANALYTICS_KEY, JSON.stringify(data));
+}
+
+function getDateKey(value = new Date()) {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: ANALYTICS_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(value);
+}
+
+function getSinceDateKey(days) {
+  const since = new Date();
+  since.setDate(since.getDate() - (days - 1));
+  return getDateKey(since);
+}
+
+function sumDailyPageViews(dailyPageViews, days) {
+  const sinceKey = getSinceDateKey(days);
+
+  return Object.entries(dailyPageViews || {}).reduce((total, [date, count]) => {
+    return date >= sinceKey ? total + Number(count || 0) : total;
+  }, 0);
 }
 
 function createEmptyAnalytics() {
@@ -88,7 +112,7 @@ export function trackPageView(pathname, title = '') {
   if (!canUseStorage()) return;
 
   const now = Date.now();
-  const dateKey = new Date(now).toISOString().slice(0, 10);
+  const dateKey = getDateKey(new Date(now));
   const visitorId = getOrCreateVisitorId();
   const session = getSessionState(now);
   const analytics = readAnalytics();
@@ -130,19 +154,15 @@ export function getVisitorAnalytics() {
   const analytics = readAnalytics();
   const pageViewsByPath = analytics.pageViewsByPath || {};
   const dailyPageViews = analytics.dailyPageViews || {};
-  const todayKey = new Date().toISOString().slice(0, 10);
-  const since = new Date();
-  since.setDate(since.getDate() - 6);
-
-  const last7Days = Object.entries(dailyPageViews).reduce((total, [date, count]) => {
-    return date >= since.toISOString().slice(0, 10) ? total + count : total;
-  }, 0);
+  const todayKey = getDateKey();
 
   return {
     ...analytics,
     source: 'local',
     todayPageViews: dailyPageViews[todayKey] || 0,
-    last7DaysPageViews: last7Days,
+    last7DaysPageViews: sumDailyPageViews(dailyPageViews, 7),
+    last14DaysPageViews: sumDailyPageViews(dailyPageViews, 14),
+    last30DaysPageViews: sumDailyPageViews(dailyPageViews, 30),
     topPages: Object.entries(pageViewsByPath)
       .map(([path, views]) => ({ path, views }))
       .sort((a, b) => b.views - a.views)
@@ -172,7 +192,21 @@ export async function fetchGlobalVisitorAnalytics() {
     }
 
     const data = await response.json();
-    return data && typeof data === 'object' ? { ...data, source: data.source || 'server' } : null;
+
+    if (!data || typeof data !== 'object') {
+      return null;
+    }
+
+    const dailyPageViews = data.dailyPageViews || {};
+
+    return {
+      ...data,
+      source: data.source || 'server',
+      todayPageViews: data.todayPageViews ?? dailyPageViews[getDateKey()] ?? 0,
+      last7DaysPageViews: data.last7DaysPageViews ?? sumDailyPageViews(dailyPageViews, 7),
+      last14DaysPageViews: data.last14DaysPageViews ?? sumDailyPageViews(dailyPageViews, 14),
+      last30DaysPageViews: data.last30DaysPageViews ?? sumDailyPageViews(dailyPageViews, 30)
+    };
   } catch {
     return null;
   } finally {

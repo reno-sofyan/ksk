@@ -1,39 +1,191 @@
 {
-  "basket.jpg": {
-    "width": 4000,
-    "height": 6000,
-    "slug": "basket",
+  "areahijau.jpeg": {
+    "width": 1920,
+    "height": 1048,
+    "slug": "areahijau",
     "format": "jpg",
     "variants": [
       {
-        "width": 320,
-        "height": 480,
-        "path": "images/optimized/basket/480.jpg",
+        "width": 480,
+        "height": 262,
+        "path": "images/optimized/areahijau/480.jpg",
         "format": "jpg"
       },
       {
-        "width": 512,
-        "height": 768,
-        "path": "images/optimized/basket/768.jpg",
+        "width": 768,
+        "height": 419,
+        "path": "images/optimized/areahijau/768.jpg",
         "format": "jpg"
       },
       {
-        "width": 800,
-        "height": 1200,
-        "path": "images/optimized/basket/1200.jpg",
+        "width": 1200,
+        "height": 655,
+        "path": "images/optimized/areahijau/1200.jpg",
         "format": "jpg"
       },
       {
-        "width": 1067,
-        "height": 1600,
-        "path": "images/optimized/basket/1600.jpg",
+        "width": 1600,
+        "height": 873,
+        "path": "images/optimized/areahijau/1600.jpg",
         "format": "jpg"
       },
       {
-        "width": 1280,
-        "height": 1920,
-        "path": "images/optimized/basket/1920.jpg",
+        "width": 1920,
+        "height": 1048,
+        "path": "images/optimized/areahijau/1920.jpg",
         "format": "jpg"
+      }
+    ]
+  },
+  "basket.png": {
+    "width": 1920,
+    "height": 1075,
+    "slug": "basket",
+    "format": "png",
+    "variants": [
+      {
+        "width": 480,
+        "height": 269,
+        "path": "images/optimized/basket/480.png",
+        "format": "png"
+      },
+      {
+        "width": 768,
+        "height": 430,
+        "path": "images/optimized/basket/768.png",
+        "format": "png"
+      },
+      {
+        "width": 1200,
+        "height": 672,
+        "path": "images/optimized/basket/1200.png",
+        "format": "png"
+      },
+      {
+        "width": 1600,
+        "height": 896,
+        "path": "images/optimized/basket/1600.png",
+        "format": "png"
+      },
+      {
+        "width": 1920,
+        "height": 1075,
+        "path": "images/optimized/basket/1920.png",
+        "format": "png"
+      }
+    ]
+  },
+  "cctv.jpeg": {
+    "width": 1920,
+    "height": 1077,
+    "slug": "cctv",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 480,
+        "height": 269,
+        "path": "images/optimized/cctv/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 768,
+        "height": 431,
+        "path": "images/optimized/cctv/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1200,
+        "height": 673,
+        "path": "images/optimized/cctv/1200.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1600,
+        "height": 898,
+        "path": "images/optimized/cctv/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1077,
+        "path": "images/optimized/cctv/1920.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "clubhouse.png": {
+    "width": 1920,
+    "height": 979,
+    "slug": "clubhouse",
+    "format": "png",
+    "variants": [
+      {
+        "width": 480,
+        "height": 245,
+        "path": "images/optimized/clubhouse/480.png",
+        "format": "png"
+      },
+      {
+        "width": 768,
+        "height": 392,
+        "path": "images/optimized/clubhouse/768.png",
+        "format": "png"
+      },
+      {
+        "width": 1200,
+        "height": 612,
+        "path": "images/optimized/clubhouse/1200.png",
+        "format": "png"
+      },
+      {
+        "width": 1600,
+        "height": 816,
+        "path": "images/optimized/clubhouse/1600.png",
+        "format": "png"
+      },
+      {
+        "width": 1920,
+        "height": 979,
+        "path": "images/optimized/clubhouse/1920.png",
+        "format": "png"
+      }
+    ]
+  },
+  "data.png": {
+    "width": 2940,
+    "height": 1600,
+    "slug": "data",
+    "format": "png",
+    "variants": [
+      {
+        "width": 480,
+        "height": 261,
+        "path": "images/optimized/data/480.png",
+        "format": "png"
+      },
+      {
+        "width": 768,
+        "height": 418,
+        "path": "images/optimized/data/768.png",
+        "format": "png"
+      },
+      {
+        "width": 1200,
+        "height": 653,
+        "path": "images/optimized/data/1200.png",
+        "format": "png"
+      },
+      {
+        "width": 1600,
+        "height": 871,
+        "path": "images/optimized/data/1600.png",
+        "format": "png"
+      },
+      {
+        "width": 1920,
+        "height": 1045,
+        "path": "images/optimized/data/1920.png",
+        "format": "png"
       }
     ]
   },
@@ -151,82 +303,6 @@
       }
     ]
   },
-  "Gambar 3d 2.png": {
-    "width": 2752,
-    "height": 1536,
-    "slug": "gambar-3d-2",
-    "format": "jpg",
-    "variants": [
-      {
-        "width": 480,
-        "height": 268,
-        "path": "images/optimized/gambar-3d-2/480.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 768,
-        "height": 429,
-        "path": "images/optimized/gambar-3d-2/768.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1200,
-        "height": 670,
-        "path": "images/optimized/gambar-3d-2/1200.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1600,
-        "height": 893,
-        "path": "images/optimized/gambar-3d-2/1600.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1920,
-        "height": 1072,
-        "path": "images/optimized/gambar-3d-2/1920.jpg",
-        "format": "jpg"
-      }
-    ]
-  },
-  "Gambar 3d 3.png": {
-    "width": 2752,
-    "height": 1536,
-    "slug": "gambar-3d-3",
-    "format": "jpg",
-    "variants": [
-      {
-        "width": 480,
-        "height": 268,
-        "path": "images/optimized/gambar-3d-3/480.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 768,
-        "height": 429,
-        "path": "images/optimized/gambar-3d-3/768.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1200,
-        "height": 670,
-        "path": "images/optimized/gambar-3d-3/1200.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1600,
-        "height": 893,
-        "path": "images/optimized/gambar-3d-3/1600.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1920,
-        "height": 1072,
-        "path": "images/optimized/gambar-3d-3/1920.jpg",
-        "format": "jpg"
-      }
-    ]
-  },
   "Gambar 3d 4.png": {
     "width": 2412,
     "height": 1016,
@@ -265,47 +341,123 @@
       }
     ]
   },
-  "Gambar 3d 5.png": {
-    "width": 2424,
-    "height": 792,
-    "slug": "gambar-3d-5",
+  "garden.jpeg": {
+    "width": 1920,
+    "height": 1080,
+    "slug": "garden",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
-        "height": 157,
-        "path": "images/optimized/gambar-3d-5/480.jpg",
+        "height": 270,
+        "path": "images/optimized/garden/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
-        "height": 251,
-        "path": "images/optimized/gambar-3d-5/768.jpg",
+        "height": 432,
+        "path": "images/optimized/garden/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
-        "height": 392,
-        "path": "images/optimized/gambar-3d-5/1200.jpg",
+        "height": 675,
+        "path": "images/optimized/garden/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
-        "height": 523,
-        "path": "images/optimized/gambar-3d-5/1600.jpg",
+        "height": 900,
+        "path": "images/optimized/garden/1600.jpg",
         "format": "jpg"
       },
       {
         "width": 1920,
-        "height": 627,
-        "path": "images/optimized/gambar-3d-5/1920.jpg",
+        "height": 1080,
+        "path": "images/optimized/garden/1920.jpg",
         "format": "jpg"
       }
     ]
   },
+  "gerbang.jpeg": {
+    "width": 1920,
+    "height": 1048,
+    "slug": "gerbang",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 480,
+        "height": 262,
+        "path": "images/optimized/gerbang/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 768,
+        "height": 419,
+        "path": "images/optimized/gerbang/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1200,
+        "height": 655,
+        "path": "images/optimized/gerbang/1200.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1600,
+        "height": 873,
+        "path": "images/optimized/gerbang/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1048,
+        "path": "images/optimized/gerbang/1920.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "gym.png": {
+    "width": 1920,
+    "height": 1047,
+    "slug": "gym",
+    "format": "png",
+    "variants": [
+      {
+        "width": 480,
+        "height": 262,
+        "path": "images/optimized/gym/480.png",
+        "format": "png"
+      },
+      {
+        "width": 768,
+        "height": 419,
+        "path": "images/optimized/gym/768.png",
+        "format": "png"
+      },
+      {
+        "width": 1200,
+        "height": 654,
+        "path": "images/optimized/gym/1200.png",
+        "format": "png"
+      },
+      {
+        "width": 1600,
+        "height": 873,
+        "path": "images/optimized/gym/1600.png",
+        "format": "png"
+      },
+      {
+        "width": 1920,
+        "height": 1047,
+        "path": "images/optimized/gym/1920.png",
+        "format": "png"
+      }
+    ]
+  },
   "investor 1.jpeg": {
-    "width": 1600,
-    "height": 1392,
+    "width": 1920,
+    "height": 1670,
     "slug": "investor-1",
     "format": "jpg",
     "variants": [
@@ -332,12 +484,18 @@
         "height": 1392,
         "path": "images/optimized/investor-1/1600.jpg",
         "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1670,
+        "path": "images/optimized/investor-1/1920.jpg",
+        "format": "jpg"
       }
     ]
   },
   "investor 2.jpeg": {
-    "width": 1362,
-    "height": 1600,
+    "width": 1634,
+    "height": 1920,
     "slug": "investor-2",
     "format": "jpg",
     "variants": [
@@ -354,7 +512,7 @@
         "format": "jpg"
       },
       {
-        "width": 1022,
+        "width": 1021,
         "height": 1200,
         "path": "images/optimized/investor-2/1200.jpg",
         "format": "jpg"
@@ -364,12 +522,18 @@
         "height": 1600,
         "path": "images/optimized/investor-2/1600.jpg",
         "format": "jpg"
+      },
+      {
+        "width": 1634,
+        "height": 1920,
+        "path": "images/optimized/investor-2/1920.jpg",
+        "format": "jpg"
       }
     ]
   },
   "investor 3.jpeg": {
-    "width": 1600,
-    "height": 900,
+    "width": 1920,
+    "height": 1080,
     "slug": "investor-3",
     "format": "jpg",
     "variants": [
@@ -396,12 +560,18 @@
         "height": 900,
         "path": "images/optimized/investor-3/1600.jpg",
         "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1080,
+        "path": "images/optimized/investor-3/1920.jpg",
+        "format": "jpg"
       }
     ]
   },
   "investor 4.jpeg": {
-    "width": 1600,
-    "height": 900,
+    "width": 1920,
+    "height": 1080,
     "slug": "investor-4",
     "format": "jpg",
     "variants": [
@@ -428,12 +598,18 @@
         "height": 900,
         "path": "images/optimized/investor-4/1600.jpg",
         "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1080,
+        "path": "images/optimized/investor-4/1920.jpg",
+        "format": "jpg"
       }
     ]
   },
   "investor 5.jpeg": {
-    "width": 900,
-    "height": 1600,
+    "width": 1080,
+    "height": 1920,
     "slug": "investor-5",
     "format": "jpg",
     "variants": [
@@ -460,12 +636,18 @@
         "height": 1600,
         "path": "images/optimized/investor-5/1600.jpg",
         "format": "jpg"
+      },
+      {
+        "width": 1080,
+        "height": 1920,
+        "path": "images/optimized/investor-5/1920.jpg",
+        "format": "jpg"
       }
     ]
   },
   "investor 6.jpeg": {
-    "width": 1200,
-    "height": 1600,
+    "width": 1440,
+    "height": 1920,
     "slug": "investor-6",
     "format": "jpg",
     "variants": [
@@ -492,12 +674,18 @@
         "height": 1600,
         "path": "images/optimized/investor-6/1600.jpg",
         "format": "jpg"
+      },
+      {
+        "width": 1440,
+        "height": 1920,
+        "path": "images/optimized/investor-6/1920.jpg",
+        "format": "jpg"
       }
     ]
   },
   "investor 7.jpeg": {
-    "width": 1600,
-    "height": 900,
+    "width": 1920,
+    "height": 1080,
     "slug": "investor-7",
     "format": "jpg",
     "variants": [
@@ -524,12 +712,132 @@
         "height": 900,
         "path": "images/optimized/investor-7/1600.jpg",
         "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1080,
+        "path": "images/optimized/investor-7/1920.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "K1.png": {
+    "width": 1920,
+    "height": 1440,
+    "slug": "k1",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 480,
+        "height": 360,
+        "path": "images/optimized/k1/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 768,
+        "height": 576,
+        "path": "images/optimized/k1/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1200,
+        "height": 900,
+        "path": "images/optimized/k1/1200.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1600,
+        "height": 1200,
+        "path": "images/optimized/k1/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1440,
+        "path": "images/optimized/k1/1920.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "K2.png": {
+    "width": 1920,
+    "height": 1440,
+    "slug": "k2",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 480,
+        "height": 360,
+        "path": "images/optimized/k2/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 768,
+        "height": 576,
+        "path": "images/optimized/k2/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1200,
+        "height": 900,
+        "path": "images/optimized/k2/1200.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1600,
+        "height": 1200,
+        "path": "images/optimized/k2/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1440,
+        "path": "images/optimized/k2/1920.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "K3.png": {
+    "width": 1440,
+    "height": 1920,
+    "slug": "k3",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 360,
+        "height": 480,
+        "path": "images/optimized/k3/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 576,
+        "height": 768,
+        "path": "images/optimized/k3/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 900,
+        "height": 1200,
+        "path": "images/optimized/k3/1200.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1200,
+        "height": 1600,
+        "path": "images/optimized/k3/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1440,
+        "height": 1920,
+        "path": "images/optimized/k3/1920.jpg",
+        "format": "jpg"
       }
     ]
   },
   "klinik.png": {
-    "width": 1372,
-    "height": 1420,
+    "width": 1855,
+    "height": 1920,
     "slug": "klinik",
     "format": "png",
     "variants": [
@@ -552,112 +860,130 @@
         "format": "png"
       },
       {
-        "width": 1372,
-        "height": 1420,
-        "path": "images/optimized/klinik/1420.png",
+        "width": 1546,
+        "height": 1600,
+        "path": "images/optimized/klinik/1600.png",
+        "format": "png"
+      },
+      {
+        "width": 1855,
+        "height": 1920,
+        "path": "images/optimized/klinik/1920.png",
         "format": "png"
       }
     ]
   },
-  "kyra-stay-1.jpg": {
-    "width": 1600,
-    "height": 1200,
-    "slug": "kyra-stay-1",
+  "laundry.jpeg": {
+    "width": 1920,
+    "height": 1280,
+    "slug": "laundry",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
-        "height": 360,
-        "path": "images/optimized/kyra-stay-1/480.jpg",
+        "height": 320,
+        "path": "images/optimized/laundry/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
-        "height": 576,
-        "path": "images/optimized/kyra-stay-1/768.jpg",
+        "height": 512,
+        "path": "images/optimized/laundry/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
-        "height": 900,
-        "path": "images/optimized/kyra-stay-1/1200.jpg",
+        "height": 800,
+        "path": "images/optimized/laundry/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
-        "height": 1200,
-        "path": "images/optimized/kyra-stay-1/1600.jpg",
+        "height": 1067,
+        "path": "images/optimized/laundry/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1280,
+        "path": "images/optimized/laundry/1920.jpg",
         "format": "jpg"
       }
     ]
   },
-  "kyra-stay-2.jpg": {
-    "width": 1200,
-    "height": 1600,
-    "slug": "kyra-stay-2",
-    "format": "jpg",
+  "logo.png": {
+    "width": 1500,
+    "height": 1509,
+    "slug": "logo",
+    "format": "png",
     "variants": [
       {
-        "width": 360,
+        "width": 477,
         "height": 480,
-        "path": "images/optimized/kyra-stay-2/480.jpg",
-        "format": "jpg"
+        "path": "images/optimized/logo/480.png",
+        "format": "png"
       },
       {
-        "width": 576,
+        "width": 763,
         "height": 768,
-        "path": "images/optimized/kyra-stay-2/768.jpg",
-        "format": "jpg"
+        "path": "images/optimized/logo/768.png",
+        "format": "png"
       },
       {
-        "width": 900,
+        "width": 1193,
         "height": 1200,
-        "path": "images/optimized/kyra-stay-2/1200.jpg",
-        "format": "jpg"
+        "path": "images/optimized/logo/1200.png",
+        "format": "png"
       },
       {
-        "width": 1200,
-        "height": 1600,
-        "path": "images/optimized/kyra-stay-2/1600.jpg",
-        "format": "jpg"
+        "width": 1500,
+        "height": 1509,
+        "path": "images/optimized/logo/1509.png",
+        "format": "png"
       }
     ]
   },
-  "kyra-stay-3.jpg": {
-    "width": 1600,
-    "height": 1200,
-    "slug": "kyra-stay-3",
-    "format": "jpg",
+  "mezzanine.png": {
+    "width": 2340,
+    "height": 1484,
+    "slug": "mezzanine",
+    "format": "png",
     "variants": [
       {
         "width": 480,
-        "height": 360,
-        "path": "images/optimized/kyra-stay-3/480.jpg",
-        "format": "jpg"
+        "height": 304,
+        "path": "images/optimized/mezzanine/480.png",
+        "format": "png"
       },
       {
         "width": 768,
-        "height": 576,
-        "path": "images/optimized/kyra-stay-3/768.jpg",
-        "format": "jpg"
+        "height": 487,
+        "path": "images/optimized/mezzanine/768.png",
+        "format": "png"
       },
       {
         "width": 1200,
-        "height": 900,
-        "path": "images/optimized/kyra-stay-3/1200.jpg",
-        "format": "jpg"
+        "height": 761,
+        "path": "images/optimized/mezzanine/1200.png",
+        "format": "png"
       },
       {
         "width": 1600,
-        "height": 1200,
-        "path": "images/optimized/kyra-stay-3/1600.jpg",
-        "format": "jpg"
+        "height": 1015,
+        "path": "images/optimized/mezzanine/1600.png",
+        "format": "png"
+      },
+      {
+        "width": 1920,
+        "height": 1218,
+        "path": "images/optimized/mezzanine/1920.png",
+        "format": "png"
       }
     ]
   },
   "mie gacoan.webp": {
-    "width": 904,
-    "height": 600,
+    "width": 1920,
+    "height": 1274,
     "slug": "mie-gacoan",
     "format": "jpg",
     "variants": [
@@ -674,9 +1000,21 @@
         "format": "jpg"
       },
       {
-        "width": 904,
-        "height": 600,
-        "path": "images/optimized/mie-gacoan/904.jpg",
+        "width": 1200,
+        "height": 796,
+        "path": "images/optimized/mie-gacoan/1200.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1600,
+        "height": 1062,
+        "path": "images/optimized/mie-gacoan/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1274,
+        "path": "images/optimized/mie-gacoan/1920.jpg",
         "format": "jpg"
       }
     ]
@@ -719,9 +1057,47 @@
       }
     ]
   },
+  "mobil.jpeg": {
+    "width": 1920,
+    "height": 1280,
+    "slug": "mobil",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 480,
+        "height": 320,
+        "path": "images/optimized/mobil/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 768,
+        "height": 512,
+        "path": "images/optimized/mobil/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1200,
+        "height": 800,
+        "path": "images/optimized/mobil/1200.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1600,
+        "height": 1067,
+        "path": "images/optimized/mobil/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1280,
+        "path": "images/optimized/mobil/1920.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
   "mushola.jpg": {
-    "width": 736,
-    "height": 736,
+    "width": 1920,
+    "height": 1920,
     "slug": "mushola",
     "format": "jpg",
     "variants": [
@@ -732,16 +1108,72 @@
         "format": "jpg"
       },
       {
-        "width": 736,
-        "height": 736,
-        "path": "images/optimized/mushola/736.jpg",
+        "width": 768,
+        "height": 768,
+        "path": "images/optimized/mushola/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1200,
+        "height": 1200,
+        "path": "images/optimized/mushola/1200.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1600,
+        "height": 1600,
+        "path": "images/optimized/mushola/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1920,
+        "path": "images/optimized/mushola/1920.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "parkir.jpeg": {
+    "width": 1920,
+    "height": 1170,
+    "slug": "parkir",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 480,
+        "height": 293,
+        "path": "images/optimized/parkir/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 768,
+        "height": 468,
+        "path": "images/optimized/parkir/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1200,
+        "height": 731,
+        "path": "images/optimized/parkir/1200.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1600,
+        "height": 975,
+        "path": "images/optimized/parkir/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1170,
+        "path": "images/optimized/parkir/1920.jpg",
         "format": "jpg"
       }
     ]
   },
   "pintu-ipb.jpg": {
-    "width": 736,
-    "height": 552,
+    "width": 1920,
+    "height": 1440,
     "slug": "pintu-ipb",
     "format": "jpg",
     "variants": [
@@ -752,199 +1184,65 @@
         "format": "jpg"
       },
       {
-        "width": 736,
-        "height": 552,
-        "path": "images/optimized/pintu-ipb/736.jpg",
-        "format": "jpg"
-      }
-    ]
-  },
-  "rivere/Denah/w1.jpg": {
-    "width": 4962,
-    "height": 3507,
-    "slug": "rivere-denah-w1",
-    "format": "jpg",
-    "variants": [
-      {
-        "width": 480,
-        "height": 339,
-        "path": "images/optimized/rivere-denah-w1/480.jpg",
-        "format": "jpg"
-      },
-      {
         "width": 768,
-        "height": 543,
-        "path": "images/optimized/rivere-denah-w1/768.jpg",
+        "height": 576,
+        "path": "images/optimized/pintu-ipb/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
-        "height": 848,
-        "path": "images/optimized/rivere-denah-w1/1200.jpg",
+        "height": 900,
+        "path": "images/optimized/pintu-ipb/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
-        "height": 1131,
-        "path": "images/optimized/rivere-denah-w1/1600.jpg",
+        "height": 1200,
+        "path": "images/optimized/pintu-ipb/1600.jpg",
         "format": "jpg"
       },
       {
         "width": 1920,
-        "height": 1357,
-        "path": "images/optimized/rivere-denah-w1/1920.jpg",
+        "height": 1440,
+        "path": "images/optimized/pintu-ipb/1920.jpg",
         "format": "jpg"
       }
     ]
   },
-  "rivere/Denah/w2.jpg": {
-    "width": 4962,
-    "height": 3507,
-    "slug": "rivere-denah-w2",
+  "pool.jpeg": {
+    "width": 1920,
+    "height": 1080,
+    "slug": "pool",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
-        "height": 339,
-        "path": "images/optimized/rivere-denah-w2/480.jpg",
+        "height": 270,
+        "path": "images/optimized/pool/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
-        "height": 543,
-        "path": "images/optimized/rivere-denah-w2/768.jpg",
+        "height": 432,
+        "path": "images/optimized/pool/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
-        "height": 848,
-        "path": "images/optimized/rivere-denah-w2/1200.jpg",
+        "height": 675,
+        "path": "images/optimized/pool/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
-        "height": 1131,
-        "path": "images/optimized/rivere-denah-w2/1600.jpg",
+        "height": 900,
+        "path": "images/optimized/pool/1600.jpg",
         "format": "jpg"
       },
       {
         "width": 1920,
-        "height": 1357,
-        "path": "images/optimized/rivere-denah-w2/1920.jpg",
-        "format": "jpg"
-      }
-    ]
-  },
-  "rivere/Denah/w3.jpg": {
-    "width": 4962,
-    "height": 3507,
-    "slug": "rivere-denah-w3",
-    "format": "jpg",
-    "variants": [
-      {
-        "width": 480,
-        "height": 339,
-        "path": "images/optimized/rivere-denah-w3/480.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 768,
-        "height": 543,
-        "path": "images/optimized/rivere-denah-w3/768.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1200,
-        "height": 848,
-        "path": "images/optimized/rivere-denah-w3/1200.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1600,
-        "height": 1131,
-        "path": "images/optimized/rivere-denah-w3/1600.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1920,
-        "height": 1357,
-        "path": "images/optimized/rivere-denah-w3/1920.jpg",
-        "format": "jpg"
-      }
-    ]
-  },
-  "rivere/Denah/w4.jpg": {
-    "width": 4962,
-    "height": 3507,
-    "slug": "rivere-denah-w4",
-    "format": "jpg",
-    "variants": [
-      {
-        "width": 480,
-        "height": 339,
-        "path": "images/optimized/rivere-denah-w4/480.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 768,
-        "height": 543,
-        "path": "images/optimized/rivere-denah-w4/768.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1200,
-        "height": 848,
-        "path": "images/optimized/rivere-denah-w4/1200.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1600,
-        "height": 1131,
-        "path": "images/optimized/rivere-denah-w4/1600.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1920,
-        "height": 1357,
-        "path": "images/optimized/rivere-denah-w4/1920.jpg",
-        "format": "jpg"
-      }
-    ]
-  },
-  "rivere/Denah/w5.jpg": {
-    "width": 4962,
-    "height": 3507,
-    "slug": "rivere-denah-w5",
-    "format": "jpg",
-    "variants": [
-      {
-        "width": 480,
-        "height": 339,
-        "path": "images/optimized/rivere-denah-w5/480.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 768,
-        "height": 543,
-        "path": "images/optimized/rivere-denah-w5/768.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1200,
-        "height": 848,
-        "path": "images/optimized/rivere-denah-w5/1200.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1600,
-        "height": 1131,
-        "path": "images/optimized/rivere-denah-w5/1600.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 1920,
-        "height": 1357,
-        "path": "images/optimized/rivere-denah-w5/1920.jpg",
+        "height": 1080,
+        "path": "images/optimized/pool/1920.jpg",
         "format": "jpg"
       }
     ]
@@ -1340,14 +1638,14 @@
     ]
   },
   "rs.png": {
-    "width": 1904,
-    "height": 1172,
+    "width": 1920,
+    "height": 1182,
     "slug": "rs",
     "format": "png",
     "variants": [
       {
         "width": 480,
-        "height": 295,
+        "height": 296,
         "path": "images/optimized/rs/480.png",
         "format": "png"
       },
@@ -1370,16 +1668,42 @@
         "format": "png"
       },
       {
-        "width": 1904,
-        "height": 1172,
-        "path": "images/optimized/rs/1904.png",
+        "width": 1920,
+        "height": 1182,
+        "path": "images/optimized/rs/1920.png",
         "format": "png"
       }
     ]
   },
+  "satpam.jpeg": {
+    "width": 1024,
+    "height": 559,
+    "slug": "satpam",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 480,
+        "height": 262,
+        "path": "images/optimized/satpam/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 768,
+        "height": 419,
+        "path": "images/optimized/satpam/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1024,
+        "height": 559,
+        "path": "images/optimized/satpam/1024.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
   "tim-kyrastay.png": {
-    "width": 790,
-    "height": 642,
+    "width": 1920,
+    "height": 1560,
     "slug": "tim-kyrastay",
     "format": "png",
     "variants": [
@@ -1396,56 +1720,28 @@
         "format": "png"
       },
       {
-        "width": 790,
-        "height": 642,
-        "path": "images/optimized/tim-kyrastay/790.png",
+        "width": 1200,
+        "height": 975,
+        "path": "images/optimized/tim-kyrastay/1200.png",
+        "format": "png"
+      },
+      {
+        "width": 1600,
+        "height": 1300,
+        "path": "images/optimized/tim-kyrastay/1600.png",
+        "format": "png"
+      },
+      {
+        "width": 1920,
+        "height": 1560,
+        "path": "images/optimized/tim-kyrastay/1920.png",
         "format": "png"
       }
     ]
   },
-  "tv.jpg": {
-    "width": 736,
-    "height": 736,
-    "slug": "tv",
-    "format": "jpg",
-    "variants": [
-      {
-        "width": 480,
-        "height": 480,
-        "path": "images/optimized/tv/480.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 736,
-        "height": 736,
-        "path": "images/optimized/tv/736.jpg",
-        "format": "jpg"
-      }
-    ]
-  },
-  "waterheater.jpg": {
-    "width": 736,
-    "height": 736,
-    "slug": "waterheater",
-    "format": "jpg",
-    "variants": [
-      {
-        "width": 480,
-        "height": 480,
-        "path": "images/optimized/waterheater/480.jpg",
-        "format": "jpg"
-      },
-      {
-        "width": 736,
-        "height": 736,
-        "path": "images/optimized/waterheater/736.jpg",
-        "format": "jpg"
-      }
-    ]
-  },
   "yogya.jpg": {
-    "width": 555,
-    "height": 370,
+    "width": 1920,
+    "height": 1280,
     "slug": "yogya",
     "format": "jpg",
     "variants": [
@@ -1456,9 +1752,27 @@
         "format": "jpg"
       },
       {
-        "width": 555,
-        "height": 370,
-        "path": "images/optimized/yogya/555.jpg",
+        "width": 768,
+        "height": 512,
+        "path": "images/optimized/yogya/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1200,
+        "height": 800,
+        "path": "images/optimized/yogya/1200.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1600,
+        "height": 1067,
+        "path": "images/optimized/yogya/1600.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 1920,
+        "height": 1280,
+        "path": "images/optimized/yogya/1920.jpg",
         "format": "jpg"
       }
     ]

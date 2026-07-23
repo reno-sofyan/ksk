@@ -1,5 +1,7 @@
 const DRAFTS_KEY = 'rivere_blog_drafts_v1';
 const PUBLISHED_POSTS_KEY = 'rivere_blog_published_posts_v1';
+const REMOTE_BLOG_URL = import.meta.env.VITE_BLOG_API_URL || '/api/blog.php';
+const BLOG_ADMIN_KEY = import.meta.env.VITE_BLOG_ADMIN_KEY || 'RivereBlog2026!';
 
 export function slugify(value) {
   return value
@@ -39,6 +41,100 @@ export function readPublishedBlogPosts() {
   } catch {
     return [];
   }
+}
+
+function canUseFetch() {
+  return typeof window !== 'undefined' && typeof window.fetch === 'function';
+}
+
+function shouldUseRemoteBlog() {
+  return Boolean(REMOTE_BLOG_URL) && REMOTE_BLOG_URL !== 'disabled';
+}
+
+async function requestRemoteBlog(action, options = {}) {
+  if (!canUseFetch() || !shouldUseRemoteBlog()) {
+    throw new Error('Remote blog API disabled.');
+  }
+
+  const { admin, query: queryParams, headers, ...fetchOptions } = options;
+  const separator = REMOTE_BLOG_URL.includes('?') ? '&' : '?';
+  const query = new URLSearchParams({ action, ...(queryParams || {}) });
+  const response = await window.fetch(`${REMOTE_BLOG_URL}${separator}${query.toString()}`, {
+    cache: 'no-store',
+    ...fetchOptions,
+    headers: {
+      Accept: 'application/json',
+      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+      ...(admin ? { 'X-Blog-Admin-Key': BLOG_ADMIN_KEY } : {}),
+      ...(headers || {})
+    }
+  });
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    throw new Error(data?.error || 'Blog API gagal merespons.');
+  }
+
+  return data;
+}
+
+export async function fetchServerPublishedBlogPosts() {
+  try {
+    const data = await requestRemoteBlog('published');
+    return Array.isArray(data?.items) ? data.items : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchServerBlogDrafts() {
+  try {
+    const data = await requestRemoteBlog('drafts', { admin: true });
+    return Array.isArray(data?.items) ? data.items : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function saveServerBlogDraft(draft) {
+  const data = await requestRemoteBlog('draft', {
+    method: 'POST',
+    admin: true,
+    body: JSON.stringify(draft)
+  });
+
+  return Array.isArray(data?.items) ? data.items : [];
+}
+
+export async function publishServerBlogPost(post) {
+  const data = await requestRemoteBlog('publish', {
+    method: 'POST',
+    admin: true,
+    body: JSON.stringify(post)
+  });
+
+  return Array.isArray(data?.items) ? data.items : [];
+}
+
+export async function deleteServerBlogDraft(id) {
+  const data = await requestRemoteBlog('draft', {
+    method: 'DELETE',
+    admin: true,
+    query: { id }
+  });
+
+  return Array.isArray(data?.items) ? data.items : [];
+}
+
+export async function deleteServerPublishedBlogPost(slug) {
+  const data = await requestRemoteBlog('published', {
+    method: 'DELETE',
+    admin: true,
+    query: { slug }
+  });
+
+  return Array.isArray(data?.items) ? data.items : [];
 }
 
 export function saveBlogDraft(draft) {

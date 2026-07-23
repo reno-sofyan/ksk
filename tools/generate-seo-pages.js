@@ -319,6 +319,16 @@ function writePage(routePath, html) {
   fs.writeFileSync(path.join(routeDir, 'index.html'), html, 'utf8');
 }
 
+function spaRouteHtml(sourceHtml, { title, description }) {
+  return sourceHtml
+    .replace(/\s*<!-- SEO_DEFAULT_START -->[\s\S]*?<!-- SEO_DEFAULT_END -->/i, '')
+    .replace(/<title[^>]*>[\s\S]*?<\/title>/i, `<title>${escapeHtml(title)}</title>`)
+    .replace(/<meta(?=[^>]*name="description")[^>]*>/i, `<meta name="description" content="${escapeHtml(description)}" />`)
+    .replace('</head>', `
+    <meta name="robots" content="noindex, nofollow" />
+  </head>`);
+}
+
 function main() {
   if (!fs.existsSync(sourceIndexPath)) {
     throw new Error(`Built index.html not found at ${sourceIndexPath}`);
@@ -360,7 +370,17 @@ function main() {
     }, renderArticle(post)));
   }
 
-  console.log(`Generated ${BLOG_POSTS.length + 2} static SEO pages in ${outputDir}`);
+  writePage('login', spaRouteHtml(sourceHtml, {
+    title: 'Login Admin Rivere',
+    description: 'Halaman login admin Rivere Kostaycation IPB.'
+  }));
+
+  writePage('dashboard', spaRouteHtml(sourceHtml, {
+    title: 'Dashboard Admin Rivere',
+    description: 'Dashboard admin Rivere Kostaycation IPB.'
+  }));
+
+  console.log(`Generated ${BLOG_POSTS.length + 4} static SEO pages in ${outputDir}`);
 }
 
 main();

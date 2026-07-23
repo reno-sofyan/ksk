@@ -32,6 +32,12 @@ jobs:
 
       - name: Build website
         run: npm run build:hostinger
+        env:
+          VITE_CLARITY_PROJECT_ID: ${{ secrets.VITE_CLARITY_PROJECT_ID }}
+          VITE_HOTJAR_ID: ${{ secrets.VITE_HOTJAR_ID }}
+          VITE_HOTJAR_SV: ${{ secrets.VITE_HOTJAR_SV || '6' }}
+          VITE_BLOG_API_URL: /api/blog.php
+          VITE_BLOG_ADMIN_KEY: ${{ secrets.VITE_BLOG_ADMIN_KEY || 'RivereBlog2026!' }}
 
       - name: Deploy dist to Hostinger public_html
         uses: SamKirkland/FTP-Deploy-Action@v4.3.6
@@ -48,3 +54,7 @@ jobs:
             **/node_modules/**
             **/.analytics-data
             **/.analytics-data/**
+            **/.blog-data
+            **/.blog-data/**
+            **/images/blog-uploads
+            **/images/blog-uploads/**

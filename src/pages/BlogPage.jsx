@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { BookOpen, SearchCheck } from 'lucide-react';
 import BlogPostCard from '@/components/BlogPostCard.jsx';
 import { BlogFooter, BlogHeader } from '@/components/BlogChrome.jsx';
 import { AUTHOR_NAME, AUTHOR_URL, BLOG_POSTS, SITE_URL, getBlogPostUrl } from '@/data/blogPosts.js';
-import { mergePublishedBlogPosts, readPublishedBlogPosts } from '@/lib/adminBlogStore.js';
+import { fetchServerPublishedBlogPosts, mergePublishedBlogPosts, readPublishedBlogPosts } from '@/lib/adminBlogStore.js';
 
 const getAbsoluteImageUrl = (image) => {
   if (!image) return `${SITE_URL}/images/rivere/Design%201/1.png`;
@@ -44,15 +44,34 @@ const createBlogSchema = (posts) => {
 };
 
 const BlogPage = () => {
-  const [publishedPosts] = useState(() => readPublishedBlogPosts());
+  const [localPublishedPosts] = useState(() => readPublishedBlogPosts());
+  const [serverPublishedPosts, setServerPublishedPosts] = useState(null);
+  const publishedPosts = serverPublishedPosts || localPublishedPosts;
   const posts = useMemo(() => mergePublishedBlogPosts(BLOG_POSTS, publishedPosts), [publishedPosts]);
   const blogSchema = useMemo(() => createBlogSchema(posts), [posts]);
   const [featuredPost, ...otherPosts] = posts;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchServerPublishedBlogPosts().then((items) => {
+      if (isMounted && items) {
+        setServerPublishedPosts(items);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Helmet>
         <title>Blog Investasi Properti Dekat IPB | Rivere Kostaycation</title>
+        <link rel="icon" href="/favicon.ico?v=kinara-20260721" sizes="any" />
+        <link rel="icon" type="image/png" href="/favicon.png?v=kinara-20260721" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kinara-20260721" />
         <meta name="description" content="Panduan investasi kost dekat IPB, cara menghitung yield dan ROI properti, serta wawasan kost resort dari Rivere Kostaycation IPB." />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <link rel="canonical" href={`${SITE_URL}/blog/`} />

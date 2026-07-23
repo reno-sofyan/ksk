@@ -2,16 +2,22 @@
 	RewriteEngine On
 	RewriteBase /
 	RewriteRule ^(cs[1-4])$ $1/ [R=301,L]
+	RewriteRule ^(assets|images|api)/ - [L]
+	RewriteRule ^(favicon\.ico|favicon\.png|apple-touch-icon\.png|robots\.txt|sitemap\.xml|llms\.txt)$ - [L]
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^ index.html [L]
 </IfModule>
 
 <IfModule mod_headers.c>
-	Header set X-Powered-By "Hostinger Horizons"
+	Header set X-Powered-By "Kinara Land"
 
-	# Cache everything on CDN by default
-	Header set Cache-Control "public, s-maxage=604800, max-age=0"
+	# Keep HTML fresh so it does not point to old hashed assets after deploy.
+	Header set Cache-Control "no-cache, must-revalidate, max-age=0"
+
+	<If "%{REQUEST_URI} =~ m#^/api/.*$#">
+		Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+	</If>
 
 	# Cache in browser all assets
 	<If "%{REQUEST_URI} =~ m#^/assets/.*$#">

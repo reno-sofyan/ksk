@@ -140,18 +140,24 @@ function client_ip_hash(): string
     return hash('sha256', trim($ip));
 }
 
-function summarize_analytics(array $analytics): array
+function sum_daily_page_views(array $dailyPageViews, int $days): int
 {
-    $todayKey = date('Y-m-d');
-    $since = new DateTimeImmutable('-6 days');
-    $last7Days = 0;
+    $since = new DateTimeImmutable('-' . ($days - 1) . ' days');
+    $total = 0;
 
-    foreach (($analytics['dailyPageViews'] ?? []) as $date => $count) {
+    foreach ($dailyPageViews as $date => $count) {
         if ($date >= $since->format('Y-m-d')) {
-            $last7Days += (int) $count;
+            $total += (int) $count;
         }
     }
 
+    return $total;
+}
+
+function summarize_analytics(array $analytics): array
+{
+    $todayKey = date('Y-m-d');
+    $dailyPageViews = $analytics['dailyPageViews'] ?? [];
     $topPages = [];
 
     foreach (($analytics['pageViewsByPath'] ?? []) as $path => $views) {
@@ -165,8 +171,10 @@ function summarize_analytics(array $analytics): array
     $events = array_slice($analytics['events'] ?? [], 0, 12);
 
     return array_merge($analytics, [
-        'todayPageViews' => (int) (($analytics['dailyPageViews'] ?? [])[$todayKey] ?? 0),
-        'last7DaysPageViews' => $last7Days,
+        'todayPageViews' => (int) ($dailyPageViews[$todayKey] ?? 0),
+        'last7DaysPageViews' => sum_daily_page_views($dailyPageViews, 7),
+        'last14DaysPageViews' => sum_daily_page_views($dailyPageViews, 14),
+        'last30DaysPageViews' => sum_daily_page_views($dailyPageViews, 30),
         'topPages' => array_slice($topPages, 0, 8),
         'recentEvents' => $events,
         'source' => 'server',

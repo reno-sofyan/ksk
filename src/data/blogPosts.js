@@ -1,4 +1,6 @@
-export const SITE_URL = 'https://kinaraland.com';
+export const COMPANY_SITE_URL = 'https://kinaraland.com';
+export const RIVERE_SITE_URL = 'https://rivere.kinaraland.com';
+export const SITE_URL = RIVERE_SITE_URL;
 export const AUTHOR_NAME = 'Tim Rivere Kostaycation IPB';
 export const AUTHOR_URL = `${SITE_URL}/blog/#tentang-tim-rivere`;
 
@@ -234,7 +236,7 @@ export const BLOG_POSTS = [
       {
         heading: '5. Pilihan unit dan positioning aset',
         paragraphs: [
-          'Rivere menawarkan Type 62/31 dengan empat kamar seharga Rp1 miliar atau Rp925 juta untuk cash keras. Type 94/31 dengan enam kamar ditawarkan seharga Rp1,6 miliar atau Rp1,45 miliar untuk cash keras, dengan pilihan skema pembayaran enam bulan atau satu tahun.',
+          'Rivere menawarkan Type 62/31 dengan empat kamar seharga Rp1 miliar atau Rp925 juta untuk cash keras. Type 94/31 dengan enam kamar ditawarkan seharga Rp1,6 miliar atau Rp1,35 miliar untuk cash keras, dengan pilihan skema pembayaran enam bulan atau satu tahun.',
           'Pilihan unit sebaiknya disesuaikan dengan modal, tujuan arus kas, horizon investasi, dan toleransi risiko. Legalitas SHM serta lokasi dekat captive market IPB memperkuat positioning sebagai aset wealth preservation, tetapi keputusan tetap perlu didasarkan pada pemeriksaan dokumen dan proyeksi finansial pribadi.'
         ]
       },

@@ -5,6 +5,9 @@ import path from 'node:path';
 import { BLOG_POSTS, SITE_URL, getBlogPostUrl } from '../src/data/blogPosts.js';
 import { DENAH_PAGE } from '../src/data/riverePlans.js';
 
+const COMPANY_SITE_URL = 'https://kinaraland.com';
+const variant = (process.env.SITE_VARIANT || process.env.VITE_SITE_VARIANT || 'rivere').toLowerCase();
+
 function renderUrl({ location, lastModified, changeFrequency, priority }) {
   return `  <url>
     <loc>${location}</loc>
@@ -20,32 +23,45 @@ function main() {
     '2026-07-14'
   );
 
-  const entries = [
-    {
-      location: `${SITE_URL}/`,
-      lastModified: latestModified,
-      changeFrequency: 'weekly',
-      priority: '1.0'
-    },
-    {
-      location: `${SITE_URL}/blog/`,
-      lastModified: latestModified,
-      changeFrequency: 'weekly',
-      priority: '0.8'
-    },
-    {
-      location: `${SITE_URL}${DENAH_PAGE.path}`,
-      lastModified: latestModified,
-      changeFrequency: 'monthly',
-      priority: '0.8'
-    },
-    ...BLOG_POSTS.map((post) => ({
-      location: getBlogPostUrl(post),
-      lastModified: post.dateModified,
-      changeFrequency: 'monthly',
-      priority: '0.8'
-    }))
-  ];
+  const entries = variant === 'company'
+    ? [
+        {
+          location: `${COMPANY_SITE_URL}/`,
+          lastModified: latestModified,
+          changeFrequency: 'weekly',
+          priority: '1.0'
+        }
+      ]
+    : [
+        {
+          location: `${SITE_URL}/`,
+          lastModified: latestModified,
+          changeFrequency: 'weekly',
+          priority: '1.0'
+        },
+        {
+          location: `${SITE_URL}/blog/`,
+          lastModified: latestModified,
+          changeFrequency: 'weekly',
+          priority: '0.8'
+        },
+        {
+          location: `${SITE_URL}${DENAH_PAGE.path}`,
+          lastModified: latestModified,
+          changeFrequency: 'monthly',
+          priority: '0.8'
+        },
+        ...BLOG_POSTS.map((post) => ({
+          location: getBlogPostUrl(post),
+          lastModified: post.dateModified,
+          changeFrequency: 'monthly',
+          priority: '0.8'
+        }))
+      ];
+
+  const sitemapUrl = variant === 'company'
+    ? `${COMPANY_SITE_URL}/sitemap.xml`
+    : `${SITE_URL}/sitemap.xml`;
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -54,8 +70,13 @@ ${entries.map(renderUrl).join('\n')}
 `;
 
   const outputPath = path.join(process.cwd(), 'public', 'sitemap.xml');
+  const robotsPath = path.join(process.cwd(), 'public', 'robots.txt');
   fs.writeFileSync(outputPath, sitemap, 'utf8');
-  console.log(`Generated sitemap with ${entries.length} URLs`);
+  fs.writeFileSync(robotsPath, `User-agent: *
+Allow: /
+Sitemap: ${sitemapUrl}
+`, 'utf8');
+  console.log(`Generated ${variant} sitemap with ${entries.length} URLs`);
 }
 
 main();

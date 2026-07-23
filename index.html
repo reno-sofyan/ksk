@@ -2,8 +2,19 @@
 <html lang="id">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="generator" content="Hostinger Horizons" />
+		<!-- Google Tag Manager -->
+		<script>
+			(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+			'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+			})(window,document,'script','dataLayer','GTM-PZRW95S2');
+		</script>
+		<!-- End Google Tag Manager -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" href="/favicon.ico?v=kinara-20260721" sizes="any" />
+		<link rel="icon" type="image/png" href="/favicon.png?v=kinara-20260721" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kinara-20260721" />
 		<title data-react-helmet="true">Rivere Kostaycation IPB | Smart Property Investment Ring 1 IPB</title>
 		<meta
 			name="description"
@@ -72,6 +83,8 @@
 			html {
 				background: #e8f2ed;
 				scroll-behavior: smooth;
+				min-height: 100%;
+				overflow-y: auto !important;
 			}
 
 			body {
@@ -80,6 +93,9 @@
 				background: #e8f2ed;
 				color: #202622;
 				font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+				overflow-x: clip;
+				overflow-y: auto !important;
+				touch-action: pan-y;
 			}
 
 			#root {
@@ -150,13 +166,6 @@
 				text-wrap: balance;
 			}
 
-			.boot-highlight {
-				background: linear-gradient(90deg, #ffffff, #d0ad5a);
-				-webkit-background-clip: text;
-				background-clip: text;
-				color: transparent;
-			}
-
 			.boot-subtitle {
 				margin: 0;
 				color: rgba(255, 255, 255, 0.9);
@@ -198,55 +207,29 @@
 				}
 			}
 		</style>
-		<!-- Meta Pixel Code -->
 		<script>
 			(function() {
-				var pixelLoaded = false;
-
-				function loadPixel() {
-					if (pixelLoaded || window.fbq) {
-						return;
-					}
-
-					pixelLoaded = true;
-
-					!function(f,b,e,v,n,t,s)
-					{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-					n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-					if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-					n.queue=[];t=b.createElement(e);t.async=!0;
-					t.src=v;s=b.getElementsByTagName(e)[0];
-					s.parentNode.insertBefore(t,s)}(window, document,'script',
-					'https://connect.facebook.net/en_US/fbevents.js');
-					fbq('init', '925893943551839');
-					fbq('track', 'PageView');
+				function unlockScroll() {
+					document.documentElement.style.overflowY = 'auto';
+					document.body.style.overflowY = 'auto';
+					document.documentElement.style.height = 'auto';
+					document.body.style.height = 'auto';
 				}
 
-				function schedulePixel() {
-					if ('requestIdleCallback' in window) {
-						requestIdleCallback(loadPixel, { timeout: 3000 });
-						return;
-					}
-
-					setTimeout(loadPixel, 2500);
-				}
-
-				var onFirstIntent = function() {
-					schedulePixel();
-				};
-
-				window.addEventListener('load', schedulePixel, { once: true });
-				window.addEventListener('pointerdown', onFirstIntent, { once: true, passive: true });
-				window.addEventListener('keydown', onFirstIntent, { once: true });
-				window.addEventListener('scroll', onFirstIntent, { once: true, passive: true });
+				unlockScroll();
+				window.addEventListener('load', unlockScroll, { once: true, passive: true });
+				window.addEventListener('scroll', unlockScroll, { passive: true });
+				window.addEventListener('touchmove', unlockScroll, { passive: true });
+				window.setTimeout(unlockScroll, 500);
+				window.setTimeout(unlockScroll, 2000);
+				window.setTimeout(unlockScroll, 5000);
 			})();
 		</script>
-		<!-- End Meta Pixel Code -->
 	</head>
 	<body>
-		<noscript><img height="1" width="1" style="display:none"
-		src="https://www.facebook.com/tr?id=925893943551839&ev=PageView&noscript=1"
-		/></noscript>
+		<!-- Google Tag Manager (noscript) -->
+		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PZRW95S2" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<!-- End Google Tag Manager (noscript) -->
 		<div id="root">
 			<section class="boot-hero" aria-label="Rivere Kostaycation IPB">
 				<div class="boot-media">
@@ -265,7 +248,7 @@
 					<div class="boot-inner">
 						<p class="boot-eyebrow">Rivere Kostaycation IPB</p>
 						<h1 class="boot-heading">
-							Rivere <span class="boot-highlight">Kostaycation IPB</span>
+							Rivere Kostaycation IPB
 						</h1>
 						<p class="boot-subtitle">
 							Lebih dari investasi properti: kost berkonsep resort di Ring 1 IPB, hanya 2 menit dari gerbang utama dan bebas macet.

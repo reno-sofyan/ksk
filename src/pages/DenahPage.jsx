@@ -58,6 +58,9 @@ const DenahPage = () => (
   <div className="min-h-screen bg-background text-foreground">
     <Helmet>
       <title>{DENAH_PAGE.title}</title>
+      <link rel="icon" href="/favicon.ico?v=kinara-20260721" sizes="any" />
+      <link rel="icon" type="image/png" href="/favicon.png?v=kinara-20260721" />
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kinara-20260721" />
       <meta name="description" content={DENAH_PAGE.description} />
       <meta name="robots" content="index, follow, max-image-preview:large" />
       <link rel="canonical" href={pageUrl} />

@@ -30,11 +30,17 @@ import {
   buildBlogPostExport,
   deleteBlogDraft,
   deletePublishedBlogPost,
+  deleteServerBlogDraft,
+  deleteServerPublishedBlogPost,
+  fetchServerBlogDrafts,
+  fetchServerPublishedBlogPosts,
   getPublishChecks,
   getSeoChecks,
+  publishServerBlogPost,
   publishBlogPost,
   readBlogDrafts,
   readPublishedBlogPosts,
+  saveServerBlogDraft,
   saveBlogDraft,
   slugify
 } from "@/lib/adminBlogStore.js";
@@ -61,6 +67,9 @@ const DEFAULT_BLOG_FORM = {
 
 const MAX_BLOG_IMAGE_WIDTH = 1600;
 const BLOG_IMAGE_QUALITY = 0.84;
+const CLARITY_PROJECT_ID = String(import.meta.env.VITE_CLARITY_PROJECT_ID || "").trim();
+const CLARITY_DASHBOARD_URL = "https://clarity.microsoft.com/";
+const CLARITY_EXCLUDED_ROUTES = ["/login", "/dashboard"];
 
 const formatNumber = (value) => new Intl.NumberFormat("id-ID").format(value || 0);
 
@@ -108,8 +117,8 @@ const StatCard = ({ icon: Icon, label, value, helper }) => (
   </div>
 );
 
-const DashboardPanel = ({ eyebrow, title, description, children, action }) => (
-  <section className="border border-primary/10 bg-card p-5 shadow-sm sm:p-6 lg:p-8">
+const DashboardPanel = ({ eyebrow, title, description, children, action, className = "" }) => (
+  <section className={`border border-primary/10 bg-card p-5 shadow-sm sm:p-6 lg:p-8 ${className}`}>
     <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <div>
         {eyebrow ? <p className="text-xs font-semibold uppercase tracking-normal text-accent">{eyebrow}</p> : null}
@@ -278,6 +287,7 @@ export default function DashboardPage() {
   const [analyticsStatus, setAnalyticsStatus] = useState("Memuat analytics...");
   const [drafts, setDrafts] = useState(() => readBlogDrafts());
   const [publishedPosts, setPublishedPosts] = useState(() => readPublishedBlogPosts());
+  const [blogSyncStatus, setBlogSyncStatus] = useState("Memuat data blog server...");
   const [form, setForm] = useState(DEFAULT_BLOG_FORM);
   const [slugTouched, setSlugTouched] = useState(false);
   const [copiedLabel, setCopiedLabel] = useState("");
@@ -289,9 +299,10 @@ export default function DashboardPage() {
   const seoScore = seoChecks.filter((check) => check.pass).length;
   const canPublish = publishChecks.every((check) => check.pass);
   const blogPostExport = useMemo(() => buildBlogPostExport(form), [form]);
-  const exportJson = useMemo(() => JSON.stringify(blogPostExport, null, 2), [blogPostExport]);
   const previewUrl = `${origin}/blog/${form.slug || "slug-artikel"}/`;
   const isUploadedImage = form.image.startsWith("data:image/");
+  const clarityConfigured = CLARITY_PROJECT_ID.length > 0;
+  const clarityTestUrl = `${origin}/?utm_source=admin-dashboard&utm_medium=clarity-test`;
 
   useEffect(() => {
     let isMounted = true;
@@ -321,6 +332,34 @@ export default function DashboardPage() {
     };
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const refreshBlogData = async () => {
+      const [serverDrafts, serverPublishedPosts] = await Promise.all([
+        fetchServerBlogDrafts(),
+        fetchServerPublishedBlogPosts()
+      ]);
+
+      if (!isMounted) return;
+
+      if (serverDrafts || serverPublishedPosts) {
+        if (serverDrafts) setDrafts(serverDrafts);
+        if (serverPublishedPosts) setPublishedPosts(serverPublishedPosts);
+        setBlogSyncStatus("Server Hostinger aktif");
+        return;
+      }
+
+      setBlogSyncStatus("Fallback lokal sampai API Hostinger aktif");
+    };
+
+    refreshBlogData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const handleLogout = async () => {
     await logout();
     window.location.href = "/login";
@@ -343,13 +382,22 @@ export default function DashboardPage() {
     setForm((current) => ({ ...current, slug: slugify(value) }));
   };
 
-  const handleSaveDraft = () => {
+  const handleSaveDraft = async () => {
     const next = saveBlogDraft(form);
     setDrafts(next);
     if (next[0]) {
       setForm((current) => ({ ...current, id: next[0].id, updatedAt: next[0].updatedAt }));
     }
-    showCopiedState("Draft tersimpan");
+
+    try {
+      const serverDrafts = await saveServerBlogDraft(next[0] || form);
+      setDrafts(serverDrafts);
+      setBlogSyncStatus("Draft tersimpan ke server Hostinger");
+      showCopiedState("Draft tersimpan ke server");
+    } catch {
+      setBlogSyncStatus("Fallback lokal sampai API Hostinger aktif");
+      showCopiedState("Draft tersimpan lokal");
+    }
   };
 
   const handleLoadDraft = (draft) => {
@@ -364,15 +412,32 @@ export default function DashboardPage() {
     showCopiedState("Artikel dibuka untuk diedit");
   };
 
-  const handleDeleteDraft = (id) => {
+  const handleDeleteDraft = async (id) => {
     const next = deleteBlogDraft(id);
     setDrafts(next);
+
+    try {
+      const serverDrafts = await deleteServerBlogDraft(id);
+      setDrafts(serverDrafts);
+      setBlogSyncStatus("Draft dihapus dari server Hostinger");
+    } catch {
+      setBlogSyncStatus("Fallback lokal sampai API Hostinger aktif");
+    }
   };
 
-  const handleDeletePublishedPost = (slug) => {
+  const handleDeletePublishedPost = async (slug) => {
     const next = deletePublishedBlogPost(slug);
     setPublishedPosts(next);
-    showCopiedState("Artikel dipublish dihapus");
+
+    try {
+      const serverPublishedPosts = await deleteServerPublishedBlogPost(slug);
+      setPublishedPosts(serverPublishedPosts);
+      setBlogSyncStatus("Artikel dihapus dari server Hostinger");
+      showCopiedState("Artikel dihapus dari server");
+    } catch {
+      setBlogSyncStatus("Fallback lokal sampai API Hostinger aktif");
+      showCopiedState("Artikel lokal dihapus");
+    }
   };
 
   const handleNewDraft = () => {
@@ -409,7 +474,7 @@ export default function DashboardPage() {
     setImageUploadError("");
   };
 
-  const handlePublishBlogPost = () => {
+  const handlePublishBlogPost = async () => {
     if (!canPublish) {
       showCopiedState("Lengkapi field wajib sebelum publish");
       return;
@@ -422,7 +487,20 @@ export default function DashboardPage() {
     if (nextDrafts[0]) {
       setForm((current) => ({ ...current, id: nextDrafts[0].id, updatedAt: nextDrafts[0].updatedAt }));
     }
-    showCopiedState("Artikel berhasil dipublish");
+
+    try {
+      const [serverPublishedPosts, serverDrafts] = await Promise.all([
+        publishServerBlogPost(blogPostExport),
+        saveServerBlogDraft(nextDrafts[0] || form)
+      ]);
+      setPublishedPosts(serverPublishedPosts);
+      setDrafts(serverDrafts);
+      setBlogSyncStatus("Artikel dipublish ke server Hostinger");
+      showCopiedState("Artikel berhasil dipublish ke server");
+    } catch {
+      setBlogSyncStatus("Fallback lokal sampai API Hostinger aktif");
+      showCopiedState("Artikel dipublish lokal");
+    }
   };
 
   const handleResetAnalytics = () => {
@@ -475,6 +553,7 @@ export default function DashboardPage() {
 
       <main className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:px-8">
         <DashboardPanel
+          className="order-4"
           eyebrow="Anchor Sales"
           title="Link Presentasi Cepat"
           description="Anchor dibuat simpel untuk membantu sales mengirim calon investor langsung ke bagian penting landing page."
@@ -523,6 +602,7 @@ export default function DashboardPage() {
         </DashboardPanel>
 
         <DashboardPanel
+          className="order-5"
           eyebrow="Visitor"
           title="Ringkasan Visitor Website"
           description="Panel ini membaca data global dari endpoint analytics server setelah deploy. Saat endpoint belum tersedia, dashboard otomatis menampilkan fallback lokal browser admin."
@@ -548,10 +628,10 @@ export default function DashboardPage() {
             ) : null}
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <StatCard icon={BarChart3} label="Pageview" value={formatNumber(analytics.totalPageViews)} helper="Total halaman dilihat dari sumber data aktif." />
             <StatCard icon={CheckCircle2} label="Hari Ini" value={formatNumber(analytics.todayPageViews)} helper="Pageview pada tanggal hari ini." />
-            <StatCard icon={Search} label="7 Hari" value={formatNumber(analytics.last7DaysPageViews)} helper="Akumulasi pageview 7 hari terakhir." />
-            <StatCard icon={LinkIcon} label="Session" value={formatNumber(analytics.totalSessions)} helper="Session dengan timeout 30 menit." />
+            <StatCard icon={BarChart3} label="7 Hari" value={formatNumber(analytics.last7DaysPageViews)} helper="Akumulasi pageview 7 hari terakhir." />
+            <StatCard icon={Search} label="14 Hari" value={formatNumber(analytics.last14DaysPageViews)} helper="Akumulasi pageview 14 hari terakhir." />
+            <StatCard icon={LinkIcon} label="1 Bulan" value={formatNumber(analytics.last30DaysPageViews)} helper="Akumulasi pageview 30 hari terakhir." />
           </div>
 
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
@@ -582,9 +662,107 @@ export default function DashboardPage() {
         </DashboardPanel>
 
         <DashboardPanel
-          eyebrow="Blog SEO"
-          title="Buat Draft Artikel Blog"
-          description="Isi konten penting, cek kualitas SEO dasar, lalu export JSON untuk dimasukkan ke data blog static atau disambungkan ke CMS."
+          className="order-6"
+          eyebrow="Heat Tracking"
+          title="Microsoft Clarity Heatmap dan Session Recording"
+          description="Clarity membaca perilaku visitor di halaman publik untuk melihat section yang menarik, section yang dilewati, dan rekaman sesi. Halaman login dan dashboard admin tidak direkam."
+          action={
+            <Button asChild className="bg-primary text-accent hover:bg-accent hover:text-primary">
+              <a href={CLARITY_DASHBOARD_URL} target="_blank" rel="noreferrer">
+                <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                Buka Clarity
+              </a>
+            </Button>
+          }
+        >
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <StatCard
+              icon={CheckCircle2}
+              label="Status Tracking"
+              value={clarityConfigured ? "Aktif" : "Off"}
+              helper={clarityConfigured ? "Script Clarity akan dimuat di halaman publik production." : "Isi VITE_CLARITY_PROJECT_ID sebelum build production."}
+            />
+            <StatCard
+              icon={BarChart3}
+              label="Heatmap"
+              value="Publik"
+              helper="Klik, scroll, dan perhatian visitor dibaca dari halaman landing, denah, dan blog."
+            />
+            <StatCard
+              icon={LinkIcon}
+              label="Project ID"
+              value={clarityConfigured ? CLARITY_PROJECT_ID : "-"}
+              helper={clarityConfigured ? "Project ID dari dashboard Clarity." : "Belum ada Project ID di build ini."}
+            />
+            <StatCard
+              icon={Globe2}
+              label="Admin"
+              value="Exclude"
+              helper={`Route ${CLARITY_EXCLUDED_ROUTES.join(" dan ")} tidak ikut direkam.`}
+            />
+          </div>
+
+          {!clarityConfigured ? (
+            <div className="mt-6 flex gap-3 border border-accent/25 bg-accent/10 p-4 text-sm leading-6 text-primary">
+              <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+              <p>
+                Clarity belum aktif di build ini. Buat project gratis di Microsoft Clarity, lalu build ulang dengan environment
+                <span className="font-semibold"> VITE_CLARITY_PROJECT_ID</span>.
+              </p>
+            </div>
+          ) : null}
+
+          <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.85fr)]">
+            <div className="border border-primary/10 bg-white p-5">
+              <h3 className="font-bold text-primary">Yang Direkam</h3>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {["/", "/cs1 - /cs4", "/denah", "/blog dan /blog/[slug]"].map((path) => (
+                  <div key={path} className="border border-border bg-secondary/40 px-4 py-3 text-sm font-semibold text-primary">
+                    {path}
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-sm leading-6 text-muted-foreground">
+                Untuk mengetes data, buka halaman publik dari browser biasa, scroll beberapa section, lalu tunggu data masuk ke Clarity.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button
+                  variant="outline"
+                  className="border-primary/20 text-primary hover:bg-primary hover:text-accent"
+                  onClick={() => copyText(clarityTestUrl, "URL test Clarity disalin")}
+                >
+                  <Copy className="h-4 w-4" aria-hidden="true" />
+                  Copy URL Test
+                </Button>
+                <a
+                  href={clarityTestUrl}
+                  className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-primary/20 px-4 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-accent"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  Buka Test
+                </a>
+              </div>
+            </div>
+
+            <div className="border border-primary/10 bg-white p-5">
+              <h3 className="font-bold text-primary">Cara Lihat Heatmap</h3>
+              <ol className="mt-4 list-decimal space-y-3 pl-5 text-sm leading-6 text-muted-foreground">
+                <li>Buka dashboard Microsoft Clarity lalu pilih project Rivere/Kinara.</li>
+                <li>Masuk ke menu Heatmaps untuk peta klik dan scroll.</li>
+                <li>Masuk ke menu Recordings untuk melihat sesi visitor satu per satu.</li>
+                <li>Filter URL dengan domain Rivere agar data landing page terpisah dari halaman lain.</li>
+              </ol>
+            </div>
+          </div>
+        </DashboardPanel>
+
+        <DashboardPanel
+          className="order-1"
+          eyebrow="Blog Admin"
+          title="Kelola Artikel Blog"
+          description="Buat draft, edit konten, upload foto, lalu publish artikel ke website."
           action={
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" className="border-primary/20 bg-white text-primary hover:bg-primary hover:text-accent" onClick={handleNewDraft}>
@@ -597,11 +775,14 @@ export default function DashboardPage() {
               </Button>
               <Button className="bg-accent text-primary hover:bg-primary hover:text-accent" onClick={handlePublishBlogPost}>
                 <Send className="h-4 w-4" aria-hidden="true" />
-                Publish
+                Publish Artikel
               </Button>
             </div>
           }
         >
+          <div className="mb-5 border border-primary/10 bg-white px-4 py-3 text-sm font-semibold text-primary">
+            Status blog: <span className="text-accent">{blogSyncStatus}</span>
+          </div>
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]">
             <div className="grid gap-5">
               <div className="grid gap-5 md:grid-cols-2">
@@ -777,36 +958,19 @@ export default function DashboardPage() {
               </div>
 
               <BlogFormatPreview post={blogPostExport} />
-
-              <div className="border border-primary/10 bg-white p-5">
-                <div className="flex items-center justify-between gap-4">
-                  <h3 className="font-bold text-primary">Export JSON</h3>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-primary/20 text-primary hover:bg-primary hover:text-accent"
-                    onClick={() => copyText(exportJson, "JSON artikel disalin")}
-                  >
-                    <Copy className="h-4 w-4" aria-hidden="true" />
-                    Copy
-                  </Button>
-                </div>
-                <pre className="mt-4 max-h-96 overflow-auto border border-border bg-secondary/60 p-4 text-xs leading-5 text-foreground/80">
-                  {exportJson}
-                </pre>
-              </div>
             </aside>
           </div>
 
           <div className="mt-6 border border-accent/25 bg-accent/10 p-4 text-sm leading-6 text-primary">
-            <strong>Catatan publish:</strong> tombol Publish membuat artikel langsung muncul di halaman blog pada browser admin ini. Export JSON tetap mengikuti struktur <code className="rounded bg-white/70 px-1 py-0.5">BLOG_POSTS</code> untuk kebutuhan deploy statis/SEO penuh atau migrasi ke backend/CMS.
+            <strong>Catatan publish:</strong> artikel yang dipublish tersimpan di server Hostinger dan tampil untuk visitor di halaman Blog serta section Blog di beranda.
           </div>
         </DashboardPanel>
 
         <DashboardPanel
-          eyebrow="Published Blog"
-          title="Artikel Blog Terpublish"
-          description="Artikel di daftar ini sudah muncul di halaman blog pada browser ini."
+          className="order-2"
+          eyebrow="Artikel Live"
+          title="Artikel Terpublish"
+          description="Artikel yang sudah publish akan tampil di /blog, detail artikel, dan section Blog di beranda."
         >
           <div className="grid gap-3">
             {publishedPosts.length ? publishedPosts.map((post) => (
@@ -852,9 +1016,10 @@ export default function DashboardPage() {
         </DashboardPanel>
 
         <DashboardPanel
-          eyebrow="Draft Lokal"
+          className="order-3"
+          eyebrow="Draft"
           title="Draft Artikel Tersimpan"
-          description="Draft ini hanya tersimpan di browser admin yang sedang dipakai."
+          description="Draft tersimpan di server Hostinger dan bisa dibuka lagi untuk dilanjutkan sebelum publish."
         >
           <div className="grid gap-3">
             {drafts.length ? drafts.map((draft) => (

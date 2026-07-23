@@ -20,7 +20,7 @@ const UnitCardsSection = () => (
       type="Type 94/31"
       description="Unit premium lebih besar untuk investor yang ingin memperkuat portofolio properti hospitality dengan pengelolaan profesional."
       price="Rp 1,6 M"
-      cashPrice="Rp 1,45 M"
+      cashPrice="Rp 1,35 M"
       payment="Tersedia tenor 6 bulan atau 1 tahun."
       image={imageUrl('rivere/Design 2/2.png')}
       floorPlanImage={imageUrl('Denah 2.png')}

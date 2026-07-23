@@ -9,11 +9,8 @@ const distDir = path.join(projectRoot, 'dist');
 const viteBin = path.join(projectRoot, 'node_modules', 'vite', 'bin', 'vite.js');
 
 const buildTargets = [
-	{ csKey: 'cs1', outDir: 'dist', base: '/' },
-	{ csKey: 'cs1', outDir: 'dist/cs1', base: '/cs1/' },
-	{ csKey: 'cs2', outDir: 'dist/cs2', base: '/cs2/' },
-	{ csKey: 'cs3', outDir: 'dist/cs3', base: '/cs3/' },
-	{ csKey: 'cs4', outDir: 'dist/cs4', base: '/cs4/' }
+	{ variant: 'company', csKey: 'cs1', outDir: 'dist', base: '/', generateSeoPages: false },
+	{ variant: 'rivere', csKey: 'cs1', outDir: 'dist/rivere', base: '/', generateSeoPages: true }
 ];
 
 function runNodeScript(args, env = {}) {
@@ -29,16 +26,20 @@ function runNodeScript(args, env = {}) {
 
 rmSync(distDir, { recursive: true, force: true });
 
-try {
-	runNodeScript([path.join(projectRoot, 'tools', 'generate-sitemap.js')]);
-	runNodeScript([path.join(projectRoot, 'tools', 'generate-llms.js')]);
-} catch (error) {
-	console.warn('Skipping SEO index generation:', error.message);
-}
-
 runNodeScript([path.join(projectRoot, 'tools', 'generate-responsive-images.js')]);
 
 for (const target of buildTargets) {
+	try {
+		runNodeScript([path.join(projectRoot, 'tools', 'generate-sitemap.js')], {
+			SITE_VARIANT: target.variant
+		});
+		runNodeScript([path.join(projectRoot, 'tools', 'generate-llms.js')], {
+			SITE_VARIANT: target.variant
+		});
+	} catch (error) {
+		console.warn('Skipping SEO index generation:', error.message);
+	}
+
 	runNodeScript(
 		[
 			viteBin,
@@ -46,12 +47,19 @@ for (const target of buildTargets) {
 			'--base',
 			target.base,
 			'--outDir',
-			target.outDir
+			target.outDir,
+			'--emptyOutDir=false'
 		],
-		{ VITE_CS_KEY: target.csKey }
+		{ VITE_CS_KEY: target.csKey, VITE_SITE_VARIANT: target.variant }
 	);
 
-	if (target.outDir === 'dist') {
+	runNodeScript([
+		path.join(projectRoot, 'tools', 'apply-homepage-shell.js'),
+		target.outDir,
+		target.variant
+	]);
+
+	if (target.generateSeoPages) {
 		runNodeScript([
 			path.join(projectRoot, 'tools', 'generate-seo-pages.js'),
 			target.outDir
@@ -62,3 +70,10 @@ for (const target of buildTargets) {
 		]);
 	}
 }
+
+runNodeScript([path.join(projectRoot, 'tools', 'generate-sitemap.js')], {
+	SITE_VARIANT: 'company'
+});
+runNodeScript([path.join(projectRoot, 'tools', 'generate-llms.js')], {
+	SITE_VARIANT: 'company'
+});

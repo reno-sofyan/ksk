@@ -5,6 +5,8 @@ import path from 'path';
 import { BLOG_POSTS } from '../src/data/blogPosts.js';
 import { DENAH_PAGE } from '../src/data/riverePlans.js';
 
+const variant = (process.env.SITE_VARIANT || process.env.VITE_SITE_VARIANT || 'rivere').toLowerCase();
+
 const CLEAN_CONTENT_REGEX = {
 	comments: /\/\*[\s\S]*?\*\/|\/\/.*$/gm,
 	templateLiterals: /`[\s\S]*?`/g,
@@ -152,6 +154,21 @@ function main() {
 
 	let pages = [];
 
+	if (variant === 'company') {
+		const llmsTxtContent = generateLlmsTxt([
+			{
+				url: '/',
+				title: 'PT Kinara Land Indonesia | Developer Properti Bogor',
+				description: 'Company profile PT Kinara Land Indonesia, developer properti dan pengelola ekosistem hunian produktif di Bogor.'
+			}
+		]);
+		const outputPath = path.join(process.cwd(), 'public', 'llms.txt');
+
+		ensureDirectoryExists(path.dirname(outputPath));
+		fs.writeFileSync(outputPath, llmsTxtContent, 'utf8');
+		return;
+	}
+
 	if (!fs.existsSync(pagesDir)) {
 		pages.push(processPageFile(appJsxPath, []))
 		pages = pages.filter(Boolean);
@@ -171,6 +188,8 @@ function main() {
 
 	pages = pages
 		.filter(page => page.title !== 'Untitled Page')
+		.filter(page => page.url !== '/companyprofile')
+		.filter(page => page.url !== '/blogarticle')
 		.concat({
 			url: DENAH_PAGE.path,
 			title: DENAH_PAGE.title,

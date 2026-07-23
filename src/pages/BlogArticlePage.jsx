@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { ArrowLeft, CalendarDays, Clock, MessageCircle } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
@@ -6,7 +6,7 @@ import BlogPostCard from '@/components/BlogPostCard.jsx';
 import { BlogFooter, BlogHeader, WHATSAPP_URL } from '@/components/BlogChrome.jsx';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import { AUTHOR_NAME, AUTHOR_URL, BLOG_POSTS, SITE_URL, getBlogPostUrl } from '@/data/blogPosts.js';
-import { findMergedBlogPost, mergePublishedBlogPosts, readPublishedBlogPosts } from '@/lib/adminBlogStore.js';
+import { fetchServerPublishedBlogPosts, findMergedBlogPost, mergePublishedBlogPosts, readPublishedBlogPosts } from '@/lib/adminBlogStore.js';
 
 const formatDate = (date) => new Intl.DateTimeFormat('id-ID', {
   day: 'numeric',
@@ -92,15 +92,58 @@ function createArticleSchema(article) {
 
 const BlogArticlePage = () => {
   const { slug } = useParams();
-  const [publishedPosts] = useState(() => readPublishedBlogPosts());
+  const [localPublishedPosts] = useState(() => readPublishedBlogPosts());
+  const [serverPublishedPosts, setServerPublishedPosts] = useState(null);
+  const [serverChecked, setServerChecked] = useState(false);
+  const publishedPosts = serverPublishedPosts || localPublishedPosts;
   const allPosts = useMemo(() => mergePublishedBlogPosts(BLOG_POSTS, publishedPosts), [publishedPosts]);
   const article = useMemo(() => findMergedBlogPost(BLOG_POSTS, slug, publishedPosts), [slug, publishedPosts]);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchServerPublishedBlogPosts()
+      .then((items) => {
+        if (isMounted && items) {
+          setServerPublishedPosts(items);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setServerChecked(true);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   if (!article) {
+    if (!serverChecked) {
+      return (
+        <div className="min-h-screen bg-background">
+          <Helmet>
+            <title>Memuat Artikel | Rivere Kostaycation IPB</title>
+            <meta name="robots" content="noindex, follow" />
+          </Helmet>
+          <BlogHeader />
+          <main className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-start justify-center px-4 py-20 sm:px-6">
+            <p className="text-sm font-semibold text-accent">Memuat</p>
+            <h1 className="mt-3 text-3xl font-bold text-primary">Mengambil artikel dari server.</h1>
+          </main>
+          <BlogFooter />
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-background">
         <Helmet>
           <title>Artikel Tidak Ditemukan | Rivere Kostaycation IPB</title>
+          <link rel="icon" href="/favicon.ico?v=kinara-20260721" sizes="any" />
+          <link rel="icon" type="image/png" href="/favicon.png?v=kinara-20260721" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kinara-20260721" />
           <meta name="robots" content="noindex, follow" />
         </Helmet>
         <BlogHeader />
@@ -126,6 +169,9 @@ const BlogArticlePage = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Helmet>
         <title>{article.seoTitle}</title>
+        <link rel="icon" href="/favicon.ico?v=kinara-20260721" sizes="any" />
+        <link rel="icon" type="image/png" href="/favicon.png?v=kinara-20260721" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kinara-20260721" />
         <meta name="description" content={article.description} />
         <meta name="author" content={AUTHOR_NAME} />
         <meta name="robots" content="index, follow, max-image-preview:large" />
