@@ -11,7 +11,7 @@ const viteBin = path.join(projectRoot, 'node_modules', 'vite', 'bin', 'vite.js')
 const buildTargets = [
 	{ variant: 'company', csKey: 'cs1', outDir: 'dist', base: '/', generateSeoPages: false },
 	{ variant: 'rivere', csKey: 'cs1', outDir: 'dist/rivere', base: '/', generateSeoPages: true },
-	{ variant: 'royal', csKey: 'royal', outDir: 'dist/royalcnn', base: '/', generateSeoPages: false },
+	{ variant: 'royal', csKey: 'royal', outDir: 'dist/royalkinara', base: '/', generateSeoPages: false },
 	{ variant: 'ksk', csKey: 'ksk', outDir: 'dist/ksk', base: '/', generateSeoPages: false }
 ];
 
@@ -27,18 +27,39 @@ function runNodeScript(args, env = {}) {
 }
 
 function pruneRoyalAssets() {
-	const imagesDir = path.join(projectRoot, 'dist', 'royalcnn', 'images');
+	const imagesDir = path.join(projectRoot, 'dist', 'royalkinara', 'images');
 	if (!fsExists(imagesDir)) return;
+	const usedFiles = new Set([
+		'1.png',
+		'2.png',
+		'location.jpg',
+		'logo-kinara.png',
+		'siteplan.png'
+	]);
+	const usedOptimizedDirs = new Set([
+		'royalcnn-1',
+		'royalcnn-2',
+		'royalcnn-location',
+		'royalcnn-logo-kinara',
+		'royalcnn-siteplan'
+	]);
 
 	for (const entry of readdirSync(imagesDir)) {
 		if (entry === 'optimized') {
 			const optimizedDir = path.join(imagesDir, entry);
 			for (const optimizedEntry of readdirSync(optimizedDir)) {
-				if (!optimizedEntry.startsWith('royalcnn-')) {
+				if (!usedOptimizedDirs.has(optimizedEntry)) {
 					rmSync(path.join(optimizedDir, optimizedEntry), { recursive: true, force: true });
 				}
 			}
-		} else if (entry !== 'royalcnn') {
+		} else if (entry === 'royalcnn') {
+			const royalImagesDir = path.join(imagesDir, entry);
+			for (const assetEntry of readdirSync(royalImagesDir)) {
+				if (!usedFiles.has(assetEntry)) {
+					rmSync(path.join(royalImagesDir, assetEntry), { recursive: true, force: true });
+				}
+			}
+		} else {
 			rmSync(path.join(imagesDir, entry), { recursive: true, force: true });
 		}
 	}

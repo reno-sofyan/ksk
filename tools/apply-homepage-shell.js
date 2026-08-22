@@ -95,13 +95,13 @@ const variants = {
     }
   },
   royal: {
-    title: 'Royal Ruko CNN | Ruko Premium di Babengket, Ciampea',
-    description: 'Temukan Royal Ruko CNN, ruko premium berdesain Luxury Classic Minimalist di Babengket, Ciampea, Kabupaten Bogor. Cek lokasi, keunggulan, dan ketersediaan unit.',
+    title: 'Royal Kinara | Ruko Premium di Babengket, Ciampea',
+    description: 'Temukan Royal Kinara, ruko premium berdesain Luxury Classic Minimalist di Babengket, Ciampea, Kabupaten Bogor. Cek lokasi, keunggulan, dan ketersediaan unit.',
     robots: 'index, follow, max-image-preview:large',
-    canonical: 'https://royalcnn.kinaraland.com/',
-    siteName: 'Royal Ruko CNN',
-    image: 'https://royalcnn.kinaraland.com/images/royalcnn/2.png',
-    imageAlt: 'Royal Ruko CNN commercial hub premium di Babengket, Ciampea, Kabupaten Bogor',
+    canonical: 'https://royalkinara.kinaraland.com/',
+    siteName: 'Royal Kinara',
+    image: 'https://royalkinara.kinaraland.com/images/royalcnn/2.png',
+    imageAlt: 'Royal Kinara commercial hub premium di Babengket, Ciampea, Kabupaten Bogor',
     preload: 'images/optimized/royalcnn-2/768.webp',
     preloadSrcSet: [
       'images/optimized/royalcnn-2/480.webp 480w',
@@ -113,35 +113,35 @@ const variants = {
     preloadSizes: '(min-width: 1024px) 46vw, (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)',
     preloadWidth: 2760,
     preloadHeight: 1504,
-    eyebrow: 'Eksklusif Commercial Hub',
-    h1: 'Investasi Ruko Produktif dengan Desain Luxury Classic Minimalist',
-    subtitle: 'Berada di koridor strategis Babengket, Ciampea—dekat kawasan hunian dan akses menuju IPB University, menghadirkan visibilitas ideal untuk mengembangkan bisnis dan aset komersial.',
+    eyebrow: 'Royal Kinara • Eksklusif Commercial Hub',
+    h1: 'Royal Kinara, Aset Komersial Premium untuk Bisnis Bertumbuh',
+    subtitle: 'Dikembangkan oleh PT Kinara Land Indonesia di koridor strategis Babengket, Ciampea—dekat kawasan hunian dan akses menuju IPB University, dengan desain Luxury Classic Minimalist yang representatif untuk bisnis dan investasi.',
     schema: {
       '@context': 'https://schema.org',
       '@graph': [
         {
           '@type': 'Organization',
-          '@id': 'https://royalcnn.kinaraland.com/#organization',
+          '@id': 'https://royalkinara.kinaraland.com/#organization',
           name: 'PT KINARA LAND INDONESIA',
-          url: 'https://royalcnn.kinaraland.com/'
+          url: 'https://royalkinara.kinaraland.com/'
         },
         {
           '@type': 'WebSite',
-          '@id': 'https://royalcnn.kinaraland.com/#website',
-          url: 'https://royalcnn.kinaraland.com/',
-          name: 'Royal Ruko CNN',
+          '@id': 'https://royalkinara.kinaraland.com/#website',
+          url: 'https://royalkinara.kinaraland.com/',
+          name: 'Royal Kinara',
           inLanguage: 'id-ID',
-          publisher: { '@id': 'https://royalcnn.kinaraland.com/#organization' }
+          publisher: { '@id': 'https://royalkinara.kinaraland.com/#organization' }
         },
         {
           '@type': 'WebPage',
-          '@id': 'https://royalcnn.kinaraland.com/#webpage',
-          url: 'https://royalcnn.kinaraland.com/',
-          name: 'Royal Ruko CNN | Ruko Premium di Babengket, Ciampea',
-          description: 'Temukan Royal Ruko CNN, ruko premium berdesain Luxury Classic Minimalist di Babengket, Ciampea, Kabupaten Bogor. Cek lokasi, keunggulan, dan ketersediaan unit.',
+          '@id': 'https://royalkinara.kinaraland.com/#webpage',
+          url: 'https://royalkinara.kinaraland.com/',
+          name: 'Royal Kinara | Ruko Premium di Babengket, Ciampea',
+          description: 'Temukan Royal Kinara, ruko premium berdesain Luxury Classic Minimalist di Babengket, Ciampea, Kabupaten Bogor. Cek lokasi, keunggulan, dan ketersediaan unit.',
           inLanguage: 'id-ID',
-          isPartOf: { '@id': 'https://royalcnn.kinaraland.com/#website' },
-          about: { '@id': 'https://royalcnn.kinaraland.com/#organization' }
+          isPartOf: { '@id': 'https://royalkinara.kinaraland.com/#website' },
+          about: { '@id': 'https://royalkinara.kinaraland.com/#organization' }
         },
         {
           '@type': 'BreadcrumbList',
@@ -150,14 +150,14 @@ const variants = {
               '@type': 'ListItem',
               position: 1,
               name: 'Beranda',
-              item: 'https://royalcnn.kinaraland.com/'
+              item: 'https://royalkinara.kinaraland.com/'
             }
           ]
         },
         {
           '@type': 'FAQPage',
           mainEntity: [
-            ['Di mana lokasi Royal Ruko CNN?', 'Royal Ruko CNN berlokasi di Jl. Babengket No.6, Cihideung Udik, Kec. Ciampea, Kabupaten Bogor, Jawa Barat 16620.'],
+            ['Di mana lokasi Royal Kinara?', 'Royal Kinara berlokasi di Jl. Babengket No.6, Cihideung Udik, Kec. Ciampea, Kabupaten Bogor, Jawa Barat 16620.'],
             ['Berapa harga unit yang tersedia?', 'Hubungi konsultan untuk informasi terbaru.'],
             ['Apa saja spesifikasi bangunannya?', 'Hubungi konsultan untuk informasi terbaru.'],
             ['Apakah tersedia area parkir?', 'Hubungi konsultan untuk informasi terbaru.'],

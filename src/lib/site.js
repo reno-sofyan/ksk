@@ -1,6 +1,6 @@
 export const COMPANY_SITE_URL = 'https://kinaraland.com';
 export const RIVERE_SITE_URL = 'https://rivere.kinaraland.com';
-export const ROYAL_CNN_SITE_URL = 'https://royalcnn.kinaraland.com';
+export const ROYAL_KINARA_SITE_URL = 'https://royalkinara.kinaraland.com';
 export const KSK_SITE_URL = 'https://ksk.kinaraland.com';
 
 const SITE_VARIANTS = new Set(['company', 'rivere', 'royal', 'ksk']);
@@ -26,7 +26,7 @@ export function getSiteVariant() {
     return 'rivere';
   }
 
-  if (hostname === 'royalcnn.kinaraland.com' || hostname.startsWith('royalcnn.')) {
+  if (hostname === 'royalkinara.kinaraland.com' || hostname.startsWith('royalkinara.')) {
     return 'royal';
   }
 

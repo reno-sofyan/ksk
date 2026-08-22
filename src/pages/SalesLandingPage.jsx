@@ -22,6 +22,7 @@ import { RIVERE_SITE_URL } from '@/lib/site.js';
 import { DENAH_PLANS } from '@/data/riverePlans.js';
 
 const SALES_PHONE_NUMBERS = {
+  ade: '6282111124005',
   nur: '6288293516558',
   melin: '6281928719457',
   ge: '6281958798799',

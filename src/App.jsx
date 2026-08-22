@@ -53,7 +53,7 @@ function App() {
   const riverePage = (path) => (
     isCompanySite ? <ExternalRedirect to={getRivereUrl(path)} /> : null
   );
-  const standardSalesPage = siteVariant === 'royal' ? <Navigate to="/" replace /> : <HomePage />;
+  const standardSalesPage = siteVariant === 'royal' ? <RoyalRukoPage /> : <HomePage />;
   const namedSalesPage = siteVariant === 'royal' ? <RoyalRukoPage /> : <SalesLandingPage />;
 
   return (
@@ -71,6 +71,7 @@ function App() {
             <Route path="/cs2" element={isCompanySite ? riverePage('/cs2/') : standardSalesPage} />
             <Route path="/cs3" element={isCompanySite ? riverePage('/cs3/') : standardSalesPage} />
             <Route path="/cs4" element={isCompanySite ? riverePage('/cs4/') : standardSalesPage} />
+            <Route path="/ade" element={isCompanySite ? riverePage('/ade/') : namedSalesPage} />
             <Route path="/nur" element={isCompanySite ? riverePage('/nur/') : namedSalesPage} />
             <Route path="/melin" element={isCompanySite ? riverePage('/melin/') : namedSalesPage} />
             <Route path="/ge" element={isCompanySite ? riverePage('/ge/') : namedSalesPage} />

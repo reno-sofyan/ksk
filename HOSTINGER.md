@@ -4,6 +4,7 @@ Project ini adalah app React + Vite statis. Struktur domain yang dipakai:
 
 - `kinaraland.com` untuk company profile PT Kinara Land Indonesia.
 - `rivere.kinaraland.com` untuk landing page Rivere Kostaycation IPB.
+- `royalkinara.kinaraland.com` untuk landing page Royal Kinara.
 
 Untuk Hostinger, ada dua jalur yang masuk akal:
 
@@ -32,6 +33,7 @@ Build `npm run build:hostinger` menghasilkan:
 
 - `dist/` sebagai document root `kinaraland.com`.
 - `dist/rivere/` sebagai document root `rivere.kinaraland.com`.
+- `dist/royalkinara/` sebagai document root `royalkinara.kinaraland.com`.
 - `/cs1` sampai `/cs4` tetap tersedia di subdomain Rivere melalui route SPA, jadi tidak perlu folder deploy terpisah.
 
 ## Opsi 2: GitHub Actions ke FTP Hostinger
