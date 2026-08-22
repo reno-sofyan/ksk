@@ -169,6 +169,20 @@ function main() {
 		return;
 	}
 
+	if (variant === 'royal') {
+		const outputPath = path.join(process.cwd(), 'public', 'llms.txt');
+		ensureDirectoryExists(path.dirname(outputPath));
+		fs.writeFileSync(outputPath, '## Pages\n- [Royal Ruko CNN](https://royalcnn.kinaraland.com/): Ruko premium berdesain Luxury Classic Minimalist di kawasan Dramaga, Bogor Barat.\n', 'utf8');
+		return;
+	}
+
+	if (variant === 'ksk') {
+		const outputPath = path.join(process.cwd(), 'public', 'llms.txt');
+		ensureDirectoryExists(path.dirname(outputPath));
+		fs.writeFileSync(outputPath, '## Pages\n- [Kinara Signature Kost - Sold Out](https://ksk.kinaraland.com/): Seluruh unit Kinara Signature Kost telah terjual.\n', 'utf8');
+		return;
+	}
+
 	if (!fs.existsSync(pagesDir)) {
 		pages.push(processPageFile(appJsxPath, []))
 		pages = pages.filter(Boolean);

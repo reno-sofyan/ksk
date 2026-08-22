@@ -1,3 +1,11 @@
 node_modules/
 dist/
 .DS_Store
+
+# Local deployment packages generated for manual hosting uploads.
+/*-hostinger-upload.zip
+/royalcnn-upload*.zip
+/royalcnn-pagespeed-optimized*.zip
+
+# Large local brochure; keep the physical file outside Git history.
+/public/images/rivere/rivere.pdf

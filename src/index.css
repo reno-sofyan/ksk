@@ -98,6 +98,12 @@
     contain-intrinsic-size: 960px;
   }
 
+  .royal-content main > section:not(#hero),
+  .royal-content > footer {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 960px;
+  }
+
   .animate-soft-pulse {
     animation: soft-pulse 2.4s ease-in-out infinite;
   }

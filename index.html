@@ -2,15 +2,39 @@
 <html lang="id">
 	<head>
 		<meta charset="UTF-8" />
-		<!-- Google Tag Manager -->
+		<!-- Deferred analytics: queues events immediately, loads vendors after interaction or idle time. -->
 		<script>
-			(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-			'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-			})(window,document,'script','dataLayer','GTM-PZRW95S2');
+			(function(w,d){
+				w.dataLayer=w.dataLayer||[];
+				w.dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+
+				if(!w.fbq){
+					var fbq=w.fbq=function(){fbq.callMethod?fbq.callMethod.apply(fbq,arguments):fbq.queue.push(arguments)};
+					if(!w._fbq)w._fbq=fbq;
+					fbq.push=fbq;fbq.loaded=!0;fbq.version='2.0';fbq.queue=[];
+				}
+				w.fbq('init','1378482587466553');
+				w.fbq('track','PageView');
+
+				var loaded=false;
+				var timer;
+				var interactionEvents=['pointerdown','keydown','touchstart','scroll'];
+				function cleanup(){interactionEvents.forEach(function(eventName){w.removeEventListener(eventName,load)});}
+				function appendScript(id,src){
+					if(d.getElementById(id))return;
+					var script=d.createElement('script');script.id=id;script.async=true;script.src=src;
+					(d.head||d.documentElement).appendChild(script);
+				}
+				function load(){
+					if(loaded)return;loaded=true;cleanup();if(timer)w.clearTimeout(timer);
+					appendScript('gtm-tracking-code','https://www.googletagmanager.com/gtm.js?id=GTM-PZRW95S2');
+					appendScript('meta-pixel-code','https://connect.facebook.net/en_US/fbevents.js');
+				}
+				function schedule(){timer=w.setTimeout(load,7000);}
+				interactionEvents.forEach(function(eventName){w.addEventListener(eventName,load,{once:true,passive:true})});
+				if(d.readyState==='complete')schedule();else w.addEventListener('load',schedule,{once:true});
+			})(window,document);
 		</script>
-		<!-- End Google Tag Manager -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" href="/favicon.ico?v=kinara-20260721" sizes="any" />
 		<link rel="icon" type="image/png" href="/favicon.png?v=kinara-20260721" />
@@ -210,19 +234,19 @@
 		<script>
 			(function() {
 				function unlockScroll() {
+					if (!document.body) return;
 					document.documentElement.style.overflowY = 'auto';
 					document.body.style.overflowY = 'auto';
 					document.documentElement.style.height = 'auto';
 					document.body.style.height = 'auto';
 				}
 
-				unlockScroll();
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', unlockScroll, { once: true });
+				} else {
+					unlockScroll();
+				}
 				window.addEventListener('load', unlockScroll, { once: true, passive: true });
-				window.addEventListener('scroll', unlockScroll, { passive: true });
-				window.addEventListener('touchmove', unlockScroll, { passive: true });
-				window.setTimeout(unlockScroll, 500);
-				window.setTimeout(unlockScroll, 2000);
-				window.setTimeout(unlockScroll, 5000);
 			})();
 		</script>
 	</head>
@@ -230,6 +254,7 @@
 		<!-- Google Tag Manager (noscript) -->
 		<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PZRW95S2" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		<!-- End Google Tag Manager (noscript) -->
+		<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1378482587466553&ev=PageView&noscript=1" /></noscript>
 		<div id="root">
 			<section class="boot-hero" aria-label="Rivere Kostaycation IPB">
 				<div class="boot-media">

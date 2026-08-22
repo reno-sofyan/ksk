@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { trackPageView } from '@/lib/visitorAnalytics.js';
 
-const VisitorTracker = () => {
-  const location = useLocation();
-
+export const VisitorTrackerForLocation = ({ location }) => {
   useEffect(() => {
     const path = `${location.pathname}${location.search}`;
     const title = typeof document !== 'undefined' ? document.title : '';
@@ -14,4 +11,4 @@ const VisitorTracker = () => {
   return null;
 };
 
-export default VisitorTracker;
+export default VisitorTrackerForLocation;

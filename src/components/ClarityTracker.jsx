@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 const CLARITY_PROJECT_ID = String(import.meta.env.VITE_CLARITY_PROJECT_ID || '').trim();
 const ENABLE_LOCAL = import.meta.env.VITE_CLARITY_ENABLE_LOCAL === 'true';
@@ -92,9 +91,7 @@ function stopClarityTracking() {
   }
 }
 
-const ClarityTracker = () => {
-  const location = useLocation();
-
+export const ClarityTrackerForLocation = ({ location }) => {
   useEffect(() => {
     if (isPrivatePath(location.pathname)) {
       stopClarityTracking();
@@ -171,4 +168,4 @@ const ClarityTracker = () => {
   return null;
 };
 
-export default ClarityTracker;
+export default ClarityTrackerForLocation;

@@ -2,6 +2,7 @@ const DRAFTS_KEY = 'rivere_blog_drafts_v1';
 const PUBLISHED_POSTS_KEY = 'rivere_blog_published_posts_v1';
 const REMOTE_BLOG_URL = import.meta.env.VITE_BLOG_API_URL || '/api/blog.php';
 const BLOG_ADMIN_KEY = import.meta.env.VITE_BLOG_ADMIN_KEY || 'RivereBlog2026!';
+const SITE_URL = 'https://rivere.kinaraland.com';
 
 export function slugify(value) {
   return value
@@ -143,6 +144,7 @@ export function saveBlogDraft(draft) {
   const drafts = readBlogDrafts();
   const nextDraft = {
     ...draft,
+    status: 'draft',
     id: draft.id || `draft-${Date.now()}`,
     updatedAt: new Date().toISOString()
   };
@@ -164,21 +166,23 @@ export function publishBlogPost(post) {
   if (typeof window === 'undefined') return [];
 
   const publishedPosts = readPublishedBlogPosts();
-  const existingPost = publishedPosts.find((item) => item.slug === post.slug);
+  const existingPost = publishedPosts.find((item) => item.id === post.id || item.slug === post.slug);
   const today = new Date().toISOString().slice(0, 10);
   const now = new Date().toISOString();
   const nextPost = {
     ...post,
     id: existingPost?.id || `post-${Date.now()}`,
     source: 'dashboard',
+    status: 'published',
     datePublished: existingPost?.datePublished || post.datePublished || today,
     dateModified: today,
+    createdAt: existingPost?.createdAt || post.createdAt || now,
     publishedAt: existingPost?.publishedAt || now,
     updatedAt: now
   };
   const next = [
     nextPost,
-    ...publishedPosts.filter((item) => item.slug !== nextPost.slug)
+    ...publishedPosts.filter((item) => item.slug !== nextPost.slug && item.id !== nextPost.id)
   ].sort((a, b) => new Date(b.updatedAt || b.dateModified) - new Date(a.updatedAt || a.dateModified));
 
   window.localStorage.setItem(PUBLISHED_POSTS_KEY, JSON.stringify(next));
@@ -199,15 +203,15 @@ export function getPublishedBlogPost(slug) {
 
 export function buildBlogPostExport(draft) {
   const today = new Date().toISOString().slice(0, 10);
-  const keywords = draft.keywords
+  const keywords = (draft.keywords || draft.tags || '')
     .split(',')
     .map((item) => item.trim())
     .filter(Boolean);
-  const intro = draft.intro
+  const intro = (draft.intro || '')
     .split('\n')
     .map((item) => item.trim())
     .filter(Boolean);
-  const bodyParagraphs = draft.body
+  const bodyParagraphs = (draft.body || '')
     .split('\n')
     .map((item) => item.trim())
     .filter(Boolean);
@@ -221,18 +225,33 @@ export function buildBlogPostExport(draft) {
   ].filter(Boolean);
 
   return {
+    id: draft.id,
     slug: draft.slug,
     title: draft.title,
-    seoTitle: draft.seoTitle,
-    description: draft.description,
+    seoTitle: draft.title,
+    description: draft.excerpt,
     excerpt: draft.excerpt,
     category: draft.category,
-    datePublished: today,
+    tags: (draft.tags || draft.keywords || '').split(',').map((item) => item.trim()).filter(Boolean),
+    author: draft.author || 'Tim Rivere Kostaycation IPB',
+    status: draft.status || 'draft',
+    datePublished: draft.datePublished || today,
     dateModified: today,
-    readTime: estimateReadTime(`${draft.intro} ${draft.body}`),
+    createdAt: draft.createdAt,
+    publishedAt: draft.publishedAt,
+    updatedAt: draft.updatedAt,
+    readTime: estimateReadTime(`${draft.contentHtml || ''} ${draft.intro || ''} ${draft.body || ''}`),
     image: draft.image,
     imageAlt: draft.imageAlt,
     keywords,
+    focusKeyword: '',
+    canonicalUrl: '',
+    ogTitle: draft.title,
+    ogDescription: draft.excerpt,
+    ogImage: draft.image,
+    robotsIndex: true,
+    robotsFollow: true,
+    contentHtml: draft.contentHtml || '',
     intro,
     sections: [
       {
@@ -244,10 +263,27 @@ export function buildBlogPostExport(draft) {
   };
 }
 
+export function resolveBlogPostSeo(post) {
+  const canonical = post.canonicalUrl || `${SITE_URL}/blog/${post.slug}/`;
+  const seoTitle = post.seoTitle || post.title;
+  const description = post.description || post.excerpt || '';
+
+  return {
+    seoTitle,
+    description,
+    canonical,
+    ogTitle: post.ogTitle || seoTitle,
+    ogDescription: post.ogDescription || description,
+    ogImage: post.ogImage || post.image,
+    robots: `${post.robotsIndex === false ? 'noindex' : 'index'}, ${post.robotsFollow === false ? 'nofollow' : 'follow'}, max-image-preview:large`
+  };
+}
+
 export function mergePublishedBlogPosts(staticPosts, publishedPosts = readPublishedBlogPosts()) {
-  const publishedSlugs = new Set(publishedPosts.map((post) => post.slug));
+  const publicPosts = publishedPosts.filter((post) => (post.status || 'published') === 'published');
+  const publishedSlugs = new Set(publicPosts.map((post) => post.slug));
   return [
-    ...publishedPosts,
+    ...publicPosts,
     ...staticPosts.filter((post) => !publishedSlugs.has(post.slug))
   ];
 }
@@ -269,46 +305,41 @@ export function getPublishChecks(draft) {
       pass: Boolean(post.slug.trim())
     },
     {
-      label: 'SEO title wajib diisi',
-      pass: Boolean(post.seoTitle.trim())
-    },
-    {
-      label: 'Meta description wajib diisi',
-      pass: Boolean(post.description.trim())
-    },
-    {
       label: 'Excerpt blog wajib diisi',
       pass: Boolean(post.excerpt.trim())
     },
     {
-      label: 'Gambar dan alt text wajib diisi',
-      pass: Boolean(post.image.trim() && post.imageAlt.trim())
+      label: 'Featured image wajib diisi',
+      pass: Boolean(post.image.trim())
     },
     {
-      label: 'Intro artikel wajib diisi',
-      pass: post.intro.length > 0
+      label: 'Alt text featured image wajib diisi sebelum publish',
+      pass: Boolean(post.imageAlt.trim())
     },
     {
       label: 'Isi artikel wajib diisi',
-      pass: post.sections.some((section) => section.paragraphs.length > 0)
+      pass: Boolean(post.contentHtml.trim()) || post.intro.length > 0 || post.sections.some((section) => section.paragraphs.length > 0)
     }
   ];
 }
 
 export function getSeoChecks(draft) {
-  const keywordCount = draft.keywords.split(',').map((item) => item.trim()).filter(Boolean).length;
-  const wordCount = countWords(`${draft.intro} ${draft.body}`);
+  const tags = draft.tags || draft.keywords || '';
+  const keywordCount = tags.split(',').map((item) => item.trim()).filter(Boolean).length;
+  const wordCount = countWords(`${draft.contentHtml || ''} ${draft.intro || ''} ${draft.body || ''}`.replace(/<[^>]+>/g, ' '));
+  const seoTitle = draft.seoTitle || draft.title || '';
+  const description = draft.description || draft.excerpt || '';
 
   return [
     {
-      label: 'SEO title 30-60 karakter',
-      pass: draft.seoTitle.length >= 30 && draft.seoTitle.length <= 60,
-      value: `${draft.seoTitle.length} karakter`
+      label: 'SEO title sekitar 50-60 karakter',
+      pass: seoTitle.length >= 50 && seoTitle.length <= 60,
+      value: `${seoTitle.length} karakter`
     },
     {
-      label: 'Meta description 120-160 karakter',
-      pass: draft.description.length >= 120 && draft.description.length <= 160,
-      value: `${draft.description.length} karakter`
+      label: 'Meta description sekitar 140-160 karakter',
+      pass: description.length >= 140 && description.length <= 160,
+      value: `${description.length} karakter`
     },
     {
       label: 'Minimal 3 keyword',

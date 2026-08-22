@@ -118,7 +118,7 @@ export const BLOG_POSTS = [
         heading: '1. Bedakan omzet dan pendapatan bersih',
         paragraphs: [
           'Omzet adalah seluruh pendapatan sewa sebelum biaya. Pendapatan bersih adalah jumlah yang tersisa setelah biaya pengelolaan, perawatan, pajak yang relevan, periode kosong, dan pengeluaran lain sesuai skema properti.',
-          'Jika sebuah unit menghasilkan omzet Rp126 juta per tahun, angka tersebut belum otomatis menjadi uang bersih investor. Periksa struktur bagi hasil dan biaya yang menjadi tanggung jawab masing-masing pihak. Dalam skema Rivere, pembagian hasil antara investor dan pengelola mengikuti ketentuan perjanjian.'
+          'Jika sebuah unit menghasilkan omzet Rp97 juta per tahun, angka tersebut belum otomatis menjadi uang bersih investor. Periksa struktur bagi hasil dan biaya yang menjadi tanggung jawab masing-masing pihak. Dalam skema Rivere, pembagian hasil antara investor dan pengelola mengikuti ketentuan perjanjian.'
         ]
       },
       {
@@ -244,7 +244,7 @@ export const BLOG_POSTS = [
         heading: '6. Indikator yang perlu dipantau setelah pembelian',
         paragraphs: [
           'Investor perlu menerima laporan yang cukup untuk memantau okupansi, tarif rata-rata, pendapatan, keluhan penghuni, kondisi fasilitas, dan jadwal perawatan. Data tersebut menunjukkan apakah konsep resort benar-benar menghasilkan pengalaman yang dihargai pasar.',
-          'Proyeksi passive income hingga Rp126 juta per tahun per unit serta total ROI 8%-14% adalah estimasi yang dipengaruhi kinerja aktual. Pemantauan rutin membantu investor membedakan perubahan pasar sementara dari masalah operasional yang perlu ditangani.'
+          'Proyeksi passive income hingga Rp97 juta per tahun per unit serta total ROI 8%-14% adalah estimasi yang dipengaruhi kinerja aktual. Pemantauan rutin membantu investor membedakan perubahan pasar sementara dari masalah operasional yang perlu ditangani.'
         ]
       }
     ],

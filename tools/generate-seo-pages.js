@@ -127,24 +127,21 @@ function renderBlogIndex() {
 }
 
 function renderArticle(post) {
-  const tableOfContents = post.sections.map((section, index) => `
-        <li><a href="#bagian-${index + 1}" class="text-muted-foreground">${escapeHtml(section.heading)}</a></li>`).join('');
-
   const intro = post.intro.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join('');
-  const sections = post.sections.map((section, index) => {
+  const sections = post.sections.map((section) => {
     const paragraphs = section.paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join('');
     const bullets = section.bullets
       ? `<ul class="space-y-3 border-l-2 border-accent pl-5">${section.bullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join('')}</ul>`
       : '';
 
     return `
-      <section id="bagian-${index + 1}" class="pt-11">
+      <section class="pt-11">
         <h2 class="text-2xl font-bold text-primary sm:text-3xl">${escapeHtml(section.heading)}</h2>
         <div class="mt-5 space-y-5 text-lg leading-8 text-foreground/80">${paragraphs}${bullets}</div>
       </section>`;
   }).join('');
 
-  const faq = post.faq.map((item) => `
+  const faq = (post.faq || []).map((item) => `
         <details class="border-t border-border py-5">
           <summary class="font-semibold text-primary">${escapeHtml(item.question)}</summary>
           <p class="mt-3 leading-7 text-muted-foreground">${escapeHtml(item.answer)}</p>
@@ -153,30 +150,27 @@ function renderArticle(post) {
   return `${renderHeader()}
     <main>
       <article>
-        <header class="border-b border-border bg-secondary/45 py-14">
-          <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-            <nav aria-label="Breadcrumb" class="mb-7 text-sm text-muted-foreground"><a href="/">Beranda</a> / <a href="/blog/">Blog</a> / ${escapeHtml(post.category)}</nav>
+        <header class="border-b border-border bg-white py-14">
+          <div class="mx-auto max-w-3xl px-4 sm:px-6">
+            <nav aria-label="Breadcrumb" class="mb-7 text-sm text-muted-foreground"><a href="/">Beranda</a> / <a href="/blog/">Blog</a> / ${escapeHtml(post.title)}</nav>
             <p class="font-semibold text-accent">${escapeHtml(post.category)}</p>
             <h1 class="mt-4 text-4xl font-bold leading-tight text-primary sm:text-5xl">${escapeHtml(post.title)}</h1>
             <p class="mt-6 text-lg leading-8 text-muted-foreground">${escapeHtml(post.excerpt)}</p>
-            <p class="mt-6 text-sm text-muted-foreground"><time datetime="${escapeHtml(post.datePublished)}">${escapeHtml(formatDate(post.datePublished))}</time> · ${escapeHtml(post.readTime)} · <a href="/blog/#tentang-tim-rivere">${escapeHtml(AUTHOR_NAME)}</a></p>
+            <p class="mt-6 text-sm text-muted-foreground">${escapeHtml(post.author || AUTHOR_NAME)} · <time datetime="${escapeHtml(post.datePublished)}">${escapeHtml(formatDate(post.datePublished))}</time>${post.dateModified !== post.datePublished ? ` · Diperbarui ${escapeHtml(formatDate(post.dateModified))}` : ''} · ${escapeHtml(post.category)}</p>
           </div>
         </header>
-        <div class="mx-auto max-w-6xl px-4 pt-10 sm:px-6 lg:px-8">
-          <img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.imageAlt)}" class="aspect-[16/8] w-full rounded-lg object-cover" fetchpriority="high" />
+        <div class="mx-auto max-w-4xl px-4 pt-10 sm:px-6">
+          <img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.imageAlt)}" class="aspect-[16/9] w-full rounded-lg object-cover" fetchpriority="high" />
         </div>
-        <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:px-8">
-          <aside>
-            <p class="font-bold text-primary">Daftar isi</p>
-            <ol class="mt-4 space-y-3 border-l border-border pl-4 text-sm">${tableOfContents}</ol>
-          </aside>
-          <div class="max-w-3xl">
+        <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+          <div>
             <div class="space-y-5 text-lg leading-8 text-foreground/80">${intro}</div>
             ${sections}
-            <section id="pertanyaan-umum" class="pt-12">
+            ${faq ? `<section id="pertanyaan-umum" class="pt-12">
               <h2 class="text-2xl font-bold text-primary sm:text-3xl">Pertanyaan Umum</h2>
               <div class="mt-6 border-b border-border">${faq}</div>
-            </section>
+            </section>` : ''}
+            ${(post.tags || post.keywords || []).length ? `<div class="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">${(post.tags || post.keywords).map((tag) => `<span class="rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-primary">#${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
             <p class="mt-12 border-l-4 border-accent bg-secondary/60 p-5 text-sm leading-7 text-muted-foreground"><strong class="text-primary">Catatan:</strong> Informasi dan proyeksi dalam artikel ini bersifat edukatif, bukan jaminan hasil investasi. Verifikasi dokumen, kontrak, biaya, dan asumsi finansial sebelum mengambil keputusan.</p>
           </div>
         </div>
@@ -271,7 +265,7 @@ function denahSchema() {
   };
 }
 
-function applySeo(sourceHtml, { title, description, canonical, image, imageAlt, type, schema, article }, rootMarkup) {
+function applySeo(sourceHtml, { title, description, canonical, image, imageAlt, type, schema, article, robots = 'index, follow, max-image-preview:large', ogTitle, ogDescription, ogImage }, rootMarkup) {
   let html = sourceHtml
     .replace(/\s*<!-- SEO_DEFAULT_START -->[\s\S]*?<!-- SEO_DEFAULT_END -->/i, '')
     .replace(/<title[^>]*>[\s\S]*?<\/title>/i, `<title data-react-helmet="true">${escapeHtml(title)}</title>`)
@@ -284,20 +278,20 @@ function applySeo(sourceHtml, { title, description, canonical, image, imageAlt, 
     <meta data-react-helmet="true" property="article:section" content="${escapeHtml(article.category)}" />` : '';
 
   const seoTags = `
-    <meta data-react-helmet="true" name="robots" content="index, follow, max-image-preview:large" />
+    <meta data-react-helmet="true" name="robots" content="${escapeHtml(robots)}" />
     <link data-react-helmet="true" rel="canonical" href="${escapeHtml(canonical)}" />
     <meta data-react-helmet="true" property="og:type" content="${escapeHtml(type)}" />
     <meta data-react-helmet="true" property="og:locale" content="id_ID" />
     <meta data-react-helmet="true" property="og:site_name" content="Rivere Kostaycation IPB" />
-    <meta data-react-helmet="true" property="og:title" content="${escapeHtml(title)}" />
-    <meta data-react-helmet="true" property="og:description" content="${escapeHtml(description)}" />
+    <meta data-react-helmet="true" property="og:title" content="${escapeHtml(ogTitle || title)}" />
+    <meta data-react-helmet="true" property="og:description" content="${escapeHtml(ogDescription || description)}" />
     <meta data-react-helmet="true" property="og:url" content="${escapeHtml(canonical)}" />
-    <meta data-react-helmet="true" property="og:image" content="${escapeHtml(image)}" />
+    <meta data-react-helmet="true" property="og:image" content="${escapeHtml(ogImage || image)}" />
     <meta data-react-helmet="true" property="og:image:alt" content="${escapeHtml(imageAlt)}" />${articleTags}
     <meta data-react-helmet="true" name="twitter:card" content="summary_large_image" />
-    <meta data-react-helmet="true" name="twitter:title" content="${escapeHtml(title)}" />
-    <meta data-react-helmet="true" name="twitter:description" content="${escapeHtml(description)}" />
-    <meta data-react-helmet="true" name="twitter:image" content="${escapeHtml(image)}" />
+    <meta data-react-helmet="true" name="twitter:title" content="${escapeHtml(ogTitle || title)}" />
+    <meta data-react-helmet="true" name="twitter:description" content="${escapeHtml(ogDescription || description)}" />
+    <meta data-react-helmet="true" name="twitter:image" content="${escapeHtml(ogImage || image)}" />
     <meta data-react-helmet="true" name="twitter:image:alt" content="${escapeHtml(imageAlt)}" />
     <script data-react-helmet="true" type="application/ld+json">${serializeSchema(schema)}</script>`;
 
@@ -358,15 +352,23 @@ function main() {
   }, renderBlogIndex()));
 
   for (const post of BLOG_POSTS) {
+    const title = post.seoTitle || post.title;
+    const description = post.description || post.excerpt;
+    const canonical = post.canonicalUrl || getBlogPostUrl(post);
+    const image = `${SITE_URL}${post.image}`;
     writePage(path.join('blog', post.slug), applySeo(sourceHtml, {
-      title: post.seoTitle,
-      description: post.description,
-      canonical: getBlogPostUrl(post),
-      image: `${SITE_URL}${post.image}`,
+      title,
+      description,
+      canonical,
+      image,
       imageAlt: post.imageAlt,
       type: 'article',
       schema: articleSchema(post),
-      article: post
+      article: post,
+      robots: `${post.robotsIndex === false ? 'noindex' : 'index'}, ${post.robotsFollow === false ? 'nofollow' : 'follow'}, max-image-preview:large`,
+      ogTitle: post.ogTitle || title,
+      ogDescription: post.ogDescription || description,
+      ogImage: post.ogImage || image
     }, renderArticle(post)));
   }
 

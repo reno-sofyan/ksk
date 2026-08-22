@@ -93,6 +93,127 @@ const variants = {
         }
       ]
     }
+  },
+  royal: {
+    title: 'Royal Ruko CNN | Ruko Premium di Babengket, Ciampea',
+    description: 'Temukan Royal Ruko CNN, ruko premium berdesain Luxury Classic Minimalist di Babengket, Ciampea, Kabupaten Bogor. Cek lokasi, keunggulan, dan ketersediaan unit.',
+    robots: 'index, follow, max-image-preview:large',
+    canonical: 'https://royalcnn.kinaraland.com/',
+    siteName: 'Royal Ruko CNN',
+    image: 'https://royalcnn.kinaraland.com/images/royalcnn/2.png',
+    imageAlt: 'Royal Ruko CNN commercial hub premium di Babengket, Ciampea, Kabupaten Bogor',
+    preload: 'images/optimized/royalcnn-2/768.webp',
+    preloadSrcSet: [
+      'images/optimized/royalcnn-2/480.webp 480w',
+      'images/optimized/royalcnn-2/768.webp 768w',
+      'images/optimized/royalcnn-2/1200.webp 1200w',
+      'images/optimized/royalcnn-2/1600.webp 1600w',
+      'images/optimized/royalcnn-2/1920.webp 1920w'
+    ].join(', '),
+    preloadSizes: '(min-width: 1024px) 46vw, (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)',
+    preloadWidth: 2760,
+    preloadHeight: 1504,
+    eyebrow: 'Eksklusif Commercial Hub',
+    h1: 'Investasi Ruko Produktif dengan Desain Luxury Classic Minimalist',
+    subtitle: 'Berada di koridor strategis Babengket, Ciampea—dekat kawasan hunian dan akses menuju IPB University, menghadirkan visibilitas ideal untuk mengembangkan bisnis dan aset komersial.',
+    schema: {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'Organization',
+          '@id': 'https://royalcnn.kinaraland.com/#organization',
+          name: 'PT KINARA LAND INDONESIA',
+          url: 'https://royalcnn.kinaraland.com/'
+        },
+        {
+          '@type': 'WebSite',
+          '@id': 'https://royalcnn.kinaraland.com/#website',
+          url: 'https://royalcnn.kinaraland.com/',
+          name: 'Royal Ruko CNN',
+          inLanguage: 'id-ID',
+          publisher: { '@id': 'https://royalcnn.kinaraland.com/#organization' }
+        },
+        {
+          '@type': 'WebPage',
+          '@id': 'https://royalcnn.kinaraland.com/#webpage',
+          url: 'https://royalcnn.kinaraland.com/',
+          name: 'Royal Ruko CNN | Ruko Premium di Babengket, Ciampea',
+          description: 'Temukan Royal Ruko CNN, ruko premium berdesain Luxury Classic Minimalist di Babengket, Ciampea, Kabupaten Bogor. Cek lokasi, keunggulan, dan ketersediaan unit.',
+          inLanguage: 'id-ID',
+          isPartOf: { '@id': 'https://royalcnn.kinaraland.com/#website' },
+          about: { '@id': 'https://royalcnn.kinaraland.com/#organization' }
+        },
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: 'Beranda',
+              item: 'https://royalcnn.kinaraland.com/'
+            }
+          ]
+        },
+        {
+          '@type': 'FAQPage',
+          mainEntity: [
+            ['Di mana lokasi Royal Ruko CNN?', 'Royal Ruko CNN berlokasi di Jl. Babengket No.6, Cihideung Udik, Kec. Ciampea, Kabupaten Bogor, Jawa Barat 16620.'],
+            ['Berapa harga unit yang tersedia?', 'Hubungi konsultan untuk informasi terbaru.'],
+            ['Apa saja spesifikasi bangunannya?', 'Hubungi konsultan untuk informasi terbaru.'],
+            ['Apakah tersedia area parkir?', 'Hubungi konsultan untuk informasi terbaru.'],
+            ['Jenis usaha apa yang cocok?', 'Hubungi konsultan untuk informasi terbaru.'],
+            ['Bagaimana skema pembayarannya?', 'Hubungi konsultan untuk informasi terbaru.'],
+            ['Kapan unit diserahterimakan?', 'Hubungi konsultan untuk informasi terbaru.']
+          ].map(([question, answer]) => ({
+            '@type': 'Question',
+            name: question,
+            acceptedAnswer: { '@type': 'Answer', text: answer }
+          }))
+        }
+      ]
+    }
+  },
+  ksk: {
+    title: 'Kinara Signature Kost | Sold Out',
+    description: 'Seluruh unit Kinara Signature Kost telah terjual. Terima kasih atas kepercayaan para pemilik dan investor.',
+    robots: 'index, follow, max-image-preview:large',
+    canonical: 'https://ksk.kinaraland.com/',
+    siteName: 'Kinara Signature Kost',
+    image: 'https://ksk.kinaraland.com/images/ksk/COZ-1-edit.jpg',
+    imageAlt: 'Fasad Kinara Signature Kost di kawasan IPB Dramaga',
+    preload: 'images/ksk/COZ-1-edit.jpg',
+    eyebrow: 'Sold Out',
+    h1: 'Seluruh Unit Telah Terjual',
+    subtitle: 'Terima kasih atas kepercayaan para pemilik dan investor kepada Kinara Signature Kost.',
+    schema: {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'Organization',
+          '@id': 'https://ksk.kinaraland.com/#organization',
+          name: 'PT Kinara Land Indonesia',
+          url: 'https://kinaraland.com/'
+        },
+        {
+          '@type': 'WebSite',
+          '@id': 'https://ksk.kinaraland.com/#website',
+          url: 'https://ksk.kinaraland.com/',
+          name: 'Kinara Signature Kost',
+          inLanguage: 'id-ID',
+          publisher: { '@id': 'https://ksk.kinaraland.com/#organization' }
+        },
+        {
+          '@type': 'WebPage',
+          '@id': 'https://ksk.kinaraland.com/#webpage',
+          url: 'https://ksk.kinaraland.com/',
+          name: 'Kinara Signature Kost | Sold Out',
+          description: 'Seluruh unit Kinara Signature Kost telah terjual. Terima kasih atas kepercayaan para pemilik dan investor.',
+          inLanguage: 'id-ID',
+          isPartOf: { '@id': 'https://ksk.kinaraland.com/#website' },
+          about: { '@id': 'https://ksk.kinaraland.com/#organization' }
+        }
+      ]
+    }
   }
 };
 
@@ -124,7 +245,7 @@ function renderSeo(config) {
     <link rel="icon" href="/favicon.ico?v=kinara-20260721" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon.png?v=kinara-20260721" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kinara-20260721" />
-    <meta data-react-helmet="true" name="robots" content="index, follow, max-image-preview:large" />
+    <meta data-react-helmet="true" name="robots" content="${escapeHtml(config.robots || 'index, follow, max-image-preview:large')}" />
     <link data-react-helmet="true" rel="canonical" href="${escapeHtml(config.canonical)}" />
     <meta data-react-helmet="true" property="og:type" content="website" />
     <meta data-react-helmet="true" property="og:locale" content="id_ID" />
@@ -144,14 +265,18 @@ function renderSeo(config) {
 }
 
 function renderShell(config) {
+  const responsiveAttributes = config.preloadSrcSet
+    ? `\n            srcset="${escapeHtml(config.preloadSrcSet)}"\n            sizes="${escapeHtml(config.preloadSizes)}"`
+    : '';
+
   return `
       <section class="boot-hero" aria-label="${escapeHtml(config.eyebrow)}">
         <div class="boot-media">
           <img
-            src="${escapeHtml(config.preload)}"
+            src="${escapeHtml(config.preload)}"${responsiveAttributes}
             alt="${escapeHtml(config.eyebrow)} hero"
-            width="1200"
-            height="675"
+            width="${config.preloadWidth || 1200}"
+            height="${config.preloadHeight || 675}"
             loading="eager"
             decoding="sync"
             fetchpriority="high"
@@ -208,7 +333,9 @@ function main() {
   html = replaceRequired(
     html,
     /<link\s+rel="preload"[\s\S]*?fetchpriority="high"[\s\S]*?\/>/i,
-    `<link rel="preload" as="image" href="${escapeHtml(config.preload)}" fetchpriority="high" />`,
+    config.preloadSrcSet
+      ? `<link rel="preload" as="image" href="${escapeHtml(config.preload)}" imagesrcset="${escapeHtml(config.preloadSrcSet)}" imagesizes="${escapeHtml(config.preloadSizes)}" fetchpriority="high" />`
+      : `<link rel="preload" as="image" href="${escapeHtml(config.preload)}" fetchpriority="high" />`,
     'preload image'
   );
 

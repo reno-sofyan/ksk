@@ -6,6 +6,8 @@ import { BLOG_POSTS, SITE_URL, getBlogPostUrl } from '../src/data/blogPosts.js';
 import { DENAH_PAGE } from '../src/data/riverePlans.js';
 
 const COMPANY_SITE_URL = 'https://kinaraland.com';
+const ROYAL_CNN_SITE_URL = 'https://royalcnn.kinaraland.com';
+const KSK_SITE_URL = 'https://ksk.kinaraland.com';
 const variant = (process.env.SITE_VARIANT || process.env.VITE_SITE_VARIANT || 'rivere').toLowerCase();
 
 function renderUrl({ location, lastModified, changeFrequency, priority }) {
@@ -32,7 +34,21 @@ function main() {
           priority: '1.0'
         }
       ]
-    : [
+    : variant === 'ksk'
+      ? [{
+          location: `${KSK_SITE_URL}/`,
+          lastModified: latestModified,
+          changeFrequency: 'monthly',
+          priority: '1.0'
+        }]
+    : variant === 'royal'
+      ? [{
+          location: `${ROYAL_CNN_SITE_URL}/`,
+          lastModified: latestModified,
+          changeFrequency: 'weekly',
+          priority: '1.0'
+        }]
+      : [
         {
           location: `${SITE_URL}/`,
           lastModified: latestModified,
@@ -51,7 +67,7 @@ function main() {
           changeFrequency: 'monthly',
           priority: '0.8'
         },
-        ...BLOG_POSTS.map((post) => ({
+        ...BLOG_POSTS.filter((post) => post.robotsIndex !== false && (post.status || 'published') === 'published').map((post) => ({
           location: getBlogPostUrl(post),
           lastModified: post.dateModified,
           changeFrequency: 'monthly',
@@ -61,7 +77,11 @@ function main() {
 
   const sitemapUrl = variant === 'company'
     ? `${COMPANY_SITE_URL}/sitemap.xml`
-    : `${SITE_URL}/sitemap.xml`;
+    : variant === 'ksk'
+      ? `${KSK_SITE_URL}/sitemap.xml`
+    : variant === 'royal'
+      ? `${ROYAL_CNN_SITE_URL}/sitemap.xml`
+      : `${SITE_URL}/sitemap.xml`;
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

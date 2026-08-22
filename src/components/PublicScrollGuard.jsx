@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 const PRIVATE_PATH_PREFIXES = ['/dashboard', '/login'];
 
@@ -35,11 +34,9 @@ function unlockDocumentScroll() {
   });
 }
 
-const PublicScrollGuard = () => {
-  const location = useLocation();
-
+export const PublicScrollGuardForPath = ({ pathname }) => {
   useEffect(() => {
-    if (isPrivatePath(location.pathname)) {
+    if (isPrivatePath(pathname)) {
       return undefined;
     }
 
@@ -61,9 +58,9 @@ const PublicScrollGuard = () => {
         window.removeEventListener(eventName, unlockDocumentScroll, eventOptions);
       });
     };
-  }, [location.pathname]);
+  }, [pathname]);
 
   return null;
 };
 
-export default PublicScrollGuard;
+export default PublicScrollGuardForPath;

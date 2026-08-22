@@ -3,18 +3,23 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '@/context/AuthContext.jsx';
 import ProtectedRoute from '@/components/ProtectedRoute.jsx';
 import ScrollToTop from '@/components/ScrollToTop.jsx';
-import PublicScrollGuard from '@/components/PublicScrollGuard.jsx';
-import VisitorTracker from '@/components/VisitorTracker.jsx';
-import ClarityTracker from '@/components/ClarityTracker.jsx';
+import PublicScrollGuard from '@/components/RoutedPublicScrollGuard.jsx';
+import VisitorTracker from '@/components/RoutedVisitorTracker.jsx';
+import ClarityTracker from '@/components/RoutedClarityTracker.jsx';
 import WhatsAppLeadGate from '@/components/WhatsAppLeadGate.jsx';
-import CompanyProfilePage from '@/pages/CompanyProfilePage.jsx';
-import HomePage from '@/pages/HomePage.jsx';
-import BlogPage from '@/pages/BlogPage.jsx';
-import BlogArticlePage from '@/pages/BlogArticlePage.jsx';
-import DenahPage from '@/pages/DenahPage.jsx';
-import LoginPage from '@/pages/LoginPage.jsx';
-import DashboardPage from '@/pages/DashboardPage.jsx';
+import HeroShell from '@/components/HeroShell.jsx';
+import RoyalRukoPage from '@/pages/RoyalRukoPage.jsx';
 import { getRivereUrl, getSiteVariant } from '@/lib/site.js';
+
+const CompanyProfilePage = React.lazy(() => import('@/pages/CompanyProfilePage.jsx'));
+const HomePage = React.lazy(() => import('@/pages/HomePage.jsx'));
+const SalesLandingPage = React.lazy(() => import('@/pages/SalesLandingPage.jsx'));
+const KskPage = React.lazy(() => import('@/pages/KskPage.jsx'));
+const BlogPage = React.lazy(() => import('@/pages/BlogPage.jsx'));
+const BlogArticlePage = React.lazy(() => import('@/pages/BlogArticlePage.jsx'));
+const DenahPage = React.lazy(() => import('@/pages/DenahPage.jsx'));
+const LoginPage = React.lazy(() => import('@/pages/LoginPage.jsx'));
+const DashboardPage = React.lazy(() => import('@/pages/DashboardPage.jsx'));
 
 const ExternalRedirect = ({ to }) => {
   React.useEffect(() => {
@@ -43,10 +48,13 @@ const ExternalRedirect = ({ to }) => {
 };
 
 function App() {
-  const isCompanySite = getSiteVariant() === 'company';
+  const siteVariant = getSiteVariant();
+  const isCompanySite = siteVariant === 'company';
   const riverePage = (path) => (
     isCompanySite ? <ExternalRedirect to={getRivereUrl(path)} /> : null
   );
+  const standardSalesPage = siteVariant === 'royal' ? <Navigate to="/" replace /> : <HomePage />;
+  const namedSalesPage = siteVariant === 'royal' ? <RoyalRukoPage /> : <SalesLandingPage />;
 
   return (
     <BrowserRouter>
@@ -56,29 +64,36 @@ function App() {
         <VisitorTracker />
         <ClarityTracker />
         <WhatsAppLeadGate />
-        <Routes>
-          <Route path="/" element={isCompanySite ? <CompanyProfilePage /> : <HomePage />} />
-          <Route path="/cs1" element={isCompanySite ? riverePage('/cs1/') : <HomePage />} />
-          <Route path="/cs2" element={isCompanySite ? riverePage('/cs2/') : <HomePage />} />
-          <Route path="/cs3" element={isCompanySite ? riverePage('/cs3/') : <HomePage />} />
-          <Route path="/cs4" element={isCompanySite ? riverePage('/cs4/') : <HomePage />} />
-          <Route path="/denah" element={isCompanySite ? riverePage('/denah/') : <DenahPage />} />
-          <Route path="/blog" element={isCompanySite ? riverePage('/blog/') : <BlogPage />} />
-          <Route path="/blog/:slug" element={isCompanySite ? riverePage(typeof window !== 'undefined' ? window.location.pathname : '/blog/') : <BlogArticlePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<Navigate to="/login" replace />} />
-          <Route path="/verify-email" element={<Navigate to="/login" replace />} />
-          <Route path="/forgot-password" element={<Navigate to="/login" replace />} />
-          <Route path="/reset-password" element={<Navigate to="/login" replace />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <DashboardPage />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+        <React.Suspense fallback={<HeroShell />}>
+          <Routes>
+            <Route path="/" element={isCompanySite ? <CompanyProfilePage /> : siteVariant === 'royal' ? <RoyalRukoPage /> : siteVariant === 'ksk' ? <KskPage /> : <HomePage />} />
+            <Route path="/cs1" element={isCompanySite ? riverePage('/cs1/') : standardSalesPage} />
+            <Route path="/cs2" element={isCompanySite ? riverePage('/cs2/') : standardSalesPage} />
+            <Route path="/cs3" element={isCompanySite ? riverePage('/cs3/') : standardSalesPage} />
+            <Route path="/cs4" element={isCompanySite ? riverePage('/cs4/') : standardSalesPage} />
+            <Route path="/nur" element={isCompanySite ? riverePage('/nur/') : namedSalesPage} />
+            <Route path="/melin" element={isCompanySite ? riverePage('/melin/') : namedSalesPage} />
+            <Route path="/ge" element={isCompanySite ? riverePage('/ge/') : namedSalesPage} />
+            <Route path="/andika" element={isCompanySite ? riverePage('/andika/') : namedSalesPage} />
+            <Route path="/novan" element={isCompanySite ? riverePage('/novan/') : namedSalesPage} />
+            <Route path="/denah" element={isCompanySite ? riverePage('/denah/') : <DenahPage />} />
+            <Route path="/blog" element={isCompanySite ? riverePage('/blog/') : <BlogPage />} />
+            <Route path="/blog/:slug" element={isCompanySite ? riverePage(typeof window !== 'undefined' ? window.location.pathname : '/blog/') : <BlogArticlePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<Navigate to="/login" replace />} />
+            <Route path="/verify-email" element={<Navigate to="/login" replace />} />
+            <Route path="/forgot-password" element={<Navigate to="/login" replace />} />
+            <Route path="/reset-password" element={<Navigate to="/login" replace />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </React.Suspense>
       </AuthProvider>
     </BrowserRouter>
   );

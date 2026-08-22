@@ -13,6 +13,7 @@ const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
 const allDeps = Object.keys(pkg.dependencies || {});
 
 const isDev = process.env.NODE_ENV !== 'production';
+const siteVariant = String(process.env.VITE_SITE_VARIANT || '').trim().toLowerCase();
 
 const configHorizonsViteErrorHandler = `
 const observer = new MutationObserver((mutations) => {
@@ -304,19 +305,44 @@ export default defineConfig({
 	},
 	resolve: {
 		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json',],
-		alias: {
-			'@': path.resolve(__dirname, './src'),
-			'framer-motion': path.resolve(__dirname, './src/lib/light-motion.js'),
-		},
+		alias: [
+			{
+				find: /^@\/App$/,
+				replacement: path.resolve(__dirname, siteVariant === 'royal' ? './src/RoyalApp.jsx' : './src/App.jsx'),
+			},
+			{ find: '@', replacement: path.resolve(__dirname, './src') },
+			{ find: 'framer-motion', replacement: path.resolve(__dirname, './src/lib/light-motion.js') },
+		],
 	},
 	build: {
+		modulePreload: {
+			resolveDependencies(_filename, dependencies, context) {
+				if (siteVariant === 'royal' && context.hostType === 'html') {
+					return dependencies.filter((dependency) => !dependency.includes('/router-'));
+				}
+
+				return dependencies;
+			},
+		},
 		rollupOptions: {
 			external: [
 				'@babel/parser',
 				'@babel/traverse',
 				'@babel/generator',
 				'@babel/types'
-			]
+			],
+			output: siteVariant === 'royal' ? {
+				onlyExplicitManualChunks: true,
+				manualChunks(id) {
+					if (id.includes('/react-router/') || id.includes('/react-router-dom/')) {
+						return 'router';
+					}
+
+					if (id.includes('/react/') || id.includes('/react-dom/') || id.includes('/scheduler/')) {
+						return 'react-vendor';
+					}
+				},
+			} : undefined,
 		}
 	}
 });

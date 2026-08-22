@@ -25,6 +25,8 @@ import { Input } from "@/components/ui/input.jsx";
 import { Label } from "@/components/ui/label.jsx";
 import { Textarea } from "@/components/ui/textarea.jsx";
 import ResponsiveImage from "@/components/ResponsiveImage.jsx";
+import RichTextEditor from "@/components/RichTextEditor.jsx";
+import { legacyPostToHtml } from "@/lib/blogContent.js";
 import { SALES_ANCHORS } from "@/data/salesAnchors.js";
 import {
   buildBlogPostExport,
@@ -35,7 +37,6 @@ import {
   fetchServerBlogDrafts,
   fetchServerPublishedBlogPosts,
   getPublishChecks,
-  getSeoChecks,
   publishServerBlogPost,
   publishBlogPost,
   readBlogDrafts,
@@ -56,6 +57,18 @@ const DEFAULT_BLOG_FORM = {
   image: "/images/rivere/Design%201/1.png",
   imageAlt: "Visual Rivere Kostaycation IPB",
   keywords: "investasi kost dekat IPB, Rivere Kostaycation IPB, properti Ring 1 IPB",
+  tags: "investasi properti, Rivere, kost dekat IPB",
+  author: "Tim Rivere Kostaycation IPB",
+  datePublished: new Date().toISOString().slice(0, 10),
+  status: "draft",
+  contentHtml: "",
+  focusKeyword: "",
+  canonicalUrl: "",
+  ogTitle: "",
+  ogDescription: "",
+  ogImage: "",
+  robotsIndex: true,
+  robotsFollow: true,
   intro: "",
   sectionHeading: "Pembahasan Utama",
   body: "",
@@ -137,6 +150,10 @@ function blogPostToForm(post) {
 
   return {
     ...DEFAULT_BLOG_FORM,
+    id: post.id,
+    createdAt: post.createdAt,
+    publishedAt: post.publishedAt,
+    updatedAt: post.updatedAt,
     title: post.title || "",
     seoTitle: post.seoTitle || "",
     slug: post.slug || "",
@@ -146,6 +163,18 @@ function blogPostToForm(post) {
     image: post.image || DEFAULT_BLOG_FORM.image,
     imageAlt: post.imageAlt || DEFAULT_BLOG_FORM.imageAlt,
     keywords: Array.isArray(post.keywords) ? post.keywords.join(", ") : DEFAULT_BLOG_FORM.keywords,
+    tags: Array.isArray(post.tags) ? post.tags.join(", ") : (Array.isArray(post.keywords) ? post.keywords.join(", ") : ""),
+    author: post.author || DEFAULT_BLOG_FORM.author,
+    datePublished: post.datePublished || DEFAULT_BLOG_FORM.datePublished,
+    status: post.status || "published",
+    contentHtml: post.contentHtml || legacyPostToHtml(post),
+    focusKeyword: post.focusKeyword || "",
+    canonicalUrl: post.canonicalUrl || "",
+    ogTitle: post.ogTitle || "",
+    ogDescription: post.ogDescription || "",
+    ogImage: post.ogImage || "",
+    robotsIndex: post.robotsIndex !== false,
+    robotsFollow: post.robotsFollow !== false,
     intro: Array.isArray(post.intro) ? post.intro.join("\n\n") : "",
     sectionHeading: firstSection?.heading || DEFAULT_BLOG_FORM.sectionHeading,
     body: Array.isArray(post.sections)
@@ -294,10 +323,12 @@ export default function DashboardPage() {
   const [imageUploadError, setImageUploadError] = useState("");
   const origin = useMemo(() => getOrigin(), []);
 
-  const seoChecks = useMemo(() => getSeoChecks(form), [form]);
   const publishChecks = useMemo(() => getPublishChecks(form), [form]);
-  const seoScore = seoChecks.filter((check) => check.pass).length;
-  const canPublish = publishChecks.every((check) => check.pass);
+  const slugConflict = useMemo(() => {
+    if (!form.slug) return false;
+    return [...drafts, ...publishedPosts].some((item) => item.slug === form.slug && item.id !== form.id);
+  }, [drafts, publishedPosts, form.id, form.slug]);
+  const canPublish = publishChecks.every((check) => check.pass) && !slugConflict;
   const blogPostExport = useMemo(() => buildBlogPostExport(form), [form]);
   const previewUrl = `${origin}/blog/${form.slug || "slug-artikel"}/`;
   const isUploadedImage = form.image.startsWith("data:image/");
@@ -385,6 +416,7 @@ export default function DashboardPage() {
   const handleSaveDraft = async () => {
     const next = saveBlogDraft(form);
     setDrafts(next);
+    setSlugTouched(true);
     if (next[0]) {
       setForm((current) => ({ ...current, id: next[0].id, updatedAt: next[0].updatedAt }));
     }
@@ -480,7 +512,8 @@ export default function DashboardPage() {
       return;
     }
 
-    const nextPublishedPosts = publishBlogPost(blogPostExport);
+    const publishedExport = { ...blogPostExport, status: "published" };
+    const nextPublishedPosts = publishBlogPost(publishedExport);
     const nextDrafts = saveBlogDraft(form);
     setPublishedPosts(nextPublishedPosts);
     setDrafts(nextDrafts);
@@ -490,16 +523,16 @@ export default function DashboardPage() {
 
     try {
       const [serverPublishedPosts, serverDrafts] = await Promise.all([
-        publishServerBlogPost(blogPostExport),
+        publishServerBlogPost(publishedExport),
         saveServerBlogDraft(nextDrafts[0] || form)
       ]);
       setPublishedPosts(serverPublishedPosts);
       setDrafts(serverDrafts);
       setBlogSyncStatus("Artikel dipublish ke server Hostinger");
       showCopiedState("Artikel berhasil dipublish ke server");
-    } catch {
+    } catch (error) {
       setBlogSyncStatus("Fallback lokal sampai API Hostinger aktif");
-      showCopiedState("Artikel dipublish lokal");
+      showCopiedState(error.message || "Artikel dipublish lokal");
     }
   };
 
@@ -785,36 +818,25 @@ export default function DashboardPage() {
           </div>
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)]">
             <div className="grid gap-5">
+              <div className="border-b border-primary/10 pb-3">
+                <p className="text-xs font-bold uppercase tracking-normal text-accent">A. Konten Artikel</p>
+                <h3 className="mt-1 text-xl font-bold text-primary">Informasi dan isi artikel</h3>
+              </div>
+
               <div className="grid gap-5 md:grid-cols-2">
                 <Field id="title" label="Judul Artikel">
                   <Input id="title" value={form.title} onChange={(event) => handleFieldChange("title", event.target.value)} placeholder="Contoh: Investasi Kost Dekat IPB untuk Passive Income" />
                 </Field>
-                <Field id="seoTitle" label="SEO Title" helper="Ideal 30-60 karakter.">
-                  <Input id="seoTitle" value={form.seoTitle} onChange={(event) => handleFieldChange("seoTitle", event.target.value)} placeholder="Investasi Kost Dekat IPB: Panduan Investor" />
+                <Field id="slug" label="Slug URL" helper={slugConflict ? "Slug sudah digunakan artikel lain. Gunakan slug berbeda." : "Dibuat otomatis dari judul saat artikel baru. Tidak berubah otomatis setelah diedit manual atau diterbitkan."}>
+                  <Input id="slug" value={form.slug} onChange={(event) => handleSlugChange(event.target.value)} placeholder="investasi-kost-dekat-ipb" className={slugConflict ? "border-destructive" : ""} />
                 </Field>
               </div>
 
-              <div className="grid gap-5 md:grid-cols-[0.8fr_1.2fr]">
-                <Field id="slug" label="Slug URL">
-                  <Input id="slug" value={form.slug} onChange={(event) => handleSlugChange(event.target.value)} placeholder="investasi-kost-dekat-ipb" />
-                </Field>
-                <Field id="keywords" label="Keyword" helper="Pisahkan dengan koma. Minimal 3 keyword.">
-                  <Input id="keywords" value={form.keywords} onChange={(event) => handleFieldChange("keywords", event.target.value)} />
-                </Field>
-              </div>
-
-              <Field id="description" label="Meta Description" helper="Ideal 120-160 karakter agar snippet SEO lebih kuat.">
-                <Textarea id="description" value={form.description} onChange={(event) => handleFieldChange("description", event.target.value)} className="min-h-24" placeholder="Ringkasan artikel yang akan muncul di hasil pencarian Google." />
-              </Field>
-
-              <Field id="excerpt" label="Excerpt Blog">
+              <Field id="excerpt" label="Ringkasan / Excerpt">
                 <Textarea id="excerpt" value={form.excerpt} onChange={(event) => handleFieldChange("excerpt", event.target.value)} className="min-h-20" placeholder="Ringkasan pendek untuk kartu blog." />
               </Field>
 
-              <div className="grid gap-5 md:grid-cols-2">
-                <Field id="category" label="Kategori">
-                  <Input id="category" value={form.category} onChange={(event) => handleFieldChange("category", event.target.value)} />
-                </Field>
+              <div className="grid gap-5">
                 <Field id="imageUpload" label="Upload Foto Blog" helper="Upload JPG, PNG, atau WebP. Foto akan dikompres otomatis sebelum disimpan.">
                   <div className="grid gap-3">
                     <label className="flex cursor-pointer flex-col items-center justify-center gap-3 border border-dashed border-primary/25 bg-white px-4 py-6 text-center transition-colors hover:border-primary hover:bg-secondary/40">
@@ -860,64 +882,37 @@ export default function DashboardPage() {
 
               <Field id="imageAlt" label="Alt Text Gambar">
                 <Input id="imageAlt" value={form.imageAlt} onChange={(event) => handleFieldChange("imageAlt", event.target.value)} placeholder="Deskripsi gambar untuk SEO dan aksesibilitas." />
+                {!form.imageAlt.trim() ? <p className="mt-2 text-xs font-semibold text-accent">Peringatan: alt text kosong. Draft tetap dapat disimpan, tetapi lengkapi sebelum publish.</p> : null}
               </Field>
 
-              <Field id="intro" label="Intro Artikel" helper="Satu paragraf per baris.">
-                <Textarea id="intro" value={form.intro} onChange={(event) => handleFieldChange("intro", event.target.value)} className="min-h-32" placeholder="Tulis pembuka artikel di sini." />
-              </Field>
-
-              <Field id="sectionHeading" label="Heading Utama">
-                <Input id="sectionHeading" value={form.sectionHeading} onChange={(event) => handleFieldChange("sectionHeading", event.target.value)} />
-              </Field>
-
-              <Field id="body" label="Isi Artikel" helper="Satu paragraf per baris. Target minimal 350 kata untuk draft SEO awal.">
-                <Textarea id="body" value={form.body} onChange={(event) => handleFieldChange("body", event.target.value)} className="min-h-52" placeholder="Tulis isi artikel dengan informasi penting untuk calon investor." />
+              <Field id="contentHtml" label="Isi Artikel" helper="Gunakan H2 dan H3 secara berurutan. Toolbar mendukung paragraf, bold, italic, list, link, gambar beserta alt text, dan blockquote.">
+                <RichTextEditor value={form.contentHtml} onChange={(value) => handleFieldChange("contentHtml", value)} />
               </Field>
 
               <div className="grid gap-5 md:grid-cols-2">
-                <Field id="faqQuestion1" label="FAQ 1">
-                  <Input id="faqQuestion1" value={form.faqQuestion1} onChange={(event) => handleFieldChange("faqQuestion1", event.target.value)} placeholder="Pertanyaan calon investor" />
+                <Field id="category" label="Kategori">
+                  <Input id="category" value={form.category} onChange={(event) => handleFieldChange("category", event.target.value)} />
                 </Field>
-                <Field id="faqAnswer1" label="Jawaban FAQ 1">
-                  <Textarea id="faqAnswer1" value={form.faqAnswer1} onChange={(event) => handleFieldChange("faqAnswer1", event.target.value)} className="min-h-24" />
+                <Field id="tags" label="Tags" helper="Pisahkan setiap tag dengan koma.">
+                  <Input id="tags" value={form.tags} onChange={(event) => handleFieldChange("tags", event.target.value)} />
                 </Field>
-                <Field id="faqQuestion2" label="FAQ 2">
-                  <Input id="faqQuestion2" value={form.faqQuestion2} onChange={(event) => handleFieldChange("faqQuestion2", event.target.value)} placeholder="Pertanyaan calon investor" />
+                <Field id="author" label="Penulis">
+                  <Input id="author" value={form.author} onChange={(event) => handleFieldChange("author", event.target.value)} />
                 </Field>
-                <Field id="faqAnswer2" label="Jawaban FAQ 2">
-                  <Textarea id="faqAnswer2" value={form.faqAnswer2} onChange={(event) => handleFieldChange("faqAnswer2", event.target.value)} className="min-h-24" />
+                <Field id="datePublished" label="Tanggal Terbit">
+                  <Input id="datePublished" type="date" value={form.datePublished} onChange={(event) => handleFieldChange("datePublished", event.target.value)} />
                 </Field>
+              </div>
+
+              <div className="mt-3 rounded-xl border border-primary/10 bg-secondary/50 p-4 text-sm leading-6 text-primary">
+                <strong>SEO dibuat otomatis.</strong>
+                <p className="mt-1 text-muted-foreground">
+                  Judul artikel, ringkasan, slug, dan featured image otomatis digunakan untuk metadata Google, canonical URL, serta tampilan saat artikel dibagikan.
+                </p>
               </div>
             </div>
 
             <aside className="grid content-start gap-5">
-              <div className="border border-primary/10 bg-white p-5">
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-sm font-semibold text-muted-foreground">SEO Score</p>
-                    <p className="mt-1 text-3xl font-bold text-primary">{seoScore}/{seoChecks.length}</p>
-                  </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-accent">
-                    <Search className="h-6 w-6" aria-hidden="true" />
-                  </div>
-                </div>
-                <div className="mt-5 grid gap-3">
-                  {seoChecks.map((check) => (
-                    <div key={check.label} className="flex items-start gap-3">
-                      {check.pass ? (
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
-                      ) : (
-                        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                      )}
-                      <div>
-                        <p className="text-sm font-semibold text-foreground/80">{check.label}</p>
-                        <p className="text-xs text-muted-foreground">{check.value}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               <div className="border border-primary/10 bg-white p-5">
                 <div className="flex items-center justify-between gap-4">
                   <div>

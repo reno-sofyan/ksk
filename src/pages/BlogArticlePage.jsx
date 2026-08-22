@@ -6,7 +6,8 @@ import BlogPostCard from '@/components/BlogPostCard.jsx';
 import { BlogFooter, BlogHeader, WHATSAPP_URL } from '@/components/BlogChrome.jsx';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import { AUTHOR_NAME, AUTHOR_URL, BLOG_POSTS, SITE_URL, getBlogPostUrl } from '@/data/blogPosts.js';
-import { fetchServerPublishedBlogPosts, findMergedBlogPost, mergePublishedBlogPosts, readPublishedBlogPosts } from '@/lib/adminBlogStore.js';
+import { fetchServerPublishedBlogPosts, findMergedBlogPost, mergePublishedBlogPosts, readPublishedBlogPosts, resolveBlogPostSeo } from '@/lib/adminBlogStore.js';
+import { articlePlainText, legacyPostToHtml, sanitizeArticleHtml } from '@/lib/blogContent.js';
 
 const formatDate = (date) => new Intl.DateTimeFormat('id-ID', {
   day: 'numeric',
@@ -21,11 +22,9 @@ const getAbsoluteImageUrl = (image) => {
 };
 
 function createArticleSchema(article) {
-  const articleUrl = getBlogPostUrl(article);
-  const articleText = [
-    ...article.intro,
-    ...article.sections.flatMap((section) => [...section.paragraphs, ...(section.bullets || [])])
-  ].join(' ');
+  const seo = resolveBlogPostSeo(article);
+  const articleUrl = seo.canonical;
+  const articleText = articlePlainText(article);
   const wordCount = articleText.trim().split(/\s+/).length;
 
   const graph = [
@@ -33,7 +32,7 @@ function createArticleSchema(article) {
       '@type': 'BlogPosting',
       '@id': `${articleUrl}#article`,
       headline: article.title,
-      description: article.description,
+      description: seo.description,
       image: {
         '@type': 'ImageObject',
         url: getAbsoluteImageUrl(article.image)
@@ -48,10 +47,10 @@ function createArticleSchema(article) {
       articleSection: article.category,
       isAccessibleForFree: true,
       wordCount,
-      keywords: article.keywords.join(', '),
+      keywords: (article.tags || article.keywords || []).join(', '),
       author: {
-        '@type': 'Organization',
-        name: AUTHOR_NAME,
+        '@type': 'Person',
+        name: article.author || AUTHOR_NAME,
         url: AUTHOR_URL
       },
       publisher: {
@@ -70,7 +69,7 @@ function createArticleSchema(article) {
     }
   ];
 
-  if (article.faq.length) {
+  if (article.faq?.length) {
     graph.push({
       '@type': 'FAQPage',
       mainEntity: article.faq.map((item) => ({
@@ -161,36 +160,48 @@ const BlogArticlePage = () => {
     );
   }
 
-  const canonicalUrl = getBlogPostUrl(article);
-  const relatedPosts = allPosts.filter((post) => post.slug !== article.slug).slice(0, 2);
+  const seo = resolveBlogPostSeo(article);
+  const canonicalUrl = seo.canonical;
+  const articleTags = article.tags || article.keywords || [];
+  const relatedPosts = allPosts
+    .filter((post) => post.slug !== article.slug)
+    .map((post) => ({
+      post,
+      score: (post.category === article.category ? 3 : 0)
+        + (post.tags || post.keywords || []).filter((tag) => articleTags.includes(tag)).length
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 2)
+    .map(({ post }) => post);
+  const contentHtml = sanitizeArticleHtml(article.contentHtml || legacyPostToHtml(article));
   const schema = createArticleSchema(article);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Helmet>
-        <title>{article.seoTitle}</title>
+        <title>{seo.seoTitle}</title>
         <link rel="icon" href="/favicon.ico?v=kinara-20260721" sizes="any" />
         <link rel="icon" type="image/png" href="/favicon.png?v=kinara-20260721" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kinara-20260721" />
-        <meta name="description" content={article.description} />
-        <meta name="author" content={AUTHOR_NAME} />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="description" content={seo.description} />
+        <meta name="author" content={article.author || AUTHOR_NAME} />
+        <meta name="robots" content={seo.robots} />
         <link rel="canonical" href={canonicalUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:locale" content="id_ID" />
         <meta property="og:site_name" content="Rivere Kostaycation IPB" />
-        <meta property="og:title" content={article.seoTitle} />
-        <meta property="og:description" content={article.description} />
+        <meta property="og:title" content={seo.ogTitle} />
+        <meta property="og:description" content={seo.ogDescription} />
         <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content={getAbsoluteImageUrl(article.image)} />
+        <meta property="og:image" content={getAbsoluteImageUrl(seo.ogImage)} />
         <meta property="og:image:alt" content={article.imageAlt} />
         <meta property="article:published_time" content={article.datePublished} />
         <meta property="article:modified_time" content={article.dateModified} />
         <meta property="article:section" content={article.category} />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={article.seoTitle} />
-        <meta name="twitter:description" content={article.description} />
-        <meta name="twitter:image" content={getAbsoluteImageUrl(article.image)} />
+        <meta name="twitter:title" content={seo.ogTitle} />
+        <meta name="twitter:description" content={seo.ogDescription} />
+        <meta name="twitter:image" content={getAbsoluteImageUrl(seo.ogImage)} />
         <meta name="twitter:image:alt" content={article.imageAlt} />
         <script type="application/ld+json">{JSON.stringify(schema)}</script>
       </Helmet>
@@ -199,14 +210,14 @@ const BlogArticlePage = () => {
 
       <main>
         <article>
-          <header className="border-b border-border bg-secondary/45 py-12 sm:py-16 lg:py-20">
-            <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <header className="border-b border-border bg-white py-10 sm:py-14">
+            <div className="mx-auto max-w-3xl px-4 sm:px-6">
               <nav aria-label="Breadcrumb" className="mb-7 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                 <Link to="/" className="hover:text-primary">Beranda</Link>
                 <span aria-hidden="true">/</span>
                 <Link to="/blog/" className="hover:text-primary">Blog</Link>
                 <span aria-hidden="true">/</span>
-                <span className="text-primary">{article.category}</span>
+                <span className="line-clamp-1 text-primary">{article.title}</span>
               </nav>
               <p className="text-sm font-semibold text-accent">{article.category}</p>
               <h1 className="mt-4 text-3xl font-bold leading-tight text-primary sm:text-4xl lg:text-5xl">{article.title}</h1>
@@ -220,13 +231,16 @@ const BlogArticlePage = () => {
                   <Clock className="h-4 w-4" aria-hidden="true" />
                   {article.readTime}
                 </span>
-                <a href="/blog/#tentang-tim-rivere" className="transition-colors hover:text-primary">{AUTHOR_NAME}</a>
+                <a href="/blog/#tentang-tim-rivere" className="transition-colors hover:text-primary">{article.author || AUTHOR_NAME}</a>
+                {article.dateModified && article.dateModified !== article.datePublished ? (
+                  <span>Diperbarui <time dateTime={article.dateModified}>{formatDate(article.dateModified)}</time></span>
+                ) : null}
               </div>
             </div>
           </header>
 
-          <div className="mx-auto max-w-6xl px-4 pt-10 sm:px-6 lg:px-8 lg:pt-14">
-            <div className="aspect-[16/8] overflow-hidden rounded-lg bg-secondary">
+          <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 sm:pt-10">
+            <div className="aspect-[16/9] overflow-hidden rounded-lg bg-secondary">
               <ResponsiveImage
                 src={article.image}
                 alt={article.imageAlt}
@@ -239,41 +253,14 @@ const BlogArticlePage = () => {
             </div>
           </div>
 
-          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:px-8 lg:py-16">
-            <aside className="lg:sticky lg:top-24 lg:self-start">
-              <p className="font-bold text-primary">Daftar isi</p>
-              <nav aria-label="Daftar isi artikel" className="mt-4 border-l border-border pl-4">
-                {article.sections.map((section, index) => (
-                  <a key={section.heading} href={`#bagian-${index + 1}`} className="mb-3 block text-sm leading-6 text-muted-foreground transition-colors hover:text-primary">
-                    {section.heading}
-                  </a>
-                ))}
-                {article.faq.length ? (
-                  <a href="#pertanyaan-umum" className="block text-sm leading-6 text-muted-foreground transition-colors hover:text-primary">Pertanyaan umum</a>
-                ) : null}
-              </nav>
-            </aside>
+          <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+            <div className="min-w-0">
+              <div
+                className="space-y-5 text-base leading-8 text-foreground/85 sm:text-lg [&_a]:font-medium [&_a]:text-primary [&_a]:underline [&_blockquote]:my-7 [&_blockquote]:border-l-4 [&_blockquote]:border-accent [&_blockquote]:bg-secondary/50 [&_blockquote]:px-5 [&_blockquote]:py-4 [&_h2]:mt-12 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:leading-tight [&_h2]:text-primary [&_h3]:mt-9 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-primary [&_img]:my-8 [&_img]:w-full [&_img]:rounded-lg [&_li]:pl-1 [&_ol]:ml-6 [&_ol]:list-decimal [&_ol]:space-y-2 [&_p]:my-5 [&_ul]:ml-6 [&_ul]:list-disc [&_ul]:space-y-2"
+                dangerouslySetInnerHTML={{ __html: contentHtml }}
+              />
 
-            <div className="min-w-0 max-w-3xl">
-              <div className="space-y-5 text-base leading-8 text-foreground/80 sm:text-lg">
-                {article.intro.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-              </div>
-
-              {article.sections.map((section, index) => (
-                <section key={section.heading} id={`bagian-${index + 1}`} className="scroll-mt-28 pt-11">
-                  <h2 className="text-2xl font-bold text-primary sm:text-3xl">{section.heading}</h2>
-                  <div className="mt-5 space-y-5 text-base leading-8 text-foreground/80 sm:text-lg">
-                    {section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-                    {section.bullets && (
-                      <ul className="space-y-3 border-l-2 border-accent pl-5">
-                        {section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}
-                      </ul>
-                    )}
-                  </div>
-                </section>
-              ))}
-
-              {article.faq.length ? (
+              {article.faq?.length ? (
                 <section id="pertanyaan-umum" className="scroll-mt-28 pt-12">
                   <h2 className="text-2xl font-bold text-primary sm:text-3xl">Pertanyaan Umum</h2>
                   <div className="mt-6 divide-y divide-border border-y border-border">
@@ -287,7 +274,13 @@ const BlogArticlePage = () => {
                 </section>
               ) : null}
 
-              <div className="mt-12 border-l-4 border-accent bg-secondary/60 p-5 text-sm leading-7 text-muted-foreground sm:p-6">
+              {articleTags.length ? (
+                <div className="mt-12 flex flex-wrap gap-2 border-t border-border pt-6" aria-label="Tag artikel">
+                  {articleTags.map((tag) => <span key={tag} className="rounded-full bg-secondary px-3 py-1.5 text-xs font-semibold text-primary">#{tag}</span>)}
+                </div>
+              ) : null}
+
+              <div className="mt-10 border-l-4 border-accent bg-secondary/60 p-5 text-sm leading-7 text-muted-foreground sm:p-6">
                 <strong className="text-primary">Catatan:</strong> Informasi dan proyeksi dalam artikel ini bersifat edukatif, bukan jaminan hasil investasi. Verifikasi dokumen, kontrak, biaya, dan asumsi finansial sebelum mengambil keputusan.
               </div>
             </div>

@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import { MapPin, Building2, Users, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, Building2, Users, CheckCircle2, ChevronRight, Menu, X } from 'lucide-react';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import AnimatedBadge from '@/components/AnimatedBadge.jsx';
 import SectionDivider from '@/components/SectionDivider.jsx';
@@ -9,6 +9,7 @@ import IconCircle from '@/components/IconCircle.jsx';
 import ChunkErrorBoundary from '@/components/ChunkErrorBoundary.jsx';
 import FloatingWhatsAppButton from '@/components/FloatingWhatsAppButton.jsx';
 import WhatsAppCtaButton from '@/components/WhatsAppCtaButton.jsx';
+import { WhatsAppConsultationForm } from '@/components/WhatsAppLeadGate.jsx';
 import { imageUrl } from '@/lib/assets.js';
 import { RIVERE_SITE_URL } from '@/lib/site.js';
 import BlogPreviewSection from '@/sections/BlogPreviewSection.jsx';
@@ -24,7 +25,12 @@ const CS_PHONE_NUMBERS = {
   cs1: '082111124005',
   cs2: '082246526316',
   cs3: '081412184272',
-  cs4: '085860233469'
+  cs4: '085860233469',
+  nur: '088293516558',
+  melin: '081928719457',
+  ge: '081958798799',
+  andika: '085196480931',
+  novan: '087797000003'
 };
 
 const DEFAULT_CS_KEY = 'cs1';
@@ -100,13 +106,67 @@ const RIVERE_PILLARS = [
 ];
 
 const PUBLIC_NAVIGATION_ANCHORS = [
-  { sectionId: 'hero', label: 'Overview', href: '/#hero' },
-  { sectionId: 'konsep', label: 'Konsep', href: '/#konsep' },
-  { sectionId: 'fasilitas', label: 'Fasilitas', href: '/#fasilitas' },
-  { sectionId: 'unit', label: 'Unit', href: '/#unit' },
-  { sectionId: 'konsultasi', label: 'Hubungi', href: '/#konsultasi' },
-  { sectionId: 'blog', label: 'Blog', href: '/#blog' }
+  { sectionId: 'hero', label: 'Overview', href: '#hero' },
+  { sectionId: 'konsep', label: 'Konsep', href: '#konsep' },
+  { sectionId: 'fasilitas', label: 'Fasilitas', href: '#fasilitas' },
+  { sectionId: 'unit', label: 'Unit', href: '#unit' },
+  { sectionId: 'konsultasi', label: 'Hubungi', href: '#konsultasi' },
+  { sectionId: 'blog', label: 'Blog', href: '#blog' }
 ];
+
+const RivereAnchorNavigation = ({ onMenuOpenChange }) => {
+  const [activeId, setActiveId] = useState('hero');
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const menuButtonRef = useRef(null);
+  const firstLinkRef = useRef(null);
+
+  useEffect(() => {
+    const sections = PUBLIC_NAVIGATION_ANCHORS.map(({ sectionId }) => document.getElementById(sectionId)).filter(Boolean);
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      if (visible[0]?.target?.id) setActiveId(visible[0].target.id);
+    }, { rootMargin: '-72px 0px -55% 0px', threshold: [0.1, 0.35, 0.65] });
+    sections.forEach((section) => observer.observe(section));
+    const hash = window.location.hash;
+    if (hash) window.requestAnimationFrame(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'auto', block: 'start' }));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    onMenuOpenChange?.(isMobileOpen);
+    if (!isMobileOpen) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.setTimeout(() => firstLinkRef.current?.focus(), 0);
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsMobileOpen(false);
+        window.setTimeout(() => menuButtonRef.current?.focus(), 0);
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', onKeyDown); };
+  }, [isMobileOpen, onMenuOpenChange]);
+
+  const closeMenu = () => { setIsMobileOpen(false); window.setTimeout(() => menuButtonRef.current?.focus(), 0); };
+  const goTo = (event, href) => {
+    event.preventDefault();
+    window.history.pushState({}, '', href);
+    document.querySelector(href)?.scrollIntoView({ behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    closeMenu();
+  };
+
+  return (
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-primary/15 bg-primary/95 text-white shadow-[0_12px_32px_rgba(4,25,18,0.18)] backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+        <a href="#hero" onClick={(event) => goTo(event, '#hero')} className="flex min-w-0 items-center gap-2.5" aria-label="Rivere Kostaycation IPB"><span className="truncate font-serif text-base font-semibold sm:text-lg">Rivere Kostaycation IPB</span></a>
+        <nav className="hidden items-center gap-5 lg:flex" aria-label="Navigasi Rivere desktop">{PUBLIC_NAVIGATION_ANCHORS.filter(({ sectionId }) => sectionId !== 'konsultasi').map((anchor) => { const active = activeId === anchor.sectionId; return <a key={anchor.sectionId} href={anchor.href} onClick={(event) => goTo(event, anchor.href)} aria-current={active ? 'location' : undefined} className={`relative py-5 text-sm font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-2 after:h-px after:bg-accent after:transition-opacity ${active ? 'text-accent after:opacity-100' : 'text-white/75 after:opacity-0 hover:text-accent'}`}>{anchor.label}</a>; })}</nav>
+        <div className="flex items-center gap-2"><span className="hidden sm:inline-flex"><a href="#konsultasi" onClick={(event) => goTo(event, '#konsultasi')} className="inline-flex min-h-11 items-center justify-center rounded-full border border-accent bg-accent px-5 py-2.5 text-sm font-bold text-primary shadow-[0_12px_28px_rgba(208,173,90,0.24)] transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">Konsultasi Sekarang</a></span><button ref={menuButtonRef} type="button" onClick={() => setIsMobileOpen((current) => !current)} aria-expanded={isMobileOpen} aria-controls="rivere-mobile-menu" aria-label={isMobileOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'} className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-accent/60 text-accent lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">{isMobileOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}</button></div>
+      </div>
+      {isMobileOpen ? <><button type="button" aria-label="Tutup menu navigasi" className="fixed inset-0 top-16 z-40 bg-primary/45 backdrop-blur-[2px] lg:hidden" onClick={closeMenu} /><div id="rivere-mobile-menu" className="absolute left-0 right-0 top-full z-50 border-b border-accent/35 bg-primary/95 px-4 py-3 shadow-[0_20px_45px_rgba(4,25,18,0.3)] backdrop-blur-md lg:hidden"><nav aria-label="Navigasi Rivere mobile" className="grid">{PUBLIC_NAVIGATION_ANCHORS.map((anchor, index) => <a ref={index === 0 ? firstLinkRef : undefined} key={anchor.sectionId} href={anchor.href} onClick={(event) => goTo(event, anchor.href)} className="flex min-h-12 items-center justify-between border-b border-accent/20 px-2 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">{anchor.label}<ChevronRight className="h-4 w-4 text-accent" aria-hidden="true" /></a>)}<a href="#konsultasi" onClick={(event) => goTo(event, '#konsultasi')} className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-accent px-4 py-3 text-sm font-bold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">Konsultasi Sekarang</a></nav></div></> : null}
+    </header>
+  );
+};
 
 const DEVELOPER_PORTFOLIO = [
   'Rabbani Bintaro Residence',
@@ -215,7 +275,7 @@ const HomePage = () => {
   const currentPhoneNumber = CS_PHONE_NUMBERS[currentCsKey];
   const whatsappPhone = normalizeWhatsAppPhone(currentPhoneNumber);
   const shouldEnhanceHero = false;
-  const [isAnchorOpen, setIsAnchorOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const heroImages = RIVERE_DESIGN_IMAGES.map(({ file }) => imageUrl(file));
   const createWhatsAppUrl = (message) => `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
@@ -262,8 +322,9 @@ const HomePage = () => {
           <meta name="twitter:image:alt" content="Rivere Kostaycation IPB, investasi kost resort premium dekat IPB" />
           <script type="application/ld+json">{JSON.stringify(HOME_SCHEMA)}</script>
         </Helmet>
-        <FloatingWhatsAppButton phoneNumber={whatsappPhone} message={CTWA_MESSAGES.floating} />
+        {!mobileMenuOpen ? <FloatingWhatsAppButton phoneNumber={whatsappPhone} message={CTWA_MESSAGES.floating} /> : null}
         
+        <RivereAnchorNavigation onMenuOpenChange={setMobileMenuOpen} />
         {/* HERO SECTION */}
         <section id="hero" className="relative h-[100svh] min-h-[620px] scroll-mt-24 overflow-hidden bg-primary sm:h-[100dvh] sm:min-h-[700px]">
           {shouldEnhanceHero ? (
@@ -366,62 +427,6 @@ const HomePage = () => {
             </svg>
           </div>
         </section>
-
-        <nav aria-label="Navigasi sales Rivere mobile" className="fixed left-2 right-2 top-2 z-50 rounded-[1.35rem] border border-primary/10 bg-white/96 px-2.5 py-2.5 shadow-[0_18px_45px_rgba(4,25,18,0.16)] backdrop-blur-md sm:left-4 sm:right-4 sm:top-3 sm:px-3 lg:hidden">
-          <div className="grid grid-cols-3 items-center gap-2">
-            {PUBLIC_NAVIGATION_ANCHORS.map((anchor) => (
-              <a
-                key={anchor.sectionId}
-                href={anchor.href}
-                className={`inline-flex min-h-10 items-center justify-center rounded-full border px-2.5 py-2 text-center text-xs font-bold leading-tight shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:min-h-11 sm:px-3 sm:text-[13px] ${
-                  anchor.sectionId === 'konsultasi'
-                    ? 'col-start-2 row-start-2 border-accent bg-accent text-primary shadow-[0_12px_28px_rgba(208,173,90,0.28)] hover:bg-primary hover:text-accent'
-                    : 'border-primary/10 bg-secondary/80 text-primary/80 hover:border-primary/25 hover:bg-primary hover:text-accent'
-                }`}
-              >
-                {anchor.label}
-              </a>
-            ))}
-          </div>
-        </nav>
-
-        <nav aria-label="Navigasi sales Rivere desktop" className="fixed right-0 top-1/2 z-50 hidden -translate-y-1/2 lg:block">
-          <div className={`flex items-stretch transition-transform duration-300 ease-out ${isAnchorOpen ? 'translate-x-0' : 'translate-x-[13rem]'}`}>
-            <button
-              type="button"
-              className="flex w-12 flex-col items-center justify-center gap-2 rounded-l-2xl border-y border-l border-accent/60 bg-accent py-5 text-primary shadow-[0_18px_45px_rgba(208,173,90,0.28)] backdrop-blur-md transition-colors hover:bg-primary hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent xl:w-14"
-              onClick={() => setIsAnchorOpen((current) => !current)}
-              aria-expanded={isAnchorOpen}
-              aria-controls="desktop-anchor-panel"
-            >
-              {isAnchorOpen ? (
-                <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              ) : (
-                <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-              )}
-              <span className="rotate-180 text-xs font-bold uppercase tracking-normal [writing-mode:vertical-rl]">
-                Navigasi
-              </span>
-            </button>
-            <div id="desktop-anchor-panel" className="max-h-[calc(100vh-6rem)] w-52 overflow-y-auto rounded-l-2xl border border-accent/35 bg-white/95 px-4 py-4 shadow-[0_24px_70px_rgba(208,173,90,0.18)] backdrop-blur-md">
-              <div className="grid gap-2">
-                {PUBLIC_NAVIGATION_ANCHORS.map((anchor) => (
-                  <a
-                    key={anchor.sectionId}
-                    href={anchor.href}
-                    className={`inline-flex min-h-10 items-center rounded-xl border px-3 py-2 text-sm font-bold leading-tight shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-                      anchor.sectionId === 'konsultasi'
-                        ? 'my-1 justify-center border-accent bg-accent text-primary shadow-[0_14px_32px_rgba(208,173,90,0.28)] hover:bg-primary hover:text-accent'
-                        : 'justify-start border-primary/10 bg-secondary/80 text-primary/80 hover:border-primary/25 hover:bg-primary hover:text-accent'
-                    }`}
-                  >
-                    {anchor.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </nav>
 
         <section id="galeri" className="relative z-30 -mt-10 scroll-mt-28 bg-background pb-8 pt-2 sm:-mt-16 sm:pb-10 sm:pt-6 md:-mt-20">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -711,7 +716,7 @@ const HomePage = () => {
           }} className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
                 <p className="text-xs font-semibold text-primary/60">Passive Income</p>
-                <p className="mt-3 text-2xl font-black text-primary sm:text-3xl">Rp 126 Jt</p>
+                <p className="mt-3 text-2xl font-black text-primary sm:text-3xl">Rp 97 Jt</p>
                 <p className="mt-1 text-sm text-muted-foreground">Potensi per tahun per unit</p>
               </div>
               <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
@@ -1085,16 +1090,10 @@ const HomePage = () => {
               <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
                 Tim kami dapat membantu menyesuaikan pilihan Type 62/31 atau Type 94/31 dengan budget, jadwal pembayaran, dan prioritas investasi Anda.
               </p>
-              <div className="mt-8 flex justify-center px-2">
-                <WhatsAppCtaButton
-                  href={ctaLinks.simulation}
-                  ctaLabel="Bottom Funnel - Simulasi Cicilan dan Promo"
-                  variant="dark"
-                  className="w-full max-w-md sm:w-auto sm:max-w-none"
-                >
-                  Konsultasi Simulasi Cicilan & Promo Rivere
-                </WhatsAppCtaButton>
-              </div>
+              <WhatsAppConsultationForm
+                whatsappHref={ctaLinks.simulation}
+                ctaLabel="Bottom Funnel - Simulasi Cicilan dan Promo"
+              />
             </motion.div>
           </div>
         </section>

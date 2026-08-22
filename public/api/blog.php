@@ -174,6 +174,22 @@ function clean_list($value, int $maxItems = 20, int $maxLength = 500): array
     return $items;
 }
 
+function clean_bool($value, bool $default = true): bool
+{
+    return is_bool($value) ? $value : $default;
+}
+
+function sanitize_article_html($value): string
+{
+    $html = substr((string) $value, 0, 1024 * 1024 * 2);
+    $html = strip_tags($html, '<p><h2><h3><strong><b><em><i><ol><ul><li><a><img><blockquote><br>');
+    $html = preg_replace('/\s(on\w+|style|class|id)\s*=\s*(["\']).*?\2/isu', '', $html) ?? '';
+    $html = preg_replace('/\s(href|src)\s*=\s*(["\'])\s*(javascript:|data:text\/html)[^"\']*\2/isu', '', $html) ?? '';
+    $html = preg_replace('/<img(?![^>]*\salt=)([^>]*)>/iu', '<img alt=""$1>', $html) ?? '';
+
+    return trim($html);
+}
+
 function count_words_from_post(array $post): int
 {
     $parts = $post['intro'] ?? [];
@@ -294,25 +310,45 @@ function normalize_post(array $input): array
         ];
     }
 
+    $now = date(DATE_ATOM);
+    $existingCreatedAt = clean_string($input['createdAt'] ?? '', 60);
+    $existingPublishedAt = clean_string($input['publishedAt'] ?? '', 60);
+    $excerpt = clean_string($input['excerpt'] ?? '', 500);
+    $seoTitle = clean_string($input['seoTitle'] ?? '', 220);
+    $description = clean_string($input['description'] ?? '', 500);
+
     $post = [
         'id' => clean_string($input['id'] ?? ('post-' . time() . '-' . bin2hex(random_bytes(3))), 120),
         'source' => 'hostinger',
         'slug' => $slug,
         'title' => $title,
-        'seoTitle' => clean_string($input['seoTitle'] ?? $title, 220),
-        'description' => clean_string($input['description'] ?? '', 500),
-        'excerpt' => clean_string($input['excerpt'] ?? '', 500),
+        'seoTitle' => $seoTitle !== '' ? $seoTitle : $title,
+        'description' => $description !== '' ? $description : $excerpt,
+        'excerpt' => $excerpt,
         'category' => clean_string($input['category'] ?? 'Rivere Insights', 120),
+        'tags' => clean_list($input['tags'] ?? $input['keywords'] ?? [], 30, 120),
+        'author' => clean_string($input['author'] ?? 'Tim Rivere Kostaycation IPB', 160),
+        'status' => 'published',
         'datePublished' => clean_string($input['datePublished'] ?? $today, 40),
         'dateModified' => $today,
+        'createdAt' => $existingCreatedAt !== '' ? $existingCreatedAt : $now,
+        'publishedAt' => $existingPublishedAt !== '' ? $existingPublishedAt : $now,
         'readTime' => clean_string($input['readTime'] ?? '', 40),
         'image' => save_data_image_if_needed((string) ($input['image'] ?? ''), $slug),
         'imageAlt' => clean_string($input['imageAlt'] ?? $title, 220),
         'keywords' => clean_list($input['keywords'] ?? [], 20, 120),
+        'focusKeyword' => clean_string($input['focusKeyword'] ?? '', 160),
+        'canonicalUrl' => clean_string($input['canonicalUrl'] ?? '', 1200),
+        'ogTitle' => clean_string($input['ogTitle'] ?? '', 220),
+        'ogDescription' => clean_string($input['ogDescription'] ?? '', 500),
+        'ogImage' => clean_string($input['ogImage'] ?? '', 1200),
+        'robotsIndex' => clean_bool($input['robotsIndex'] ?? true),
+        'robotsFollow' => clean_bool($input['robotsFollow'] ?? true),
+        'contentHtml' => sanitize_article_html($input['contentHtml'] ?? ''),
         'intro' => clean_list($input['intro'] ?? [], 20, 4000),
         'sections' => $sections,
         'faq' => normalize_faq($input['faq'] ?? []),
-        'updatedAt' => date(DATE_ATOM),
+        'updatedAt' => $now,
     ];
 
     if ($post['readTime'] === '') {
@@ -329,6 +365,11 @@ function normalize_draft(array $input): array
     $draft['title'] = clean_string($input['title'] ?? '', 220);
     $draft['slug'] = clean_slug($input['slug'] ?? $draft['title']);
     $draft['image'] = save_data_image_if_needed((string) ($input['image'] ?? ''), $draft['slug']);
+    $draft['status'] = 'draft';
+    $draft['contentHtml'] = sanitize_article_html($input['contentHtml'] ?? '');
+    $draft['robotsIndex'] = clean_bool($input['robotsIndex'] ?? true);
+    $draft['robotsFollow'] = clean_bool($input['robotsFollow'] ?? true);
+    $draft['createdAt'] = clean_string($input['createdAt'] ?? date(DATE_ATOM), 60);
     $draft['updatedAt'] = date(DATE_ATOM);
 
     return $draft;
@@ -391,6 +432,14 @@ try {
 
         if ($action === 'draft') {
             $draft = normalize_draft($input);
+            $existing = read_blog_store();
+            $duplicate = array_filter(
+                array_merge($existing['drafts'] ?? [], $existing['publishedPosts'] ?? []),
+                fn ($item) => ($item['slug'] ?? '') === $draft['slug'] && ($item['id'] ?? '') !== $draft['id']
+            );
+            if (count($duplicate)) {
+                respond(['error' => 'Slug sudah digunakan artikel lain.'], 409);
+            }
             $store = update_blog_store(function (array $store) use ($draft) {
                 $drafts = array_values(array_filter($store['drafts'] ?? [], fn ($item) => ($item['id'] ?? '') !== $draft['id']));
                 $store['drafts'] = array_slice(array_merge([$draft], $drafts), 0, MAX_DRAFTS);
@@ -403,12 +452,31 @@ try {
         if ($action === 'publish') {
             $post = normalize_post($input);
 
-            if ($post['title'] === '' || $post['slug'] === '' || $post['description'] === '' || $post['excerpt'] === '') {
+            if ($post['title'] === '' || $post['slug'] === '' || $post['description'] === '' || $post['excerpt'] === '' || $post['image'] === '' || $post['imageAlt'] === '') {
                 respond(['error' => 'Required blog fields are incomplete.'], 422);
             }
 
+            $existing = read_blog_store();
+            $duplicate = array_filter(
+                $existing['publishedPosts'] ?? [],
+                fn ($item) => ($item['slug'] ?? '') === $post['slug'] && ($item['id'] ?? '') !== $post['id']
+            );
+            if (count($duplicate)) {
+                respond(['error' => 'Slug sudah digunakan artikel lain.'], 409);
+            }
+
             $store = update_blog_store(function (array $store) use ($post) {
-                $posts = array_values(array_filter($store['publishedPosts'] ?? [], fn ($item) => ($item['slug'] ?? '') !== $post['slug']));
+                foreach (($store['publishedPosts'] ?? []) as $existingPost) {
+                    if (($existingPost['id'] ?? '') === $post['id']) {
+                        $post['createdAt'] = $existingPost['createdAt'] ?? $post['createdAt'];
+                        $post['publishedAt'] = $existingPost['publishedAt'] ?? $post['publishedAt'];
+                        break;
+                    }
+                }
+                $posts = array_values(array_filter(
+                    $store['publishedPosts'] ?? [],
+                    fn ($item) => ($item['slug'] ?? '') !== $post['slug'] && ($item['id'] ?? '') !== $post['id']
+                ));
                 $store['publishedPosts'] = array_slice(sort_posts(array_merge([$post], $posts)), 0, MAX_POSTS);
                 return $store;
             });

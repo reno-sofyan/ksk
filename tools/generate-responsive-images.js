@@ -3,6 +3,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import sharp from 'sharp';
 
 const projectRoot = process.cwd();
 const sourceDir = path.join(projectRoot, 'public', 'images');
@@ -10,6 +11,7 @@ const outputDir = path.join(sourceDir, 'optimized');
 const manifestPath = path.join(projectRoot, 'src', 'generated', 'image-manifest.json');
 const imageExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 const preferredWidths = [480, 768, 1200, 1600, 1920];
+const webpSources = new Set(['royalcnn/2.png']);
 
 function ensureDir(dirPath) {
   if (!existsSync(dirPath)) {
@@ -80,7 +82,19 @@ function getVariantDimensions(width, height, maxDimension) {
   return { width: scaledWidth, height: maxDimension };
 }
 
-function buildVariant(inputPath, outputPath, format, maxDimension) {
+async function buildVariant(inputPath, outputPath, format, maxDimension, sourceWidth, sourceHeight) {
+  if (format === 'webp') {
+    await sharp(inputPath)
+      .resize({
+        width: sourceWidth >= sourceHeight ? maxDimension : undefined,
+        height: sourceHeight > sourceWidth ? maxDimension : undefined,
+        withoutEnlargement: true
+      })
+      .webp({ quality: 76, effort: 5, smartSubsample: true })
+      .toFile(outputPath);
+    return;
+  }
+
   const args = ['-s', 'format', format];
 
   if (format === 'jpeg') {
@@ -91,7 +105,7 @@ function buildVariant(inputPath, outputPath, format, maxDimension) {
   execFileSync('sips', args, { stdio: 'ignore' });
 }
 
-function main() {
+async function main() {
   ensureDir(path.dirname(manifestPath));
   rmSync(outputDir, { recursive: true, force: true });
   ensureDir(outputDir);
@@ -106,8 +120,8 @@ function main() {
     const width = Number(readSipsValue(inputPath, 'pixelWidth'));
     const height = Number(readSipsValue(inputPath, 'pixelHeight'));
     const hasAlpha = readSipsValue(inputPath, 'hasAlpha') === 'yes';
-    const format = getOutputFormat(extension, hasAlpha);
-    const outputExtension = format === 'png' ? 'png' : 'jpg';
+    const format = webpSources.has(fileName) ? 'webp' : getOutputFormat(extension, hasAlpha);
+    const outputExtension = format === 'png' ? 'png' : format === 'webp' ? 'webp' : 'jpg';
     const slug = toSlug(fileName);
     const variantDir = path.join(outputDir, slug);
 
@@ -119,20 +133,22 @@ function main() {
       .filter((size, index, list) => list.indexOf(size) === index)
       .sort((left, right) => left - right);
 
-    const variants = widths.map((size) => {
+    const variants = [];
+
+    for (const size of widths) {
       const outputFileName = `${size}.${outputExtension}`;
       const outputPath = path.join(variantDir, outputFileName);
       const dimensions = getVariantDimensions(width, height, size);
 
-      buildVariant(inputPath, outputPath, format, size);
+      await buildVariant(inputPath, outputPath, format, size, width, height);
 
-      return {
+      variants.push({
         width: dimensions.width,
         height: dimensions.height,
         path: `images/optimized/${slug}/${outputFileName}`,
         format: outputExtension
-      };
-    });
+      });
+    }
 
     manifest[fileName] = {
       width,
@@ -146,4 +162,7 @@ function main() {
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

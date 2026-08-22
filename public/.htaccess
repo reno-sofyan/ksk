@@ -2,8 +2,12 @@
 	RewriteEngine On
 	RewriteBase /
 	RewriteRule ^(cs[1-4])$ $1/ [R=301,L]
+	RewriteRule ^sitemap\.xml$ api/sitemap.php [L,QSA]
 	RewriteRule ^(assets|images|api)/ - [L]
 	RewriteRule ^(favicon\.ico|favicon\.png|apple-touch-icon\.png|robots\.txt|sitemap\.xml|llms\.txt)$ - [L]
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^blog/([a-z0-9-]+)/?$ api/article.php?slug=$1 [L,QSA]
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^ index.html [L]

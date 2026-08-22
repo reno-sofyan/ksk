@@ -27,8 +27,12 @@ class AppErrorBoundary extends React.Component {
 	}
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-	<AppErrorBoundary>
-		<App />
-	</AppErrorBoundary>
-);
+const appRoot = ReactDOM.createRoot(document.getElementById('root'));
+
+React.startTransition(() => {
+	appRoot.render(
+		<AppErrorBoundary>
+			<App />
+		</AppErrorBoundary>
+	);
+});
