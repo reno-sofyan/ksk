@@ -148,7 +148,7 @@ const RoyalAnchorNavigation = ({ onMenuOpenChange }) => {
 };
 
 const RoyalLeadForm = () => {
-  const [form, setForm] = useState({ name: '', phone: '', domicile: '' });
+  const [form, setForm] = useState({ name: '', domicile: '' });
   const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const isComplete = Object.values(form).every((value) => value.trim());
@@ -174,12 +174,10 @@ const RoyalLeadForm = () => {
       return;
     }
     const message = [
-      'Halo, saya tertarik dengan Royal Kinara.',
+      '(LP) Halo, saya tertarik dengan Royal Kinara.',
       `Nama: ${form.name.trim()}`,
-      `Nomor Telepon: ${form.phone.trim()}`,
       `Domisili: ${form.domicile.trim()}`,
-      'Mohon informasi mengenai harga, spesifikasi, ketersediaan unit, dan skema pembayaran.',
-      `(Ref:ROYAL-KINARA-LP-CTWA-${salesKey.toUpperCase()})`
+      'Mohon Informasi mengenai harga, spesifikasi, ketersediaan unit, dan skema pembayaran.'
     ].join('\n');
     const href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     const eventId = `royal-ctwa-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -206,7 +204,6 @@ const RoyalLeadForm = () => {
     <form onSubmit={submit} className="mx-auto max-w-2xl rounded-3xl border border-[#D4AF56]/35 bg-[#F8F3EA] p-5 text-[#220306] shadow-[0_24px_70px_rgba(0,0,0,0.25)] sm:p-8">
       <div className="grid gap-5 sm:grid-cols-2">
         <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Nama</span><input required value={form.name} onChange={update('name')} autoComplete="name" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="Nama lengkap" /></label>
-        <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Nomor Telepon</span><input required type="tel" inputMode="tel" value={form.phone} onChange={update('phone')} autoComplete="tel" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="Contoh: 0812xxxxxxx" /></label>
         <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Domisili</span><input required value={form.domicile} onChange={update('domicile')} autoComplete="address-level2" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="Kota domisili" /></label>
       </div>
       <button type="submit" disabled={!isComplete} className="mt-6 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-[#220306] px-5 py-3 text-base font-bold text-[#E8CF8A] transition-colors hover:bg-[#65131C] disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF56]"><MessageCircle className="h-5 w-5" aria-hidden="true" />Hubungi Konsultan Properti Hari Ini</button>
