@@ -11,7 +11,7 @@ const outputDir = path.join(sourceDir, 'optimized');
 const manifestPath = path.join(projectRoot, 'src', 'generated', 'image-manifest.json');
 const imageExtensions = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 const preferredWidths = [480, 768, 1200, 1600, 1920];
-const webpSources = new Set(['royalcnn/2.png']);
+const webpSources = new Set(['royalkinara/2.png']);
 
 function ensureDir(dirPath) {
   if (!existsSync(dirPath)) {

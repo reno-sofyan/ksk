@@ -3033,532 +3033,532 @@
       }
     ]
   },
-  "royalcnn/1.png": {
+  "royalkinara/1.png": {
     "width": 1686,
     "height": 2528,
-    "slug": "royalcnn-1",
+    "slug": "royalkinara-1",
     "format": "png",
     "variants": [
       {
         "width": 320,
         "height": 480,
-        "path": "images/optimized/royalcnn-1/480.png",
+        "path": "images/optimized/royalkinara-1/480.png",
         "format": "png"
       },
       {
         "width": 512,
         "height": 768,
-        "path": "images/optimized/royalcnn-1/768.png",
+        "path": "images/optimized/royalkinara-1/768.png",
         "format": "png"
       },
       {
         "width": 800,
         "height": 1200,
-        "path": "images/optimized/royalcnn-1/1200.png",
+        "path": "images/optimized/royalkinara-1/1200.png",
         "format": "png"
       },
       {
         "width": 1067,
         "height": 1600,
-        "path": "images/optimized/royalcnn-1/1600.png",
+        "path": "images/optimized/royalkinara-1/1600.png",
         "format": "png"
       },
       {
         "width": 1281,
         "height": 1920,
-        "path": "images/optimized/royalcnn-1/1920.png",
+        "path": "images/optimized/royalkinara-1/1920.png",
         "format": "png"
       }
     ]
   },
-  "royalcnn/2.png": {
+  "royalkinara/2.png": {
     "width": 2760,
     "height": 1504,
-    "slug": "royalcnn-2",
+    "slug": "royalkinara-2",
     "format": "webp",
     "variants": [
       {
         "width": 480,
         "height": 262,
-        "path": "images/optimized/royalcnn-2/480.webp",
+        "path": "images/optimized/royalkinara-2/480.webp",
         "format": "webp"
       },
       {
         "width": 768,
         "height": 419,
-        "path": "images/optimized/royalcnn-2/768.webp",
+        "path": "images/optimized/royalkinara-2/768.webp",
         "format": "webp"
       },
       {
         "width": 1200,
         "height": 654,
-        "path": "images/optimized/royalcnn-2/1200.webp",
+        "path": "images/optimized/royalkinara-2/1200.webp",
         "format": "webp"
       },
       {
         "width": 1600,
         "height": 872,
-        "path": "images/optimized/royalcnn-2/1600.webp",
+        "path": "images/optimized/royalkinara-2/1600.webp",
         "format": "webp"
       },
       {
         "width": 1920,
         "height": 1046,
-        "path": "images/optimized/royalcnn-2/1920.webp",
+        "path": "images/optimized/royalkinara-2/1920.webp",
         "format": "webp"
       }
     ]
   },
-  "royalcnn/architecture.jpg": {
+  "royalkinara/architecture.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-architecture",
+    "slug": "royalkinara-architecture",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-architecture/480.jpg",
+        "path": "images/optimized/royalkinara-architecture/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-architecture/768.jpg",
+        "path": "images/optimized/royalkinara-architecture/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-architecture/1200.jpg",
+        "path": "images/optimized/royalkinara-architecture/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-architecture/1600.jpg",
+        "path": "images/optimized/royalkinara-architecture/1600.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/closing.jpg": {
+  "royalkinara/closing.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-closing",
+    "slug": "royalkinara-closing",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-closing/480.jpg",
+        "path": "images/optimized/royalkinara-closing/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-closing/768.jpg",
+        "path": "images/optimized/royalkinara-closing/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-closing/1200.jpg",
+        "path": "images/optimized/royalkinara-closing/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-closing/1600.jpg",
+        "path": "images/optimized/royalkinara-closing/1600.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/demand.jpg": {
+  "royalkinara/demand.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-demand",
+    "slug": "royalkinara-demand",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-demand/480.jpg",
+        "path": "images/optimized/royalkinara-demand/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-demand/768.jpg",
+        "path": "images/optimized/royalkinara-demand/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-demand/1200.jpg",
+        "path": "images/optimized/royalkinara-demand/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-demand/1600.jpg",
+        "path": "images/optimized/royalkinara-demand/1600.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/design.jpg": {
+  "royalkinara/design.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-design",
+    "slug": "royalkinara-design",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-design/480.jpg",
+        "path": "images/optimized/royalkinara-design/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-design/768.jpg",
+        "path": "images/optimized/royalkinara-design/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-design/1200.jpg",
+        "path": "images/optimized/royalkinara-design/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-design/1600.jpg",
+        "path": "images/optimized/royalkinara-design/1600.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/hero.jpg": {
+  "royalkinara/hero.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-hero",
+    "slug": "royalkinara-hero",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-hero/480.jpg",
+        "path": "images/optimized/royalkinara-hero/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-hero/768.jpg",
+        "path": "images/optimized/royalkinara-hero/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-hero/1200.jpg",
+        "path": "images/optimized/royalkinara-hero/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-hero/1600.jpg",
+        "path": "images/optimized/royalkinara-hero/1600.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/investment.jpg": {
+  "royalkinara/investment.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-investment",
+    "slug": "royalkinara-investment",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-investment/480.jpg",
+        "path": "images/optimized/royalkinara-investment/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-investment/768.jpg",
+        "path": "images/optimized/royalkinara-investment/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-investment/1200.jpg",
+        "path": "images/optimized/royalkinara-investment/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-investment/1600.jpg",
+        "path": "images/optimized/royalkinara-investment/1600.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/location.jpg": {
+  "royalkinara/location.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-location",
+    "slug": "royalkinara-location",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-location/480.jpg",
+        "path": "images/optimized/royalkinara-location/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-location/768.jpg",
+        "path": "images/optimized/royalkinara-location/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-location/1200.jpg",
+        "path": "images/optimized/royalkinara-location/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-location/1600.jpg",
+        "path": "images/optimized/royalkinara-location/1600.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/logo-kinara.png": {
+  "royalkinara/logo-kinara.png": {
     "width": 1699,
     "height": 926,
-    "slug": "royalcnn-logo-kinara",
+    "slug": "royalkinara-logo-kinara",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 262,
-        "path": "images/optimized/royalcnn-logo-kinara/480.jpg",
+        "path": "images/optimized/royalkinara-logo-kinara/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 419,
-        "path": "images/optimized/royalcnn-logo-kinara/768.jpg",
+        "path": "images/optimized/royalkinara-logo-kinara/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 654,
-        "path": "images/optimized/royalcnn-logo-kinara/1200.jpg",
+        "path": "images/optimized/royalkinara-logo-kinara/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 872,
-        "path": "images/optimized/royalcnn-logo-kinara/1600.jpg",
+        "path": "images/optimized/royalkinara-logo-kinara/1600.jpg",
         "format": "jpg"
       },
       {
         "width": 1699,
         "height": 926,
-        "path": "images/optimized/royalcnn-logo-kinara/1699.jpg",
+        "path": "images/optimized/royalkinara-logo-kinara/1699.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/logo.jpg": {
+  "royalkinara/logo.jpg": {
     "width": 864,
     "height": 450,
-    "slug": "royalcnn-logo",
+    "slug": "royalkinara-logo",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 250,
-        "path": "images/optimized/royalcnn-logo/480.jpg",
+        "path": "images/optimized/royalkinara-logo/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 400,
-        "path": "images/optimized/royalcnn-logo/768.jpg",
+        "path": "images/optimized/royalkinara-logo/768.jpg",
         "format": "jpg"
       },
       {
         "width": 864,
         "height": 450,
-        "path": "images/optimized/royalcnn-logo/864.jpg",
+        "path": "images/optimized/royalkinara-logo/864.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/market.jpg": {
+  "royalkinara/market.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-market",
+    "slug": "royalkinara-market",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-market/480.jpg",
+        "path": "images/optimized/royalkinara-market/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-market/768.jpg",
+        "path": "images/optimized/royalkinara-market/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-market/1200.jpg",
+        "path": "images/optimized/royalkinara-market/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-market/1600.jpg",
+        "path": "images/optimized/royalkinara-market/1600.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/site-plan.jpg": {
+  "royalkinara/site-plan.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-site-plan",
+    "slug": "royalkinara-site-plan",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-site-plan/480.jpg",
+        "path": "images/optimized/royalkinara-site-plan/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-site-plan/768.jpg",
+        "path": "images/optimized/royalkinara-site-plan/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-site-plan/1200.jpg",
+        "path": "images/optimized/royalkinara-site-plan/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-site-plan/1600.jpg",
+        "path": "images/optimized/royalkinara-site-plan/1600.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/siteplan.png": {
+  "royalkinara/siteplan.png": {
     "width": 1652,
     "height": 1152,
-    "slug": "royalcnn-siteplan",
+    "slug": "royalkinara-siteplan",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 335,
-        "path": "images/optimized/royalcnn-siteplan/480.jpg",
+        "path": "images/optimized/royalkinara-siteplan/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 536,
-        "path": "images/optimized/royalcnn-siteplan/768.jpg",
+        "path": "images/optimized/royalkinara-siteplan/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 837,
-        "path": "images/optimized/royalcnn-siteplan/1200.jpg",
+        "path": "images/optimized/royalkinara-siteplan/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 1116,
-        "path": "images/optimized/royalcnn-siteplan/1600.jpg",
+        "path": "images/optimized/royalkinara-siteplan/1600.jpg",
         "format": "jpg"
       },
       {
         "width": 1652,
         "height": 1152,
-        "path": "images/optimized/royalcnn-siteplan/1652.jpg",
+        "path": "images/optimized/royalkinara-siteplan/1652.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/track-record.jpg": {
+  "royalkinara/track-record.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-track-record",
+    "slug": "royalkinara-track-record",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-track-record/480.jpg",
+        "path": "images/optimized/royalkinara-track-record/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-track-record/768.jpg",
+        "path": "images/optimized/royalkinara-track-record/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-track-record/1200.jpg",
+        "path": "images/optimized/royalkinara-track-record/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-track-record/1600.jpg",
+        "path": "images/optimized/royalkinara-track-record/1600.jpg",
         "format": "jpg"
       }
     ]
   },
-  "royalcnn/weekend.jpg": {
+  "royalkinara/weekend.jpg": {
     "width": 1600,
     "height": 900,
-    "slug": "royalcnn-weekend",
+    "slug": "royalkinara-weekend",
     "format": "jpg",
     "variants": [
       {
         "width": 480,
         "height": 270,
-        "path": "images/optimized/royalcnn-weekend/480.jpg",
+        "path": "images/optimized/royalkinara-weekend/480.jpg",
         "format": "jpg"
       },
       {
         "width": 768,
         "height": 432,
-        "path": "images/optimized/royalcnn-weekend/768.jpg",
+        "path": "images/optimized/royalkinara-weekend/768.jpg",
         "format": "jpg"
       },
       {
         "width": 1200,
         "height": 675,
-        "path": "images/optimized/royalcnn-weekend/1200.jpg",
+        "path": "images/optimized/royalkinara-weekend/1200.jpg",
         "format": "jpg"
       },
       {
         "width": 1600,
         "height": 900,
-        "path": "images/optimized/royalcnn-weekend/1600.jpg",
+        "path": "images/optimized/royalkinara-weekend/1600.jpg",
         "format": "jpg"
       }
     ]

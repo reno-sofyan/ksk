@@ -172,7 +172,7 @@ function main() {
 	if (variant === 'royal') {
 		const outputPath = path.join(process.cwd(), 'public', 'llms.txt');
 		ensureDirectoryExists(path.dirname(outputPath));
-		fs.writeFileSync(outputPath, '## Pages\n- [Royal Kinara](https://royalkinara.kinaraland.com/): Ruko premium berdesain Luxury Classic Minimalist di kawasan Dramaga, Bogor Barat.\n', 'utf8');
+		fs.writeFileSync(outputPath, '## Pages\n- [Royal Kinara](https://royalkinara.kinaraland.com/): Ruko untuk profesional yang ingin mulai mengubah sebagian penghasilan menjadi aset, lima menit dari kampus IPB.\n', 'utf8');
 		return;
 	}
 

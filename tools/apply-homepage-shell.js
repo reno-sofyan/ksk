@@ -95,27 +95,27 @@ const variants = {
     }
   },
   royal: {
-    title: 'Royal Kinara | Ruko Premium di Babengket, Ciampea',
-    description: 'Temukan Royal Kinara, ruko premium berdesain Luxury Classic Minimalist di Babengket, Ciampea, Kabupaten Bogor. Cek lokasi, keunggulan, dan ketersediaan unit.',
+    title: 'Royal Kinara | Bangun Aset Passive Income dari Ruko',
+    description: 'Royal Kinara adalah ruko lima menit dari kampus IPB, berada di tengah lima kompleks perumahan, dengan bantuan pengelolaan dan pencarian penyewa.',
     robots: 'index, follow, max-image-preview:large',
     canonical: 'https://royalkinara.kinaraland.com/',
     siteName: 'Royal Kinara',
-    image: 'https://royalkinara.kinaraland.com/images/royalcnn/2.png',
-    imageAlt: 'Royal Kinara commercial hub premium di Babengket, Ciampea, Kabupaten Bogor',
-    preload: 'images/optimized/royalcnn-2/768.webp',
+    image: 'https://royalkinara.kinaraland.com/images/royalkinara/2.png',
+    imageAlt: 'Fasad ruko Royal Kinara di Babengket, Ciampea, Kabupaten Bogor',
+    preload: 'images/optimized/royalkinara-2/768.webp',
     preloadSrcSet: [
-      'images/optimized/royalcnn-2/480.webp 480w',
-      'images/optimized/royalcnn-2/768.webp 768w',
-      'images/optimized/royalcnn-2/1200.webp 1200w',
-      'images/optimized/royalcnn-2/1600.webp 1600w',
-      'images/optimized/royalcnn-2/1920.webp 1920w'
+      'images/optimized/royalkinara-2/480.webp 480w',
+      'images/optimized/royalkinara-2/768.webp 768w',
+      'images/optimized/royalkinara-2/1200.webp 1200w',
+      'images/optimized/royalkinara-2/1600.webp 1600w',
+      'images/optimized/royalkinara-2/1920.webp 1920w'
     ].join(', '),
     preloadSizes: '(min-width: 1024px) 46vw, (min-width: 640px) calc(100vw - 3rem), calc(100vw - 2rem)',
     preloadWidth: 2760,
     preloadHeight: 1504,
-    eyebrow: 'Royal Kinara • Eksklusif Commercial Hub',
-    h1: 'Royal Kinara, Aset Komersial Premium untuk Bisnis Bertumbuh',
-    subtitle: 'Dikembangkan oleh PT Kinara Land Indonesia di koridor strategis Babengket, Ciampea—dekat kawasan hunian dan akses menuju IPB University, dengan desain Luxury Classic Minimalist yang representatif untuk bisnis dan investasi.',
+    eyebrow: 'Royal Kinara • Aset untuk Passive Income',
+    h1: 'Mau Sampai Kapan Jadi Karyawan Tanpa Aset Passive Income?',
+    subtitle: 'Karier Anda mungkin sudah matang. Jabatan sudah tinggi. Penghasilan sudah jauh lebih baik. Pengalaman sudah bertahun-tahun.',
     schema: {
       '@context': 'https://schema.org',
       '@graph': [
@@ -137,8 +137,8 @@ const variants = {
           '@type': 'WebPage',
           '@id': 'https://royalkinara.kinaraland.com/#webpage',
           url: 'https://royalkinara.kinaraland.com/',
-          name: 'Royal Kinara | Ruko Premium di Babengket, Ciampea',
-          description: 'Temukan Royal Kinara, ruko premium berdesain Luxury Classic Minimalist di Babengket, Ciampea, Kabupaten Bogor. Cek lokasi, keunggulan, dan ketersediaan unit.',
+          name: 'Royal Kinara | Bangun Aset Passive Income dari Ruko',
+          description: 'Royal Kinara adalah ruko lima menit dari kampus IPB, berada di tengah lima kompleks perumahan, dengan bantuan pengelolaan dan pencarian penyewa.',
           inLanguage: 'id-ID',
           isPartOf: { '@id': 'https://royalkinara.kinaraland.com/#website' },
           about: { '@id': 'https://royalkinara.kinaraland.com/#organization' }
@@ -158,12 +158,12 @@ const variants = {
           '@type': 'FAQPage',
           mainEntity: [
             ['Di mana lokasi Royal Kinara?', 'Royal Kinara berlokasi di Jl. Babengket No.6, Cihideung Udik, Kec. Ciampea, Kabupaten Bogor, Jawa Barat 16620.'],
-            ['Berapa harga unit yang tersedia?', 'Hubungi konsultan untuk informasi terbaru.'],
-            ['Apa saja spesifikasi bangunannya?', 'Hubungi konsultan untuk informasi terbaru.'],
-            ['Apakah tersedia area parkir?', 'Hubungi konsultan untuk informasi terbaru.'],
-            ['Jenis usaha apa yang cocok?', 'Hubungi konsultan untuk informasi terbaru.'],
-            ['Bagaimana skema pembayarannya?', 'Hubungi konsultan untuk informasi terbaru.'],
-            ['Kapan unit diserahterimakan?', 'Hubungi konsultan untuk informasi terbaru.']
+            ['Berapa jauh Royal Kinara dari kampus IPB?', 'Royal Kinara berjarak sekitar lima menit dari kampus IPB.'],
+            ['Berapa unit yang tersedia?', 'Saat ini tersedia lima unit Royal Kinara. Hubungi tim kami untuk mengecek ketersediaan terbaru.'],
+            ['Apakah pengelolaan ruko dibantu?', 'Ya. Tim kami membantu pengelolaan dan pencarian penyewa tanpa biaya.'],
+            ['Siapa yang cocok memiliki Royal Kinara?', 'Royal Kinara relevan bagi profesional dengan penghasilan relatif stabil yang ingin mulai mengubah sebagian income menjadi aset.'],
+            ['Apakah ruko dapat disewakan?', 'Ya. Ruko dapat digunakan sendiri atau disewakan sesuai kebutuhan pemilik.'],
+            ['Bagaimana harga dan skema pembayarannya?', 'Isi form dan hubungi tim kami untuk mendapatkan informasi harga, spesifikasi, ketersediaan unit, dan skema pembayaran terbaru.']
           ].map(([question, answer]) => ({
             '@type': 'Question',
             name: question,

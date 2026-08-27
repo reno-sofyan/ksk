@@ -37,11 +37,11 @@ function pruneRoyalAssets() {
 		'siteplan.png'
 	]);
 	const usedOptimizedDirs = new Set([
-		'royalcnn-1',
-		'royalcnn-2',
-		'royalcnn-location',
-		'royalcnn-logo-kinara',
-		'royalcnn-siteplan'
+		'royalkinara-1',
+		'royalkinara-2',
+		'royalkinara-location',
+		'royalkinara-logo-kinara',
+		'royalkinara-siteplan'
 	]);
 
 	for (const entry of readdirSync(imagesDir)) {
@@ -52,7 +52,7 @@ function pruneRoyalAssets() {
 					rmSync(path.join(optimizedDir, optimizedEntry), { recursive: true, force: true });
 				}
 			}
-		} else if (entry === 'royalcnn') {
+		} else if (entry === 'royalkinara') {
 			const royalImagesDir = path.join(imagesDir, entry);
 			for (const assetEntry of readdirSync(royalImagesDir)) {
 				if (!usedFiles.has(assetEntry)) {
