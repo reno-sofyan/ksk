@@ -8,6 +8,7 @@ import SectionDivider from '@/components/SectionDivider.jsx';
 import IconCircle from '@/components/IconCircle.jsx';
 import ChunkErrorBoundary from '@/components/ChunkErrorBoundary.jsx';
 import FloatingWhatsAppButton from '@/components/FloatingWhatsAppButton.jsx';
+import ViewportVideo from '@/components/ViewportVideo.jsx';
 import WhatsAppCtaButton from '@/components/WhatsAppCtaButton.jsx';
 import { WhatsAppConsultationForm } from '@/components/WhatsAppLeadGate.jsx';
 import { imageUrl } from '@/lib/assets.js';
@@ -108,6 +109,7 @@ const RIVERE_PILLARS = [
 const PUBLIC_NAVIGATION_ANCHORS = [
   { sectionId: 'hero', label: 'Overview', href: '#hero' },
   { sectionId: 'konsep', label: 'Konsep', href: '#konsep' },
+  { sectionId: 'video', label: 'Video', href: '#video' },
   { sectionId: 'fasilitas', label: 'Fasilitas', href: '#fasilitas' },
   { sectionId: 'unit', label: 'Unit', href: '#unit' },
   { sectionId: 'konsultasi', label: 'Hubungi', href: '#konsultasi' },
@@ -481,6 +483,19 @@ const HomePage = () => {
               >
                 Cek Ketersediaan Unit & Masterplan
               </WhatsAppCtaButton>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* VIDEO RIVERE */}
+        <section id="video" className="cv-auto scroll-mt-28 bg-secondary/50 py-16 sm:py-20 lg:py-24">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
+              <h2 className="text-3xl font-bold text-primary sm:text-4xl md:text-5xl">Kenali Rivere Lebih Dekat</h2>
+              <p className="mt-4 text-base leading-7 text-muted-foreground sm:text-lg">Lihat progress pembangunan Rivere Kostaycation IPB dalam video berikut.</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="overflow-hidden rounded-2xl border border-primary/15 bg-primary shadow-[0_24px_70px_rgba(7,39,29,0.18)] sm:rounded-3xl">
+              <ViewportVideo className="mx-auto block max-h-[80vh] w-full object-contain sm:max-w-md" poster={imageUrl('rivere/Design 1/1.png')} src={imageUrl('rivere/vid-rivere.mp4')} />
             </motion.div>
           </div>
         </section>

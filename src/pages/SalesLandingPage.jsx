@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import WhatsAppCtaButton from '@/components/WhatsAppCtaButton.jsx';
+import ViewportVideo from '@/components/ViewportVideo.jsx';
 import { WhatsAppConsultationForm } from '@/components/WhatsAppLeadGate.jsx';
 import { imageUrl } from '@/lib/assets.js';
 import { RIVERE_SITE_URL } from '@/lib/site.js';
@@ -94,6 +95,7 @@ const SalesLandingPage = () => {
           </a>
           <nav className="hidden items-center gap-5 lg:flex" aria-label="Navigasi landing sales">
             <a href="#keunggulan" className="text-sm font-semibold text-primary/75 hover:text-primary">Keunggulan</a>
+            <a href="#video" className="text-sm font-semibold text-primary/75 hover:text-primary">Video</a>
             <a href="#unit" className="text-sm font-semibold text-primary/75 hover:text-primary">Unit</a>
             <a href="#pengelolaan" className="text-sm font-semibold text-primary/75 hover:text-primary">Pengelolaan</a>
             <a href="#faq" className="text-sm font-semibold text-primary/75 hover:text-primary">FAQ</a>
@@ -107,6 +109,7 @@ const SalesLandingPage = () => {
               <nav className="absolute right-0 top-12 grid w-48 gap-1 rounded-xl border border-primary/10 bg-white p-2 shadow-xl">
                 {[
                   ['Keunggulan', '#keunggulan'],
+                  ['Video', '#video'],
                   ['Unit', '#unit'],
                   ['Pengelolaan', '#pengelolaan'],
                   ['FAQ', '#faq']
@@ -274,6 +277,15 @@ const SalesLandingPage = () => {
                   <ResponsiveImage src={imageUrl(file)} alt={alt} className="aspect-[4/3] h-full w-full object-cover" loading="lazy" sizes="(min-width: 768px) 33vw, 50vw" />
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="video" className="scroll-mt-20 bg-secondary/60 py-14 sm:py-16">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <SectionHeading title="Kenali Rivere Lebih Dekat" description="Lihat progress pembangunan Rivere Kostaycation IPB dalam video berikut." />
+            <div className="overflow-hidden rounded-2xl border border-primary/15 bg-primary shadow-[0_20px_55px_rgba(7,39,29,0.16)] sm:rounded-3xl">
+              <ViewportVideo className="mx-auto block max-h-[80vh] w-full object-contain sm:max-w-md" poster={imageUrl('rivere/Design 1/1.png')} src={imageUrl('rivere/vid-rivere.mp4')} />
             </div>
           </div>
         </section>
