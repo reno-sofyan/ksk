@@ -50,8 +50,8 @@ function normalizeWhatsAppPhone(phoneNumber) {
   return digits.startsWith('0') ? `62${digits.slice(1)}` : digits;
 }
 
-const RoyalImage = ({ fileName, alt, className = '', sizes = '100vw', loading = 'lazy', decoding = 'async', fetchPriority, ...props }) => (
-  <ResponsiveImage src={imageUrl(`royalkinara/${fileName}`)} alt={alt} className={className} sizes={sizes} loading={loading} decoding={decoding} fetchPriority={fetchPriority} {...props} />
+const RoyalImage = ({ fileName, assetPath, alt, className = '', sizes = '100vw', loading = 'lazy', decoding = 'async', fetchPriority, ...props }) => (
+  <ResponsiveImage src={imageUrl(assetPath || `royalkinara/${fileName}`)} alt={alt} className={className} sizes={sizes} loading={loading} decoding={decoding} fetchPriority={fetchPriority} {...props} />
 );
 
 const SectionHeading = ({ eyebrow, title, description, light = false }) => (
@@ -237,10 +237,10 @@ const RoyalRukoContent = () => {
               <p className="font-serif text-2xl font-semibold leading-snug text-[#F8F3EA] sm:text-3xl">Kalau suatu hari Anda berhenti bekerja, apa yang tetap menghasilkan untuk Anda?</p>
             </div>
 
-            <div className="mt-8 max-w-3xl text-base leading-8 text-[#E9DED0] sm:text-lg">
-              <p>Karena selama ini...</p>
-              <p className="mt-3">Anda menukar waktu dengan penghasilan.</p>
-              <p className="mt-1 font-bold text-[#F8F3EA]">Anda harus tetap bekerja untuk mendapatkan penghasilan tersebut.</p>
+            <div className="mt-10 max-w-4xl border-l-2 border-[#D4AF56] pl-5 sm:pl-8">
+              <p className="font-serif text-lg font-medium italic text-[#E8CF8A] sm:text-xl">Karena selama ini...</p>
+              <p className="mt-4 font-serif text-2xl font-medium leading-tight text-[#F8F3EA] sm:text-3xl">Anda menukar <span className="font-bold italic">waktu</span> dengan penghasilan.</p>
+              <p className="mt-3 max-w-3xl font-serif text-2xl font-bold leading-tight text-[#E8CF8A] sm:text-4xl">Anda harus tetap bekerja untuk mendapatkan penghasilan tersebut.</p>
             </div>
           </div>
         </section>
@@ -251,19 +251,30 @@ const RoyalRukoContent = () => {
               <p className="text-sm font-bold uppercase tracking-[0.14em] text-[#65131C]">Karier Anda Sudah Bekerja untuk Anda.</p>
               <h2 className="mt-4 max-w-3xl font-serif text-3xl font-semibold leading-tight text-[#220306] sm:text-4xl lg:text-5xl">Kapan Aset Anda Mulai Bekerja untuk Anda?</h2>
               <div className="mt-7 max-w-3xl space-y-4 text-base leading-8 text-[#5c4848] sm:text-lg">
-                <p>Ini bukan tentang berhenti bekerja besok.</p>
-                <p>Bukan juga tentang mengejar “cepat kaya”.</p>
-                <p className="font-bold text-[#220306]">Justru sebaliknya.</p>
-                <p>Semakin matang karier Anda, semakin penting mulai membangun aset yang tidak sepenuhnya bergantung pada waktu dan tenaga Anda.</p>
+                <p className="font-serif text-lg font-medium sm:text-xl">Ini bukan tentang berhenti bekerja besok.</p>
+                <p className="font-serif text-lg font-medium sm:text-xl">Bukan juga tentang mengejar <span className="font-bold">“cepat kaya”.</span></p>
+                <p className="font-serif text-2xl font-semibold italic leading-tight text-[#220306] sm:text-3xl">Justru sebaliknya.</p>
+                <p className="font-serif text-xl font-semibold leading-relaxed text-[#220306] sm:text-2xl">Semakin matang karier Anda, semakin penting mulai membangun aset yang tidak sepenuhnya bergantung pada waktu dan tenaga Anda.</p>
               </div>
             </div>
-            <div className="mt-10 overflow-hidden rounded-2xl border border-[#D4AF56]/40 bg-[#220306] shadow-[0_18px_45px_rgba(34,3,6,0.14)]">
+          </div>
+        </section>
+
+        <section className="border-y border-[#D4AF56]/30 bg-[#EFE4D1] py-10 sm:py-14" aria-label="Visual dan konsultasi Royal Kinara">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <div className="relative overflow-hidden rounded-3xl border border-[#D4AF56]/50 bg-[#220306] shadow-[0_22px_55px_rgba(34,3,6,0.2)]">
               <div className="relative">
                 <RoyalImage fileName="2.png" alt="Gambar facade ruko" className="aspect-[16/9] w-full object-cover" sizes="(min-width: 1024px) 64rem, calc(100vw - 2rem)" loading="eager" />
-                <p className="absolute bottom-5 left-5 rounded-full border border-[#E8CF8A]/50 bg-[#220306]/90 px-4 py-2 text-sm font-bold text-[#E8CF8A]">Tersedia 5 unit</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#220306]/95 via-[#220306]/25 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 flex flex-col gap-5 p-5 sm:flex-row sm:items-end sm:justify-between sm:p-7">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#E8CF8A]">Royal Kinara</p>
+                    <p className="mt-2 inline-flex rounded-full border border-[#E8CF8A]/60 bg-[#220306]/75 px-3 py-1.5 text-sm font-bold text-[#E8CF8A]">Tersedia 5 unit</p>
+                  </div>
+                  <CTA label="Royal Kinara - Section Karier Hubungi Kami">Hubungi Kami</CTA>
+                </div>
               </div>
             </div>
-            <div className="mt-7"><CTA label="Royal Kinara - Section Karier Hubungi Kami">Hubungi Kami</CTA></div>
           </div>
         </section>
 
@@ -291,9 +302,9 @@ const RoyalRukoContent = () => {
             </div>
             <div className="grid gap-5 lg:grid-cols-2 lg:gap-8">
               {[
-                ['2.png', 'Gambar facade ruko'],
-                ['location.jpg', 'Lokasi ruko']
-              ].map(([fileName, alt], index) => <button type="button" key={fileName} onClick={() => setActiveGallery({ fileName, alt })} className="group relative overflow-hidden rounded-3xl border border-[#D4AF56]/45 bg-[#220306] text-left shadow-[0_18px_45px_rgba(34,3,6,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF56]"><div className="absolute left-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#E8CF8A]/70 bg-[#220306]/75 font-serif text-lg text-[#E8CF8A]">0{index + 1}</div><div className="m-3 overflow-hidden rounded-2xl"><RoyalImage fileName={fileName} alt={alt} className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.025]" /></div><span className="block border-t border-[#D4AF56]/35 bg-[#220306] px-5 py-4 font-serif text-xl font-semibold text-[#F8F3EA]">{alt}</span></button>)}
+                ['2.png', 'Foto ruko Royal Kinara', null],
+                ['maps.jpeg', 'Lokasi ruko', 'maps.jpeg']
+              ].map(([fileName, alt, assetPath], index) => <button type="button" key={fileName} onClick={() => setActiveGallery({ fileName, assetPath, alt })} className="group relative overflow-hidden rounded-3xl border border-[#D4AF56]/45 bg-[#220306] text-left shadow-[0_18px_45px_rgba(34,3,6,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF56]"><div className="absolute left-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#E8CF8A]/70 bg-[#220306]/75 font-serif text-lg text-[#E8CF8A]">0{index + 1}</div><div className="m-3 overflow-hidden rounded-2xl"><RoyalImage fileName={fileName} assetPath={assetPath} alt={alt} className={`aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.025] ${assetPath === 'maps.jpeg' ? 'object-[center_62%]' : ''}`} /></div>{assetPath ? <span className="block border-t border-[#D4AF56]/35 bg-[#220306] px-5 py-4 font-serif text-xl font-semibold text-[#F8F3EA]">{alt}</span> : null}</button>)}
             </div>
           </div>
         </section>
@@ -320,7 +331,7 @@ const RoyalRukoContent = () => {
       </main>
 
       <footer className="border-t border-[#D4AF56]/25 bg-[#220306] py-10 text-[#D8C7AA]"><div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:px-8"><div><p className="font-serif text-2xl font-semibold text-[#F8F3EA]">Royal Kinara</p><p className="mt-2 max-w-2xl text-xs leading-5 text-[#D8C7AA]/75">Jl. Babengket No.6, Cihideung Udik, Kec. Ciampea, Kabupaten Bogor, Jawa Barat 16620</p><p className="mt-1 text-xs font-semibold text-[#E8CF8A]">PT KINARA LAND INDONESIA</p></div><div className="text-left text-xs lg:text-right"><p>Informasi harga, ketersediaan, dan manfaat layanan perlu dikonfirmasi kepada tim Royal Kinara.</p><p className="mt-2">© {new Date().getFullYear()} Royal Kinara. Semua hak dilindungi.</p></div></div></footer>
-      {activeGallery ? <div className="fixed inset-0 z-[110] flex items-center justify-center bg-[#220306]/95 p-4" role="dialog" aria-modal="true" aria-label={activeGallery.alt} onClick={() => setActiveGallery(null)}><button type="button" onClick={() => setActiveGallery(null)} className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF56] text-[#E8CF8A]" aria-label="Tutup galeri"><span className="text-2xl">×</span></button><div className="max-h-[90vh] max-w-6xl" onClick={(event) => event.stopPropagation()}><RoyalImage fileName={activeGallery.fileName} alt={activeGallery.alt} className="max-h-[82vh] w-auto rounded-xl object-contain" loading="eager" /><p className="mt-3 text-center text-sm text-[#D8C7AA]">{activeGallery.alt}</p></div></div> : null}
+      {activeGallery ? <div className="fixed inset-0 z-[110] flex items-center justify-center bg-[#220306]/95 p-4" role="dialog" aria-modal="true" aria-label={activeGallery.alt} onClick={() => setActiveGallery(null)}><button type="button" onClick={() => setActiveGallery(null)} className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF56] text-[#E8CF8A]" aria-label="Tutup galeri"><span className="text-2xl">×</span></button><div className="max-h-[90vh] max-w-6xl" onClick={(event) => event.stopPropagation()}><RoyalImage fileName={activeGallery.fileName} assetPath={activeGallery.assetPath} alt={activeGallery.alt} className="max-h-[82vh] w-auto rounded-xl object-contain" loading="eager" /><p className="mt-3 text-center text-sm text-[#D8C7AA]">{activeGallery.alt}</p></div></div> : null}
       {!mobileMenuOpen ? <a href="#konsultasi" onClick={(event) => { event.preventDefault(); scrollToLead(); }} className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-[70] hidden h-14 w-14 items-center justify-center rounded-full border border-[#D4AF56] bg-[#220306] text-[#E8CF8A] shadow-[0_18px_42px_rgba(34,3,6,0.35)] md:inline-flex md:right-6" aria-label="Buka form konsultasi Royal Kinara"><MessageCircle className="h-7 w-7" /></a> : null}
     </div>
   );

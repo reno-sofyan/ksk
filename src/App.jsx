@@ -6,6 +6,8 @@ import ScrollToTop from '@/components/ScrollToTop.jsx';
 import PublicScrollGuard from '@/components/RoutedPublicScrollGuard.jsx';
 import VisitorTracker from '@/components/RoutedVisitorTracker.jsx';
 import ClarityTracker from '@/components/RoutedClarityTracker.jsx';
+import HotjarTracker from '@/components/HotjarTracker.jsx';
+import ContentsquareTracker from '@/components/ContentsquareTracker.jsx';
 import WhatsAppLeadGate from '@/components/WhatsAppLeadGate.jsx';
 import HeroShell from '@/components/HeroShell.jsx';
 import RoyalRukoPage from '@/pages/RoyalRukoPage.jsx';
@@ -63,6 +65,8 @@ function App() {
         <PublicScrollGuard />
         <VisitorTracker />
         <ClarityTracker />
+        <HotjarTracker />
+        <ContentsquareTracker />
         <WhatsAppLeadGate />
         <React.Suspense fallback={<HeroShell />}>
           <Routes>

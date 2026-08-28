@@ -2339,6 +2339,32 @@
       }
     ]
   },
+  "maps.jpeg": {
+    "width": 972,
+    "height": 978,
+    "slug": "maps",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 477,
+        "height": 480,
+        "path": "images/optimized/maps/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 763,
+        "height": 768,
+        "path": "images/optimized/maps/768.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 972,
+        "height": 978,
+        "path": "images/optimized/maps/978.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
   "mezzanine.png": {
     "width": 2340,
     "height": 1484,

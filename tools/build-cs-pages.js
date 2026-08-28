@@ -32,11 +32,13 @@ function pruneRoyalAssets() {
 	const usedFiles = new Set([
 		'1.png',
 		'2.png',
+		'maps.jpeg',
 		'location.jpg',
 		'logo-kinara.png',
 		'siteplan.png'
 	]);
 	const usedOptimizedDirs = new Set([
+		'maps',
 		'royalkinara-1',
 		'royalkinara-2',
 		'royalkinara-location',
@@ -59,6 +61,8 @@ function pruneRoyalAssets() {
 					rmSync(path.join(royalImagesDir, assetEntry), { recursive: true, force: true });
 				}
 			}
+		} else if (entry === 'maps.jpeg') {
+			continue;
 		} else {
 			rmSync(path.join(imagesDir, entry), { recursive: true, force: true });
 		}

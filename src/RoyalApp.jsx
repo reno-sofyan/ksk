@@ -1,5 +1,7 @@
 import React from 'react';
 import { ClarityTrackerForLocation } from '@/components/ClarityTracker.jsx';
+import { HotjarTrackerForLocation } from '@/components/HotjarTracker.jsx';
+import { ContentsquareTrackerForLocation } from '@/components/ContentsquareTracker.jsx';
 import { PublicScrollGuardForPath } from '@/components/PublicScrollGuard.jsx';
 import { VisitorTrackerForLocation } from '@/components/VisitorTracker.jsx';
 import RoyalRukoPage from '@/pages/RoyalRukoPage.jsx';
@@ -32,6 +34,8 @@ const RoyalApp = () => {
 			<PublicScrollGuardForPath pathname={pathname} />
 			<VisitorTrackerForLocation location={location} />
 			<ClarityTrackerForLocation location={location} />
+			<HotjarTrackerForLocation location={location} />
+			<ContentsquareTrackerForLocation location={location} />
 			<RoyalRukoPage />
 		</>
 	);

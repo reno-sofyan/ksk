@@ -83,8 +83,7 @@ function sendHotjarEvent(eventName) {
   }
 }
 
-const HotjarTracker = () => {
-  const location = useLocation();
+export const HotjarTrackerForLocation = ({ location }) => {
 
   useEffect(() => {
     if (!canTrack(location.pathname)) {
@@ -153,6 +152,11 @@ const HotjarTracker = () => {
   }, [location.pathname, location.search]);
 
   return null;
+};
+
+const HotjarTracker = () => {
+  const location = useLocation();
+  return <HotjarTrackerForLocation location={location} />;
 };
 
 export default HotjarTracker;

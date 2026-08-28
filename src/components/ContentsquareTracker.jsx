@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { injectContentsquareScript } from '@contentsquare/tag-sdk';
 
-const CONTENTSQUARE_SCRIPT_ID = 'contentsquare-uxa-tracking-code';
-const CONTENTSQUARE_SCRIPT_SRC = 'https://t.contentsquare.net/uxa/66e02fc9bea2b.js';
+const CONTENTSQUARE_TAG_ID = 'd1b163415cfc9';
 const ENABLE_LOCAL = import.meta.env.VITE_CONTENTSQUARE_ENABLE_LOCAL === 'true';
 const PRIVATE_PATH_PREFIXES = ['/dashboard', '/login'];
 
@@ -26,49 +26,22 @@ function canTrack(pathname) {
   return ENABLE_LOCAL || !isLocalHost(window.location.hostname);
 }
 
-function getTrackedPath() {
-  const hashPath = window.location.hash.replace('#', '?__');
-  return `${window.location.pathname}${hashPath}`.slice(0, 255);
-}
-
-function installContentsquare() {
-  if (document.getElementById(CONTENTSQUARE_SCRIPT_ID)) {
-    return;
-  }
-
-  const script = document.createElement('script');
-  script.id = CONTENTSQUARE_SCRIPT_ID;
-  script.type = 'text/javascript';
-  script.async = true;
-  script.defer = true;
-  script.src = CONTENTSQUARE_SCRIPT_SRC;
-  document.head.appendChild(script);
-}
-
-function trackContentsquarePageview() {
-  window._uxa = window._uxa || [];
-
-  if (typeof window.CS_CONF === 'undefined') {
-    window._uxa.push(['setPath', getTrackedPath()]);
-    installContentsquare();
-    return;
-  }
-
-  window._uxa.push(['trackPageview', getTrackedPath()]);
-}
-
-const ContentsquareTracker = () => {
-  const location = useLocation();
+export const ContentsquareTrackerForLocation = ({ location }) => {
 
   useEffect(() => {
     if (!canTrack(location.pathname)) {
       return;
     }
 
-    trackContentsquarePageview();
-  }, [location.hash, location.pathname, location.search]);
+    injectContentsquareScript({ clientId: CONTENTSQUARE_TAG_ID });
+  }, [location.pathname]);
 
   return null;
+};
+
+const ContentsquareTracker = () => {
+  const location = useLocation();
+  return <ContentsquareTrackerForLocation location={location} />;
 };
 
 export default ContentsquareTracker;
