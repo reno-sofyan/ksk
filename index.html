@@ -2,12 +2,18 @@
 <html lang="id">
 	<head>
 		<meta charset="UTF-8" />
-		<!-- Deferred analytics: queues events immediately, loads vendors after interaction or idle time. -->
+		<!-- Google Tag Manager -->
+		<script>
+			(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+			'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+			})(window,document,'script','dataLayer','GTM-PZRW95S2');
+		</script>
+		<!-- End Google Tag Manager -->
+		<!-- Meta Pixel is deferred until interaction or idle time. -->
 		<script>
 			(function(w,d){
-				w.dataLayer=w.dataLayer||[];
-				w.dataLayer.push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-
 				if(!w.fbq){
 					var fbq=w.fbq=function(){fbq.callMethod?fbq.callMethod.apply(fbq,arguments):fbq.queue.push(arguments)};
 					if(!w._fbq)w._fbq=fbq;
@@ -27,7 +33,6 @@
 				}
 				function load(){
 					if(loaded)return;loaded=true;cleanup();if(timer)w.clearTimeout(timer);
-					appendScript('gtm-tracking-code','https://www.googletagmanager.com/gtm.js?id=GTM-PZRW95S2');
 					appendScript('meta-pixel-code','https://connect.facebook.net/en_US/fbevents.js');
 				}
 				function schedule(){timer=w.setTimeout(load,7000);}

@@ -11,6 +11,23 @@ export function ContactForm() {
     const valid = data.get("name") && data.get("whatsapp") && String(data.get("email")).includes("@") && data.get("need") && data.get("topic") && data.get("message") && data.get("consent");
     if (!valid) return setStatus("error");
     setStatus("loading");
+    const email = String(data.get("email") || "").trim().toLowerCase();
+    let phone = String(data.get("whatsapp") || "").replace(/\D/g, "");
+    if (phone.startsWith("0")) phone = `62${phone.slice(1)}`;
+    if (phone.startsWith("8")) phone = `62${phone}`;
+    const eventId = `company-lead-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "kinara_generate_lead",
+      event_id: eventId,
+      lead_source_code: "KINARA-COMPANY-CONTACT",
+      lead_source_page: `${window.location.hostname}${window.location.pathname}${window.location.search}`,
+      cta_label: "Company Contact Form",
+      user_data: {
+        email_address: email,
+        phone_number: `+${phone}`
+      }
+    });
     const message = [
       "Halo Kinara Land, saya ingin mengirim permintaan melalui website.",
       `Nama: ${data.get("name")}`,
@@ -32,7 +49,7 @@ export function ContactForm() {
     <label>Kebutuhan<input name="need" required /></label>
     <label>Pilihan topik<select name="topic" defaultValue="" required><option value="" disabled>Pilih topik</option>{["Informasi proyek","Investasi properti","Kerja sama","Pengelolaan properti","Media","Karier","Lainnya"].map((item) => <option key={item}>{item}</option>)}</select></label>
     <label>Pesan<textarea name="message" rows={5} required /></label>
-    <label className="consent"><input name="consent" type="checkbox" required /><span>Saya menyetujui pemrosesan data untuk menindaklanjuti permintaan ini.</span></label>
+    <label className="consent"><input name="consent" type="checkbox" required /><span>Saya menyetujui pemrosesan data untuk tindak lanjut dan pengukuran konversi iklan.</span></label>
     <div className="form-actions"><button className="pill" disabled={status === "loading"}>{status === "loading" ? "Mengirim..." : "Kirim Permintaan"}<ArrowRight /></button><a className="text-link" href={company.whatsappUrl}>WhatsApp Langsung <ArrowRight /></a></div>
     <p role="status">{status === "error" ? "Lengkapi seluruh field wajib dan persetujuan pemrosesan data." : status === "success" ? "Permintaan diterima. Tim Kinara Land akan menindaklanjuti Anda." : ""}</p>
   </form>;

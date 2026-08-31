@@ -1,9 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MapPin, MessageCircle, Phone, UserRound, X } from 'lucide-react';
+import { Mail, MapPin, MessageCircle, Phone, UserRound, X } from 'lucide-react';
+import {
+  normalizeEnhancedConversionEmail,
+  normalizeEnhancedConversionPhone,
+  pushEnhancedConversionLead
+} from '@/lib/googleConversionTracking.js';
 
 const INITIAL_FORM = {
   name: '',
   phone: '',
+  email: '',
   domicile: ''
 };
 
@@ -78,13 +84,14 @@ function validateForm(form) {
   const errors = {};
 
   if (!form.name.trim()) errors.name = 'Nama wajib diisi.';
-  if (!form.phone.trim()) errors.phone = 'Nomor telepon wajib diisi.';
+  if (!normalizeEnhancedConversionPhone(form.phone)) errors.phone = 'Nomor telepon valid wajib diisi.';
+  if (!normalizeEnhancedConversionEmail(form.email)) errors.email = 'Email valid wajib diisi.';
   if (!form.domicile.trim()) errors.domicile = 'Domisili wajib diisi.';
 
   return errors;
 }
 
-function trackLeadSubmit(ctaLabel) {
+function trackLeadSubmit(ctaLabel, form) {
   if (typeof window === 'undefined') return;
 
   const eventId = `rivere-ctwa-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -103,6 +110,15 @@ function trackLeadSubmit(ctaLabel) {
     event_id: eventId,
     meta_event_name: 'Lead',
     ...eventParameters
+  });
+
+  pushEnhancedConversionLead({
+    email: form.email,
+    phone: form.phone,
+    eventId,
+    leadSourceCode: LEAD_SOURCE_CODE,
+    leadSourcePage: eventParameters.lead_source_page,
+    ctaLabel
   });
 
   if (typeof window.fbq === 'function') {
@@ -147,7 +163,7 @@ export const WhatsAppConsultationForm = ({
     if (Object.keys(nextErrors).length > 0) return;
 
     const whatsappUrl = buildWhatsAppUrl(targetHref, form, targetCtaLabel);
-    trackLeadSubmit(targetCtaLabel);
+    trackLeadSubmit(targetCtaLabel, form);
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   };
 
@@ -166,6 +182,7 @@ export const WhatsAppConsultationForm = ({
           </span>
           <input
             ref={nameInputRef}
+            name="name"
             type="text"
             value={form.name}
             onChange={updateField('name')}
@@ -182,6 +199,7 @@ export const WhatsAppConsultationForm = ({
             Nomor Telepon
           </span>
           <input
+            name="phone"
             type="tel"
             value={form.phone}
             onChange={updateField('phone')}
@@ -191,6 +209,23 @@ export const WhatsAppConsultationForm = ({
             inputMode="tel"
           />
           {errors.phone ? <span className="mt-1 block text-xs font-semibold text-red-600">{errors.phone}</span> : null}
+        </label>
+
+        <label className="block">
+          <span className="mb-2 flex items-center gap-2 text-sm font-bold text-primary">
+            <Mail className="h-4 w-4 text-accent" aria-hidden="true" />
+            Email
+          </span>
+          <input
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={updateField('email')}
+            className="h-12 w-full rounded-xl border border-primary/15 bg-white px-4 text-base font-medium text-primary outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/25"
+            placeholder="nama@email.com"
+            autoComplete="email"
+          />
+          {errors.email ? <span className="mt-1 block text-xs font-semibold text-red-600">{errors.email}</span> : null}
         </label>
 
         <label className="block">
@@ -221,9 +256,12 @@ export const WhatsAppConsultationForm = ({
         <MessageCircle className="h-5 w-5" aria-hidden="true" />
         Konsultasi WhatsApp
       </button>
+      <p className="mt-3 text-center text-xs text-muted-foreground">
+        Data digunakan untuk menindaklanjuti konsultasi dan pengukuran konversi iklan.
+      </p>
       {!isComplete ? (
-        <p className="mt-3 text-center text-sm font-medium text-muted-foreground">
-          Lengkapi nama, nomor telepon, dan domisili untuk mengaktifkan tombol.
+        <p className="mt-2 text-center text-sm font-medium text-muted-foreground">
+          Lengkapi nama, nomor telepon, email, dan domisili untuk mengaktifkan tombol.
         </p>
       ) : null}
     </form>
@@ -308,7 +346,7 @@ const WhatsAppLeadGate = () => {
     if (Object.keys(nextErrors).length > 0) return;
 
     const whatsappUrl = buildWhatsAppUrl(targetHref, form, targetCtaLabel);
-    trackLeadSubmit(targetCtaLabel);
+    trackLeadSubmit(targetCtaLabel, form);
     setIsOpen(false);
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   };
@@ -354,6 +392,7 @@ const WhatsAppLeadGate = () => {
             </span>
             <input
               ref={nameInputRef}
+              name="name"
               type="text"
               value={form.name}
               onChange={updateField('name')}
@@ -370,6 +409,7 @@ const WhatsAppLeadGate = () => {
               Nomor Telepon
             </span>
             <input
+              name="phone"
               type="tel"
               value={form.phone}
               onChange={updateField('phone')}
@@ -379,6 +419,23 @@ const WhatsAppLeadGate = () => {
               inputMode="tel"
             />
             {errors.phone ? <span className="mt-1 block text-xs font-semibold text-red-600">{errors.phone}</span> : null}
+          </label>
+
+          <label className="block">
+            <span className="mb-2 flex items-center gap-2 text-sm font-bold text-primary">
+              <Mail className="h-4 w-4 text-accent" aria-hidden="true" />
+              Email
+            </span>
+            <input
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={updateField('email')}
+              className="h-12 w-full rounded-xl border border-primary/15 bg-white px-4 text-base font-medium text-primary outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-accent focus:ring-2 focus:ring-accent/25"
+              placeholder="nama@email.com"
+              autoComplete="email"
+            />
+            {errors.email ? <span className="mt-1 block text-xs font-semibold text-red-600">{errors.email}</span> : null}
           </label>
 
           <label className="block">
@@ -406,6 +463,9 @@ const WhatsAppLeadGate = () => {
             <MessageCircle className="h-5 w-5" aria-hidden="true" />
             Lanjut Konsultasi via WhatsApp
           </button>
+          <p className="text-center text-xs text-muted-foreground">
+            Data digunakan untuk menindaklanjuti konsultasi dan pengukuran konversi iklan.
+          </p>
         </form>
       </section>
     </div>

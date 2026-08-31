@@ -10,6 +10,11 @@ import {
 } from 'lucide-react';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import { imageUrl } from '@/lib/assets.js';
+import {
+  normalizeEnhancedConversionEmail,
+  normalizeEnhancedConversionPhone,
+  pushEnhancedConversionLead
+} from '@/lib/googleConversionTracking.js';
 
 const ROYAL_SALES_PHONE_NUMBERS = {
   cs1: '082111124005',
@@ -133,10 +138,14 @@ const RoyalAnchorNavigation = ({ onMenuOpenChange }) => {
 };
 
 const RoyalLeadForm = () => {
-  const [form, setForm] = useState({ name: '', phone: '' });
+  const [form, setForm] = useState({ name: '', phone: '', email: '' });
   const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const isComplete = Object.values(form).every((value) => value.trim());
+  const isComplete = Boolean(
+    form.name.trim()
+    && normalizeEnhancedConversionPhone(form.phone)
+    && normalizeEnhancedConversionEmail(form.email)
+  );
   const salesKey = getRoyalSalesKey();
   const whatsappNumber = normalizeWhatsAppPhone(ROYAL_SALES_PHONE_NUMBERS[salesKey]);
 
@@ -177,6 +186,14 @@ const RoyalLeadForm = () => {
     };
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: 'ctwa_lead_submit', event_id: eventId, meta_event_name: 'Lead', ...eventParameters });
+    pushEnhancedConversionLead({
+      email: form.email,
+      phone: form.phone,
+      eventId,
+      leadSourceCode: eventParameters.lead_source_code,
+      leadSourcePage: eventParameters.lead_source_page,
+      ctaLabel: eventParameters.cta_label
+    });
     if (typeof window.fbq === 'function') {
       window.fbq('track', 'Lead', eventParameters, { eventID: eventId });
       window.fbq('trackCustom', 'WhatsAppConsultation', eventParameters, { eventID: eventId });
@@ -188,11 +205,12 @@ const RoyalLeadForm = () => {
   return (
     <form onSubmit={submit} className="mx-auto max-w-2xl rounded-3xl border border-[#D4AF56]/35 bg-[#F8F3EA] p-5 text-[#220306] shadow-[0_24px_70px_rgba(0,0,0,0.25)] sm:p-8">
       <div className="grid gap-5 sm:grid-cols-2">
-        <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Nama Lengkap</span><input required value={form.name} onChange={update('name')} autoComplete="name" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="Nama lengkap" /></label>
-        <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Nomor WhatsApp</span><input required type="tel" inputMode="tel" value={form.phone} onChange={update('phone')} autoComplete="tel" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="Contoh: 0812xxxxxxx" /></label>
+        <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Nama Lengkap</span><input name="name" required value={form.name} onChange={update('name')} autoComplete="name" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="Nama lengkap" /></label>
+        <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Nomor WhatsApp</span><input name="phone" required type="tel" inputMode="tel" value={form.phone} onChange={update('phone')} autoComplete="tel" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="Contoh: 0812xxxxxxx" /></label>
+        <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Email</span><input name="email" required type="email" value={form.email} onChange={update('email')} autoComplete="email" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="nama@email.com" /></label>
       </div>
       <button type="submit" disabled={!isComplete} className="mt-6 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-[#220306] px-5 py-3 text-base font-bold text-[#E8CF8A] transition-colors hover:bg-[#65131C] disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF56]"><MessageCircle className="h-5 w-5" aria-hidden="true" />Hubungi Kami</button>
-      <p className="mt-3 text-center text-xs text-[#5c4848]">Data Anda hanya digunakan untuk keperluan konsultasi Royal Kinara.</p>
+      <p className="mt-3 text-center text-xs text-[#5c4848]">Data digunakan untuk konsultasi Royal Kinara dan pengukuran konversi iklan.</p>
       {error ? <p role="alert" className="mt-3 text-center text-sm font-semibold text-[#8b1e2d]">{error}</p> : null}
       {submitted ? <p className="mt-3 text-center text-sm font-semibold text-[#2e6b45]">WhatsApp dibuka di tab baru.</p> : null}
     </form>
