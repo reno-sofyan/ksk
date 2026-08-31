@@ -136,8 +136,6 @@ export const WhatsAppConsultationForm = ({
   const [form, setForm] = useState(INITIAL_FORM);
   const [errors, setErrors] = useState({});
   const nameInputRef = useRef(null);
-  const isComplete = Object.keys(validateForm(form)).length === 0;
-
   useEffect(() => {
     const handleConsultationRequest = (event) => {
       if (event.detail?.href) setTargetHref(event.detail.href);
@@ -168,7 +166,7 @@ export const WhatsAppConsultationForm = ({
   };
 
   return (
-    <form className="mx-auto mt-8 max-w-xl rounded-2xl border border-primary/15 bg-white p-5 text-left shadow-[0_20px_55px_rgba(7,39,29,0.1)] sm:p-7" onSubmit={handleSubmit}>
+    <form className="mx-auto mt-8 max-w-xl rounded-2xl border border-primary/15 bg-white p-5 text-left shadow-[0_20px_55px_rgba(7,39,29,0.1)] sm:p-7" onSubmit={handleSubmit} noValidate>
       <div className="mb-6 text-center">
         <p className="text-xs font-bold uppercase tracking-normal text-accent">Form Konsultasi Investor</p>
         <h3 className="mt-2 text-xl font-bold text-primary sm:text-2xl">Isi data untuk melanjutkan ke WhatsApp</h3>
@@ -247,11 +245,9 @@ export const WhatsAppConsultationForm = ({
 
       <button
         type="submit"
-        disabled={!isComplete}
-        aria-disabled={!isComplete}
         data-meta-event="Lead"
         data-meta-custom-event="WhatsAppConsultation"
-        className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-base font-bold text-primary shadow-[0_14px_32px_rgba(208,173,90,0.28)] transition-colors hover:bg-primary hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:cursor-not-allowed disabled:bg-primary/15 disabled:text-primary/45 disabled:shadow-none disabled:hover:bg-primary/15 disabled:hover:text-primary/45"
+        className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-base font-bold text-primary shadow-[0_14px_32px_rgba(208,173,90,0.28)] transition-colors hover:bg-primary hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >
         <MessageCircle className="h-5 w-5" aria-hidden="true" />
         Konsultasi WhatsApp
@@ -259,11 +255,9 @@ export const WhatsAppConsultationForm = ({
       <p className="mt-3 text-center text-xs text-muted-foreground">
         Data digunakan untuk menindaklanjuti konsultasi dan pengukuran konversi iklan.
       </p>
-      {!isComplete ? (
-        <p className="mt-2 text-center text-sm font-medium text-muted-foreground">
-          Lengkapi nama, nomor telepon, email, dan domisili untuk mengaktifkan tombol.
-        </p>
-      ) : null}
+      <p className="mt-2 text-center text-sm font-medium text-muted-foreground">
+        Lengkapi nama, nomor telepon, email, dan domisili untuk melanjutkan.
+      </p>
     </form>
   );
 };
