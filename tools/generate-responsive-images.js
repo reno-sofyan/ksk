@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
@@ -17,17 +16,6 @@ function ensureDir(dirPath) {
   if (!existsSync(dirPath)) {
     mkdirSync(dirPath, { recursive: true });
   }
-}
-
-function readSipsValue(filePath, propertyName) {
-  const output = execFileSync(
-    'sips',
-    ['-g', propertyName, filePath],
-    { encoding: 'utf8' }
-  );
-
-  const match = output.match(new RegExp(`${propertyName}:\\s+(.+)$`, 'm'));
-  return match?.[1]?.trim() || '';
 }
 
 function toSlug(fileName) {
@@ -83,26 +71,25 @@ function getVariantDimensions(width, height, maxDimension) {
 }
 
 async function buildVariant(inputPath, outputPath, format, maxDimension, sourceWidth, sourceHeight) {
+  const pipeline = sharp(inputPath).resize({
+    width: sourceWidth >= sourceHeight ? maxDimension : undefined,
+    height: sourceHeight > sourceWidth ? maxDimension : undefined,
+    withoutEnlargement: true
+  });
+
   if (format === 'webp') {
-    await sharp(inputPath)
-      .resize({
-        width: sourceWidth >= sourceHeight ? maxDimension : undefined,
-        height: sourceHeight > sourceWidth ? maxDimension : undefined,
-        withoutEnlargement: true
-      })
+    await pipeline
       .webp({ quality: 76, effort: 5, smartSubsample: true })
       .toFile(outputPath);
     return;
   }
 
-  const args = ['-s', 'format', format];
-
-  if (format === 'jpeg') {
-    args.push('-s', 'formatOptions', '68');
+  if (format === 'png') {
+    await pipeline.png({ compressionLevel: 9 }).toFile(outputPath);
+    return;
   }
 
-  args.push('-Z', String(maxDimension), inputPath, '--out', outputPath);
-  execFileSync('sips', args, { stdio: 'ignore' });
+  await pipeline.jpeg({ quality: 68, mozjpeg: true }).toFile(outputPath);
 }
 
 async function main() {
@@ -117,9 +104,14 @@ async function main() {
   for (const fileName of files) {
     const inputPath = path.join(sourceDir, fileName);
     const extension = path.extname(fileName).toLowerCase();
-    const width = Number(readSipsValue(inputPath, 'pixelWidth'));
-    const height = Number(readSipsValue(inputPath, 'pixelHeight'));
-    const hasAlpha = readSipsValue(inputPath, 'hasAlpha') === 'yes';
+    const metadata = await sharp(inputPath).metadata();
+    const width = Number(metadata.width);
+    const height = Number(metadata.height);
+    const hasAlpha = Boolean(metadata.hasAlpha);
+
+    if (!width || !height) {
+      throw new Error(`Unable to read image dimensions: ${fileName}`);
+    }
     const format = webpSources.has(fileName) ? 'webp' : getOutputFormat(extension, hasAlpha);
     const outputExtension = format === 'png' ? 'png' : format === 'webp' ? 'webp' : 'jpg';
     const slug = toSlug(fileName);
