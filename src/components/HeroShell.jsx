@@ -3,7 +3,18 @@ import { imageUrl } from '@/lib/assets.js';
 import { RIVERE_DESIGN_IMAGES } from '@/data/rivereImages.js';
 import { getSiteVariant } from '@/lib/site.js';
 
+function isHomepageRoute() {
+  if (typeof window === 'undefined') return true;
+  const path = window.location.pathname.replace(/\/+$/, '');
+  return !path || /^\/cs[1-4]$/i.test(path);
+}
+
 const HeroShell = () => {
+  if (!isHomepageRoute()) {
+    // Plain placeholder so other pages (e.g. sales LP) don't flash the homepage hero image.
+    return <section className="min-h-[620px] bg-[#10382b] sm:min-h-[700px]" aria-hidden="true" />;
+  }
+
   const isCompanySite = getSiteVariant() === 'company';
   const heroImage = isCompanySite ? imageUrl('gerbang.jpeg') : imageUrl(RIVERE_DESIGN_IMAGES[0].file);
   const eyebrow = isCompanySite ? 'PT Kinara Land Indonesia' : 'Rivere Kostaycation IPB';

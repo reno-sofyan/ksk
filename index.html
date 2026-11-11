@@ -235,7 +235,22 @@
 					height: 120px;
 				}
 			}
+
+			/* Non-homepage routes (sales LP, denah, etc.) boot with a plain hero so the homepage image does not flash. */
+			.boot-plain .boot-media,
+			.boot-plain .boot-overlay,
+			.boot-plain .boot-content {
+				display: none;
+			}
 		</style>
+		<script>
+			(function() {
+				var path = window.location.pathname.replace(/\/+$/, '');
+				if (path && !/^\/cs[1-4]$/i.test(path)) {
+					document.documentElement.classList.add('boot-plain');
+				}
+			})();
+		</script>
 		<script>
 			(function() {
 				function unlockScroll() {

@@ -20,6 +20,8 @@ const KskPage = React.lazy(() => import('@/pages/KskPage.jsx'));
 const BlogPage = React.lazy(() => import('@/pages/BlogPage.jsx'));
 const BlogArticlePage = React.lazy(() => import('@/pages/BlogArticlePage.jsx'));
 const DenahPage = React.lazy(() => import('@/pages/DenahPage.jsx'));
+const RivereAcha1Page = React.lazy(() => import('@/pages/RivereAcha1Page.jsx'));
+const RivereAcha2Page = React.lazy(() => import('@/pages/RivereAcha2Page.jsx'));
 const LoginPage = React.lazy(() => import('@/pages/LoginPage.jsx'));
 const DashboardPage = React.lazy(() => import('@/pages/DashboardPage.jsx'));
 
@@ -78,10 +80,20 @@ function App() {
             <Route path="/ade" element={isCompanySite ? riverePage('/ade/') : namedSalesPage} />
             <Route path="/nur" element={isCompanySite ? riverePage('/nur/') : namedSalesPage} />
             <Route path="/melin" element={isCompanySite ? riverePage('/melin/') : namedSalesPage} />
-            <Route path="/ge" element={isCompanySite ? riverePage('/ge/') : namedSalesPage} />
+            <Route path="/ge" element={isCompanySite ? riverePage('/gelar/') : siteVariant === 'royal' ? <RoyalRukoPage /> : <Navigate to="/gelar" replace />} />
+            <Route path="/gelar" element={isCompanySite ? riverePage('/gelar/') : namedSalesPage} />
             <Route path="/andika" element={isCompanySite ? riverePage('/andika/') : namedSalesPage} />
             <Route path="/novan" element={isCompanySite ? riverePage('/novan/') : namedSalesPage} />
+            <Route path="/cahya" element={isCompanySite ? riverePage('/cahya/') : namedSalesPage} />
+            <Route path="/liman" element={isCompanySite ? riverePage('/liman/') : namedSalesPage} />
+            <Route path="/naila" element={isCompanySite ? riverePage('/naila/') : namedSalesPage} />
+            <Route path="/reni" element={isCompanySite ? riverePage('/reni/') : siteVariant === 'royal' ? <RoyalRukoPage /> : namedSalesPage} />
+            <Route path="/adi" element={isCompanySite ? riverePage('/adi/') : namedSalesPage} />
+            <Route path="/linda" element={isCompanySite ? riverePage('/linda/') : namedSalesPage} />
+            <Route path="/acha" element={isCompanySite ? riverePage('/acha/') : namedSalesPage} />
             <Route path="/denah" element={isCompanySite ? riverePage('/denah/') : <DenahPage />} />
+            <Route path="/acha1" element={isCompanySite ? riverePage('/acha1/') : <RivereAcha1Page />} />
+            <Route path="/acha2" element={isCompanySite ? riverePage('/acha2/') : <RivereAcha2Page />} />
             <Route path="/blog" element={isCompanySite ? riverePage('/blog/') : <BlogPage />} />
             <Route path="/blog/:slug" element={isCompanySite ? riverePage(typeof window !== 'undefined' ? window.location.pathname : '/blog/') : <BlogArticlePage />} />
             <Route path="/login" element={<LoginPage />} />

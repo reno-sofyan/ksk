@@ -69,6 +69,78 @@ function pruneRoyalAssets() {
 	}
 }
 
+function pruneRivereAssets() {
+	const imagesDir = path.join(projectRoot, 'dist', 'rivere', 'images');
+	if (!fsExists(imagesDir)) return;
+
+	for (const entry of readdirSync(imagesDir)) {
+		if (entry === 'optimized') {
+			const optimizedDir = path.join(imagesDir, entry);
+			for (const optimizedEntry of readdirSync(optimizedDir)) {
+				if (
+					optimizedEntry.startsWith('ksk-') ||
+					optimizedEntry.startsWith('royalkinara-') ||
+					optimizedEntry === 'maps'
+				) {
+					rmSync(path.join(optimizedDir, optimizedEntry), { recursive: true, force: true });
+				}
+			}
+		} else if (entry === 'ksk' || entry === 'royalkinara' || entry === 'maps.jpeg') {
+			rmSync(path.join(imagesDir, entry), { recursive: true, force: true });
+		}
+	}
+}
+
+function pruneCompanyAssets() {
+	const imagesDir = path.join(projectRoot, 'dist', 'images');
+	if (!fsExists(imagesDir)) return;
+
+	const usedFiles = new Set([
+		'gerbang.jpeg',
+		'logo.png',
+		'investor 1.jpeg',
+		'investor 3.jpeg',
+		'pintu-ipb.jpg',
+		'tim-kyrastay.png'
+	]);
+	const usedOptimizedDirs = new Set([
+		'gerbang',
+		'logo',
+		'investor-1',
+		'investor-3',
+		'pintu-ipb',
+		'tim-kyrastay'
+	]);
+	const usedRivereDesignFiles = new Set(['Design 1/2.png', 'Design 2/2.png', 'Design 3/1.png']);
+
+	for (const entry of readdirSync(imagesDir)) {
+		if (entry === 'optimized') {
+			const optimizedDir = path.join(imagesDir, entry);
+			for (const optimizedEntry of readdirSync(optimizedDir)) {
+				if (!usedOptimizedDirs.has(optimizedEntry)) {
+					rmSync(path.join(optimizedDir, optimizedEntry), { recursive: true, force: true });
+				}
+			}
+		} else if (entry === 'rivere') {
+			const rivereDir = path.join(imagesDir, entry);
+			for (const rivereEntry of readdirSync(rivereDir)) {
+				if (rivereEntry.startsWith('Design ')) {
+					const designDir = path.join(rivereDir, rivereEntry);
+					for (const designEntry of readdirSync(designDir)) {
+						if (!usedRivereDesignFiles.has(`${rivereEntry}/${designEntry}`)) {
+							rmSync(path.join(designDir, designEntry), { recursive: true, force: true });
+						}
+					}
+				} else {
+					rmSync(path.join(rivereDir, rivereEntry), { recursive: true, force: true });
+				}
+			}
+		} else if (!usedFiles.has(entry)) {
+			rmSync(path.join(imagesDir, entry), { recursive: true, force: true });
+		}
+	}
+}
+
 function pruneKskAssets() {
 	const imagesDir = path.join(projectRoot, 'dist', 'ksk', 'images');
 	if (!fsExists(imagesDir)) return;
@@ -180,6 +252,8 @@ for (const target of buildTargets) {
 
 	if (target.variant === 'royal') pruneRoyalAssets();
 	if (target.variant === 'ksk') pruneKskAssets();
+	if (target.variant === 'rivere') pruneRivereAssets();
+	if (target.variant === 'company') pruneCompanyAssets();
 }
 
 runNodeScript([path.join(projectRoot, 'tools', 'generate-sitemap.js')], {

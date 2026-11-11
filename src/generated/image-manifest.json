@@ -3059,6 +3059,264 @@
       }
     ]
   },
+  "rivere/landing/aerial-photo-2.jpg": {
+    "width": 639,
+    "height": 359,
+    "slug": "rivere-landing-aerial-photo-2",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 480,
+        "height": 270,
+        "path": "images/optimized/rivere-landing-aerial-photo-2/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 639,
+        "height": 359,
+        "path": "images/optimized/rivere-landing-aerial-photo-2/639.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "rivere/landing/doc-akad.jpg": {
+    "width": 315,
+    "height": 418,
+    "slug": "rivere-landing-doc-akad",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 315,
+        "height": 418,
+        "path": "images/optimized/rivere-landing-doc-akad/418.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "rivere/landing/doc-cleaning.jpg": {
+    "width": 315,
+    "height": 418,
+    "slug": "rivere-landing-doc-cleaning",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 315,
+        "height": 418,
+        "path": "images/optimized/rivere-landing-doc-cleaning/418.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "rivere/landing/doc-fasad.jpg": {
+    "width": 315,
+    "height": 418,
+    "slug": "rivere-landing-doc-fasad",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 315,
+        "height": 418,
+        "path": "images/optimized/rivere-landing-doc-fasad/418.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "rivere/landing/doc-konstruksi.jpg": {
+    "width": 315,
+    "height": 418,
+    "slug": "rivere-landing-doc-konstruksi",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 315,
+        "height": 418,
+        "path": "images/optimized/rivere-landing-doc-konstruksi/418.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "rivere/landing/Header.png": {
+    "width": 1440,
+    "height": 820,
+    "slug": "rivere-landing-header",
+    "format": "png",
+    "variants": [
+      {
+        "width": 480,
+        "height": 273,
+        "path": "images/optimized/rivere-landing-header/480.png",
+        "format": "png"
+      },
+      {
+        "width": 768,
+        "height": 437,
+        "path": "images/optimized/rivere-landing-header/768.png",
+        "format": "png"
+      },
+      {
+        "width": 1200,
+        "height": 683,
+        "path": "images/optimized/rivere-landing-header/1200.png",
+        "format": "png"
+      },
+      {
+        "width": 1440,
+        "height": 820,
+        "path": "images/optimized/rivere-landing-header/1440.png",
+        "format": "png"
+      }
+    ]
+  },
+  "rivere/landing/logo-rivere.png": {
+    "width": 103,
+    "height": 60,
+    "slug": "rivere-landing-logo-rivere",
+    "format": "png",
+    "variants": [
+      {
+        "width": 103,
+        "height": 60,
+        "path": "images/optimized/rivere-landing-logo-rivere/103.png",
+        "format": "png"
+      }
+    ]
+  },
+  "rivere/landing/perbesar denah.png": {
+    "width": 714,
+    "height": 439,
+    "slug": "rivere-landing-perbesar-denah",
+    "format": "png",
+    "variants": [
+      {
+        "width": 480,
+        "height": 295,
+        "path": "images/optimized/rivere-landing-perbesar-denah/480.png",
+        "format": "png"
+      },
+      {
+        "width": 714,
+        "height": 439,
+        "path": "images/optimized/rivere-landing-perbesar-denah/714.png",
+        "format": "png"
+      }
+    ]
+  },
+  "rivere/landing/price-building.jpg": {
+    "width": 669,
+    "height": 525,
+    "slug": "rivere-landing-price-building",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 480,
+        "height": 377,
+        "path": "images/optimized/rivere-landing-price-building/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 669,
+        "height": 525,
+        "path": "images/optimized/rivere-landing-price-building/669.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "rivere/landing/team-photo-2.jpg": {
+    "width": 647,
+    "height": 605,
+    "slug": "rivere-landing-team-photo-2",
+    "format": "jpg",
+    "variants": [
+      {
+        "width": 480,
+        "height": 449,
+        "path": "images/optimized/rivere-landing-team-photo-2/480.jpg",
+        "format": "jpg"
+      },
+      {
+        "width": 647,
+        "height": 605,
+        "path": "images/optimized/rivere-landing-team-photo-2/647.jpg",
+        "format": "jpg"
+      }
+    ]
+  },
+  "rivere/rivere 1.png": {
+    "width": 1440,
+    "height": 4202,
+    "slug": "rivere-rivere-1",
+    "format": "png",
+    "variants": [
+      {
+        "width": 164,
+        "height": 480,
+        "path": "images/optimized/rivere-rivere-1/480.png",
+        "format": "png"
+      },
+      {
+        "width": 263,
+        "height": 768,
+        "path": "images/optimized/rivere-rivere-1/768.png",
+        "format": "png"
+      },
+      {
+        "width": 411,
+        "height": 1200,
+        "path": "images/optimized/rivere-rivere-1/1200.png",
+        "format": "png"
+      },
+      {
+        "width": 548,
+        "height": 1600,
+        "path": "images/optimized/rivere-rivere-1/1600.png",
+        "format": "png"
+      },
+      {
+        "width": 658,
+        "height": 1920,
+        "path": "images/optimized/rivere-rivere-1/1920.png",
+        "format": "png"
+      }
+    ]
+  },
+  "rivere/rivere 2.png": {
+    "width": 1440,
+    "height": 4888,
+    "slug": "rivere-rivere-2",
+    "format": "png",
+    "variants": [
+      {
+        "width": 141,
+        "height": 480,
+        "path": "images/optimized/rivere-rivere-2/480.png",
+        "format": "png"
+      },
+      {
+        "width": 226,
+        "height": 768,
+        "path": "images/optimized/rivere-rivere-2/768.png",
+        "format": "png"
+      },
+      {
+        "width": 354,
+        "height": 1200,
+        "path": "images/optimized/rivere-rivere-2/1200.png",
+        "format": "png"
+      },
+      {
+        "width": 471,
+        "height": 1600,
+        "path": "images/optimized/rivere-rivere-2/1600.png",
+        "format": "png"
+      },
+      {
+        "width": 566,
+        "height": 1920,
+        "path": "images/optimized/rivere-rivere-2/1920.png",
+        "format": "png"
+      }
+    ]
+  },
   "royalkinara/1.png": {
     "width": 1686,
     "height": 2528,

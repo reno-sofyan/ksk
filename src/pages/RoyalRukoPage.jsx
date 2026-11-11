@@ -10,11 +10,6 @@ import {
 } from 'lucide-react';
 import ResponsiveImage from '@/components/ResponsiveImage.jsx';
 import { imageUrl } from '@/lib/assets.js';
-import {
-  normalizeEnhancedConversionEmail,
-  normalizeEnhancedConversionPhone,
-  pushEnhancedConversionLead
-} from '@/lib/googleConversionTracking.js';
 
 const ROYAL_SALES_PHONE_NUMBERS = {
   cs1: '082111124005',
@@ -25,8 +20,13 @@ const ROYAL_SALES_PHONE_NUMBERS = {
   nur: '088293516558',
   melin: '081928719457',
   ge: '081958798799',
+  gelar: '081958798799',
   andika: '085196480931',
-  novan: '087797000003'
+  novan: '087797000003',
+  reni: '085181803776'
+};
+const ROYAL_SALES_GREETING_CODES = {
+  reni: 'RN'
 };
 const DEFAULT_ROYAL_SALES_KEY = 'cs1';
 const ROYAL_ANCHORS = [
@@ -55,6 +55,18 @@ function normalizeWhatsAppPhone(phoneNumber) {
   return digits.startsWith('0') ? `62${digits.slice(1)}` : digits;
 }
 
+function getRoyalWhatsAppConfig() {
+  const salesKey = getRoyalSalesKey();
+  const phoneNumber = normalizeWhatsAppPhone(ROYAL_SALES_PHONE_NUMBERS[salesKey]);
+  const greetingCode = ROYAL_SALES_GREETING_CODES[salesKey] || 'LP';
+  const message = `(${greetingCode}) Halo, saya tertarik dengan Royal Kinara. Mohon informasi mengenai harga, spesifikasi, ketersediaan unit, dan skema pembayaran.`;
+
+  return {
+    salesKey,
+    href: `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+  };
+}
+
 const RoyalImage = ({ fileName, assetPath, alt, className = '', sizes = '100vw', loading = 'lazy', decoding = 'async', fetchPriority, ...props }) => (
   <ResponsiveImage src={imageUrl(assetPath || `royalkinara/${fileName}`)} alt={alt} className={className} sizes={sizes} loading={loading} decoding={decoding} fetchPriority={fetchPriority} {...props} />
 );
@@ -67,22 +79,19 @@ const SectionHeading = ({ eyebrow, title, description, light = false }) => (
   </div>
 );
 
-function scrollToLead() {
-  document.getElementById('konsultasi')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-const CTA = ({ children, label }) => (
+const CTA = ({ children, href, label }) => (
   <a
-    href="#konsultasi"
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
     data-ctwa-label={label}
-    onClick={(event) => { event.preventDefault(); scrollToLead(); }}
     className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#D4AF56] bg-[#D4AF56] px-5 py-3 text-center text-sm font-bold text-[#220306] shadow-[0_16px_34px_rgba(212,175,86,0.22)] transition-colors hover:bg-[#E8CF8A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8CF8A] sm:min-h-14 sm:px-7 sm:text-base"
   >
     {children}<ArrowUpRight className="h-4 w-4" aria-hidden="true" />
   </a>
 );
 
-const RoyalAnchorNavigation = ({ onMenuOpenChange }) => {
+const RoyalAnchorNavigation = ({ onMenuOpenChange, whatsappHref }) => {
   const [activeId, setActiveId] = useState('keunggulan');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const menuButtonRef = useRef(null);
@@ -130,96 +139,17 @@ const RoyalAnchorNavigation = ({ onMenuOpenChange }) => {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <a href="#hero" onClick={(event) => goTo(event, '#hero')} className="flex min-w-0 items-center gap-3" aria-label="Royal Kinara"><RoyalImage fileName="logo-kinara.png" alt="Logo Royal Kinara" className="h-10 w-16 rounded object-cover" loading="eager" /><span className="truncate font-serif text-base font-semibold sm:text-lg">Royal Kinara</span></a>
         <nav className="hidden items-center gap-5 lg:flex" aria-label="Navigasi Royal Kinara desktop">{ROYAL_ANCHORS.map(([label, href]) => { const id = href.slice(1); const active = activeId === id; return <a key={href} href={href} onClick={(event) => goTo(event, href)} aria-current={active ? 'location' : undefined} className={`relative py-5 text-sm font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-2 after:h-px after:bg-[#E8CF8A] after:transition-opacity ${active ? 'text-[#E8CF8A] after:opacity-100' : 'text-[#D8C7AA] after:opacity-0 hover:text-[#E8CF8A]'}`}>{label}</a>; })}</nav>
-        <div className="flex items-center gap-2"><span className="hidden sm:inline-flex"><CTA label="Royal Kinara - Navbar Hubungi Kami">Hubungi Kami</CTA></span><button ref={menuButtonRef} type="button" onClick={() => setIsMobileOpen((current) => !current)} aria-expanded={isMobileOpen} aria-controls="royal-mobile-menu" aria-label={isMobileOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'} className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF56]/60 text-[#E8CF8A] lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8CF8A]">{isMobileOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}</button></div>
+        <div className="flex items-center gap-2"><span className="hidden sm:inline-flex"><CTA href={whatsappHref} label="Royal Kinara - Navbar Hubungi Kami">Hubungi Kami</CTA></span><button ref={menuButtonRef} type="button" onClick={() => setIsMobileOpen((current) => !current)} aria-expanded={isMobileOpen} aria-controls="royal-mobile-menu" aria-label={isMobileOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'} className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF56]/60 text-[#E8CF8A] lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8CF8A]">{isMobileOpen ? <X className="h-5 w-5" aria-hidden="true" /> : <Menu className="h-5 w-5" aria-hidden="true" />}</button></div>
       </div>
-      {isMobileOpen ? <><button type="button" aria-label="Tutup menu navigasi" className="fixed inset-0 top-16 z-40 bg-black/45 backdrop-blur-[2px] lg:hidden" onClick={closeMenu} /><div id="royal-mobile-menu" className="absolute left-0 right-0 top-full z-50 border-b border-[#D4AF56]/35 bg-[#220306]/95 px-4 py-3 shadow-[0_20px_45px_rgba(34,3,6,0.35)] backdrop-blur-md lg:hidden"><nav aria-label="Navigasi Royal Kinara mobile" className="grid">{ROYAL_ANCHORS.map(([label, href], index) => <a ref={index === 0 ? firstLinkRef : undefined} key={href} href={href} onClick={(event) => goTo(event, href)} className="flex min-h-12 items-center justify-between border-b border-[#D4AF56]/20 px-2 text-sm font-semibold text-[#F8F3EA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8CF8A]">{label}<ChevronRight className="h-4 w-4 text-[#E8CF8A]" aria-hidden="true" /></a>)}<a href="#konsultasi" onClick={(event) => goTo(event, '#konsultasi')} className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#D4AF56] px-4 py-3 text-sm font-bold text-[#220306] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8CF8A]">Hubungi Kami</a></nav></div></> : null}
+      {isMobileOpen ? <><button type="button" aria-label="Tutup menu navigasi" className="fixed inset-0 top-16 z-40 bg-black/45 backdrop-blur-[2px] lg:hidden" onClick={closeMenu} /><div id="royal-mobile-menu" className="absolute left-0 right-0 top-full z-50 border-b border-[#D4AF56]/35 bg-[#220306]/95 px-4 py-3 shadow-[0_20px_45px_rgba(34,3,6,0.35)] backdrop-blur-md lg:hidden"><nav aria-label="Navigasi Royal Kinara mobile" className="grid">{ROYAL_ANCHORS.map(([label, href], index) => <a ref={index === 0 ? firstLinkRef : undefined} key={href} href={href} onClick={(event) => goTo(event, href)} className="flex min-h-12 items-center justify-between border-b border-[#D4AF56]/20 px-2 text-sm font-semibold text-[#F8F3EA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8CF8A]">{label}<ChevronRight className="h-4 w-4 text-[#E8CF8A]" aria-hidden="true" /></a>)}<a href={whatsappHref} target="_blank" rel="noopener noreferrer" data-ctwa-label="Royal Kinara - Mobile Menu Hubungi Kami" onClick={closeMenu} className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-[#D4AF56] px-4 py-3 text-sm font-bold text-[#220306] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8CF8A]">Hubungi Kami</a></nav></div></> : null}
     </header>
-  );
-};
-
-const RoyalLeadForm = () => {
-  const [form, setForm] = useState({ name: '', phone: '', email: '' });
-  const [error, setError] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const isComplete = Boolean(
-    form.name.trim()
-    && normalizeEnhancedConversionPhone(form.phone)
-    && normalizeEnhancedConversionEmail(form.email)
-  );
-  const salesKey = getRoyalSalesKey();
-  const whatsappNumber = normalizeWhatsAppPhone(ROYAL_SALES_PHONE_NUMBERS[salesKey]);
-
-  useEffect(() => {
-    const handleRequest = () => scrollToLead();
-    window.addEventListener('rivere:consultation-request', handleRequest);
-    return () => window.removeEventListener('rivere:consultation-request', handleRequest);
-  }, []);
-
-  const update = (field) => (event) => {
-    setForm((current) => ({ ...current, [field]: event.target.value }));
-    setError('');
-    setSubmitted(false);
-  };
-
-  const submit = (event) => {
-    event.preventDefault();
-    if (!isComplete) {
-      setError('Lengkapi seluruh data sebelum melanjutkan.');
-      return;
-    }
-    const message = [
-      '(LP) Halo, saya tertarik dengan Royal Kinara.',
-      `Nama: ${form.name.trim()}`,
-      `Nomor WhatsApp: ${form.phone.trim()}`,
-      'Mohon Informasi mengenai harga, spesifikasi, ketersediaan unit, dan skema pembayaran.'
-    ].join('\n');
-    const href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-    const eventId = `royal-ctwa-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-    const eventParameters = {
-      content_name: 'Royal Kinara WhatsApp Consultation',
-      content_category: 'WhatsApp Lead',
-      lead_source_code: 'ROYAL-KINARA-LP-CTWA',
-      lead_source_page: `${window.location.hostname}${window.location.pathname}${window.location.search}`,
-      sales_key: salesKey,
-      cta_label: 'Royal Kinara - Form Lead',
-      form_completed: true
-    };
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: 'ctwa_lead_submit', event_id: eventId, meta_event_name: 'Lead', ...eventParameters });
-    pushEnhancedConversionLead({
-      email: form.email,
-      phone: form.phone,
-      eventId,
-      leadSourceCode: eventParameters.lead_source_code,
-      leadSourcePage: eventParameters.lead_source_page,
-      ctaLabel: eventParameters.cta_label
-    });
-    if (typeof window.fbq === 'function') {
-      window.fbq('track', 'Lead', eventParameters, { eventID: eventId });
-      window.fbq('trackCustom', 'WhatsAppConsultation', eventParameters, { eventID: eventId });
-    }
-    window.open(href, '_blank', 'noopener,noreferrer');
-    setSubmitted(true);
-  };
-
-  return (
-    <form onSubmit={submit} className="mx-auto max-w-2xl rounded-3xl border border-[#D4AF56]/35 bg-[#F8F3EA] p-5 text-[#220306] shadow-[0_24px_70px_rgba(0,0,0,0.25)] sm:p-8">
-      <div className="grid gap-5 sm:grid-cols-2">
-        <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Nama Lengkap</span><input name="name" required value={form.name} onChange={update('name')} autoComplete="name" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="Nama lengkap" /></label>
-        <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Nomor WhatsApp</span><input name="phone" required type="tel" inputMode="tel" value={form.phone} onChange={update('phone')} autoComplete="tel" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="Contoh: 0812xxxxxxx" /></label>
-        <label className="block sm:col-span-2"><span className="mb-2 block text-sm font-bold">Email</span><input name="email" required type="email" value={form.email} onChange={update('email')} autoComplete="email" className="h-12 w-full rounded-xl border border-[#220306]/15 bg-white px-4 outline-none focus:border-[#D4AF56] focus:ring-2 focus:ring-[#D4AF56]/30" placeholder="nama@email.com" /></label>
-      </div>
-      <button type="submit" disabled={!isComplete} className="mt-6 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-[#220306] px-5 py-3 text-base font-bold text-[#E8CF8A] transition-colors hover:bg-[#65131C] disabled:cursor-not-allowed disabled:opacity-45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF56]"><MessageCircle className="h-5 w-5" aria-hidden="true" />Hubungi Kami</button>
-      <p className="mt-3 text-center text-xs text-[#5c4848]">Data digunakan untuk konsultasi Royal Kinara dan pengukuran konversi iklan.</p>
-      {error ? <p role="alert" className="mt-3 text-center text-sm font-semibold text-[#8b1e2d]">{error}</p> : null}
-      {submitted ? <p className="mt-3 text-center text-sm font-semibold text-[#2e6b45]">WhatsApp dibuka di tab baru.</p> : null}
-    </form>
   );
 };
 
 const RoyalRukoContent = () => {
   const [activeGallery, setActiveGallery] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { href: whatsappHref } = getRoyalWhatsAppConfig();
   const audienceProfiles = [
     'Sudah memiliki penghasilan relatif stabil',
     'Berada di posisi supervisor, manager, senior manager, profesional, atau business leader',
@@ -231,7 +161,7 @@ const RoyalRukoContent = () => {
 
   return (
     <div className="royal-content min-h-screen overflow-x-hidden bg-[#F8F3EA] text-[#220306]" style={{ '--royal-maroon': MAROON }}>
-      <RoyalAnchorNavigation onMenuOpenChange={setMobileMenuOpen} />
+      <RoyalAnchorNavigation onMenuOpenChange={setMobileMenuOpen} whatsappHref={whatsappHref} />
       <main className="pt-16">
         <section id="hero" className="scroll-mt-20 bg-[#220306] text-[#F8F3EA]">
           <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
@@ -289,7 +219,7 @@ const RoyalRukoContent = () => {
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#E8CF8A]">Royal Kinara</p>
                     <p className="mt-2 inline-flex rounded-full border border-[#E8CF8A]/60 bg-[#220306]/75 px-3 py-1.5 text-sm font-bold text-[#E8CF8A]">Tersedia 5 unit</p>
                   </div>
-                  <CTA label="Royal Kinara - Section Karier Hubungi Kami">Hubungi Kami</CTA>
+                  <CTA href={whatsappHref} label="Royal Kinara - Section Karier Hubungi Kami">Hubungi Kami</CTA>
                 </div>
               </div>
             </div>
@@ -338,8 +268,10 @@ const RoyalRukoContent = () => {
 
         <section id="konsultasi" className="scroll-mt-20 bg-[#220306] py-14 text-[#F8F3EA] sm:py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <SectionHeading light title="Mau Lihat Lokasinya Sekarang atau Nanti Saja Ketika Harga Sudah Naik?" description="Isi form dan klik tombol hubungi kami untuk berdiskusi mengenai kebutuhan anda sekarang." />
-            <RoyalLeadForm />
+            <SectionHeading light title="Mau Lihat Lokasinya Sekarang atau Nanti Saja Ketika Harga Sudah Naik?" description="Klik tombol WhatsApp untuk berdiskusi langsung dengan tim Royal Kinara." />
+            <div className="text-center">
+              <CTA href={whatsappHref} label="Royal Kinara - Closing WhatsApp"><MessageCircle className="h-5 w-5" aria-hidden="true" />Hubungi via WhatsApp</CTA>
+            </div>
             <div className="mx-auto mt-16 max-w-5xl border-t border-[#D4AF56]/30 pt-12 text-center sm:mt-20 sm:pt-16">
               <p className="font-serif text-3xl font-semibold leading-tight text-[#F8F3EA] sm:text-4xl">Gaji Membayar Kehidupan Anda.</p>
               <p className="mt-4 font-serif text-3xl font-semibold leading-tight text-[#E8CF8A] sm:text-4xl">Aset Membangun Masa Depan Anda.</p>
@@ -350,7 +282,7 @@ const RoyalRukoContent = () => {
 
       <footer className="border-t border-[#D4AF56]/25 bg-[#220306] py-10 text-[#D8C7AA]"><div className="mx-auto flex max-w-7xl flex-col gap-5 px-4 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:px-8"><div><p className="font-serif text-2xl font-semibold text-[#F8F3EA]">Royal Kinara</p><p className="mt-2 max-w-2xl text-xs leading-5 text-[#D8C7AA]/75">Jl. Babengket No.6, Cihideung Udik, Kec. Ciampea, Kabupaten Bogor, Jawa Barat 16620</p><p className="mt-1 text-xs font-semibold text-[#E8CF8A]">PT KINARA LAND INDONESIA</p></div><div className="text-left text-xs lg:text-right"><p>Informasi harga, ketersediaan, dan manfaat layanan perlu dikonfirmasi kepada tim Royal Kinara.</p><p className="mt-2">© {new Date().getFullYear()} Royal Kinara. Semua hak dilindungi.</p></div></div></footer>
       {activeGallery ? <div className="fixed inset-0 z-[110] flex items-center justify-center bg-[#220306]/95 p-4" role="dialog" aria-modal="true" aria-label={activeGallery.alt} onClick={() => setActiveGallery(null)}><button type="button" onClick={() => setActiveGallery(null)} className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF56] text-[#E8CF8A]" aria-label="Tutup galeri"><span className="text-2xl">×</span></button><div className="max-h-[90vh] max-w-6xl" onClick={(event) => event.stopPropagation()}><RoyalImage fileName={activeGallery.fileName} assetPath={activeGallery.assetPath} alt={activeGallery.alt} className="max-h-[82vh] w-auto rounded-xl object-contain" loading="eager" /><p className="mt-3 text-center text-sm text-[#D8C7AA]">{activeGallery.alt}</p></div></div> : null}
-      {!mobileMenuOpen ? <a href="#konsultasi" onClick={(event) => { event.preventDefault(); scrollToLead(); }} className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-[70] hidden h-14 w-14 items-center justify-center rounded-full border border-[#D4AF56] bg-[#220306] text-[#E8CF8A] shadow-[0_18px_42px_rgba(34,3,6,0.35)] md:inline-flex md:right-6" aria-label="Buka form konsultasi Royal Kinara"><MessageCircle className="h-7 w-7" /></a> : null}
+      {!mobileMenuOpen ? <a href={whatsappHref} target="_blank" rel="noopener noreferrer" data-ctwa-label="Royal Kinara - Floating WhatsApp" className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-[70] hidden h-14 w-14 items-center justify-center rounded-full border border-[#D4AF56] bg-[#220306] text-[#E8CF8A] shadow-[0_18px_42px_rgba(34,3,6,0.35)] md:inline-flex md:right-6" aria-label="Hubungi Royal Kinara melalui WhatsApp"><MessageCircle className="h-7 w-7" /></a> : null}
     </div>
   );
 };

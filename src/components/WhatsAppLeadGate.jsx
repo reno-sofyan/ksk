@@ -44,33 +44,33 @@ function getWhatsAppPhone(url) {
   return (url.searchParams.get('phone') || '').replace(/\D/g, '');
 }
 
-function createReferenceCode(ctaLabel) {
-  const pageKey = typeof window === 'undefined'
-    ? 'rivere'
-    : window.location.pathname.split('/').filter(Boolean)[0] || 'home';
-  const ctaKey = String(ctaLabel || 'cta')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 28);
+function buildMessage(originalMessage, form, messageFormat) {
+  if (messageFormat === 'sales') {
+    return [
+      originalMessage,
+      '',
+      `Nama : ${form.name.trim()}`,
+      `Domisili : ${form.domicile.trim()}`,
+      `No WA : ${form.phone.trim()}.`,
+      '',
+      'Mohon dibantu informasi lebih lanjut mengenai harga, denah, ketersediaan unit, dan simulasi investasi Rivere.'
+    ].join('\n');
+  }
 
-  return `${LEAD_SOURCE_CODE}-${pageKey}-${ctaKey || 'cta'}`;
-}
-
-function buildWhatsAppUrl(originalHref, form, ctaLabel) {
-  const originalUrl = new URL(originalHref, window.location.origin);
-  const phoneNumber = getWhatsAppPhone(originalUrl);
-  const originalMessage = originalUrl.searchParams.get('text') || DEFAULT_MESSAGE;
-  const referenceCode = createReferenceCode(ctaLabel);
-  const message = [
+  return [
     originalMessage,
     '',
     `Perkenalkan, saya ${form.name.trim()} dari ${form.domicile.trim()}.`,
     `Nomor yang bisa dihubungi: ${form.phone.trim()}.`,
-    'Mohon dibantu informasi lebih lanjut mengenai harga, denah, ketersediaan unit, dan simulasi investasi Rivere.',
-    '',
-    `(Ref:${referenceCode})`
+    'Mohon dibantu informasi lebih lanjut mengenai harga, denah, ketersediaan unit, dan simulasi investasi Rivere.'
   ].join('\n');
+}
+
+function buildWhatsAppUrl(originalHref, form, ctaLabel, messageFormat) {
+  const originalUrl = new URL(originalHref, window.location.origin);
+  const phoneNumber = getWhatsAppPhone(originalUrl);
+  const originalMessage = originalUrl.searchParams.get('text') || DEFAULT_MESSAGE;
+  const message = buildMessage(originalMessage, form, messageFormat);
 
   if (phoneNumber) {
     return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
@@ -129,7 +129,8 @@ function trackLeadSubmit(ctaLabel, form) {
 
 export const WhatsAppConsultationForm = ({
   whatsappHref,
-  ctaLabel = 'Bottom Funnel - Simulasi Cicilan dan Promo'
+  ctaLabel = 'Bottom Funnel - Simulasi Cicilan dan Promo',
+  messageFormat
 }) => {
   const [targetHref, setTargetHref] = useState(whatsappHref);
   const [targetCtaLabel, setTargetCtaLabel] = useState(ctaLabel);
@@ -160,7 +161,7 @@ export const WhatsAppConsultationForm = ({
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    const whatsappUrl = buildWhatsAppUrl(targetHref, form, targetCtaLabel);
+    const whatsappUrl = buildWhatsAppUrl(targetHref, form, targetCtaLabel, messageFormat);
     trackLeadSubmit(targetCtaLabel, form);
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   };
