@@ -40,7 +40,7 @@ const SALES_PHONE_NUMBERS = {
 
 const SALES_GREETING_CODES = {
   ade: "AK5",
-  gelar: "B4",
+  gelar: "G",
   nur: "KC5",
   andika: "T",
   cahya: "T",
