@@ -93,12 +93,12 @@ const PORTFOLIO = [
 ];
 
 const GALLERY = [
-  ["rivere/Design 1/1.png", "Fasad utama Rivere Kostaycation IPB"],
-  ["rivere/Design 2/1.png", "Alternatif fasad Rivere Kostaycation IPB"],
-  ["rivere/Design 3/1.png", "Visual kawasan Rivere Kostaycation IPB"],
+  ["rivere/Design 1/1.png", "Fasad utama Rivere Kinara Kost Bogor"],
+  ["rivere/Design 2/1.png", "Alternatif fasad Rivere Kinara Kost Bogor"],
+  ["rivere/Design 3/1.png", "Visual kawasan Rivere Kinara Kost Bogor"],
   ["mezzanine.png", "Konsep smart spatial mezzanine Rivere"],
-  ["gym.png", "Visual fasilitas gym Rivere Kostaycation IPB"],
-  ["clubhouse.png", "Visual fasilitas clubhouse Rivere Kostaycation IPB"],
+  ["gym.png", "Visual fasilitas gym Rivere Kinara Kost Bogor"],
+  ["clubhouse.png", "Visual fasilitas clubhouse Rivere Kinara Kost Bogor"],
 ];
 
 const FAQ_ITEMS = [
@@ -186,7 +186,7 @@ const SalesLandingPage = () => {
   return (
     <div className="min-h-screen overflow-x-hidden bg-background pb-20 text-foreground md:pb-0">
       <Helmet>
-        <title>Rivere Kostaycation IPB | Aset Kost Premium Ring 1 IPB</title>
+        <title>Rivere Kinara Kost Bogor | Aset Kost Premium Ring 1 IPB</title>
         <meta
           name="description"
           content="Miliki aset kost premium di Ring 1 IPB dengan legalitas SHM dan pengelolaan profesional Kyra Stay."
@@ -200,7 +200,7 @@ const SalesLandingPage = () => {
           <a
             href="#hero"
             className="flex min-w-0 items-center gap-2.5"
-            aria-label="Rivere Kostaycation IPB"
+            aria-label="Rivere Kinara Kost Bogor"
           >
             <ResponsiveImage
               src={imageUrl("logo.png")}
@@ -211,7 +211,7 @@ const SalesLandingPage = () => {
               loading="eager"
             />
             <span className="truncate text-sm font-bold text-primary sm:text-base">
-              Rivere Kostaycation IPB
+              Rivere Kinara Kost Bogor
             </span>
           </a>
           <nav
@@ -336,7 +336,7 @@ const SalesLandingPage = () => {
             <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5">
               <ResponsiveImage
                 src={imageUrl("rivere/Design 1/1.png")}
-                alt="Fasad Rivere Kostaycation IPB"
+                alt="Fasad Rivere Kinara Kost Bogor"
                 className="aspect-[4/3] h-full w-full object-cover"
                 loading="eager"
                 decoding="async"
@@ -465,7 +465,7 @@ const SalesLandingPage = () => {
             <div className="overflow-hidden rounded-2xl bg-secondary">
               <ResponsiveImage
                 src={imageUrl("pintu-ipb.jpg")}
-                alt="Pintu utama IPB dekat Rivere Kostaycation"
+                alt="Pintu utama IPB dekat Rivere Kinara Kost Bogor"
                 className="aspect-[4/3] w-full object-cover"
                 sizes="(min-width: 1024px) 50vw, 100vw"
               />
@@ -524,7 +524,7 @@ const SalesLandingPage = () => {
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
                         <p className="text-xs font-bold uppercase text-accent">
-                          Rivere Kostaycation
+                          Rivere Kinara Kost Bogor
                         </p>
                         <h3 className="mt-1 text-2xl font-bold">
                           {plan.title}
@@ -589,7 +589,7 @@ const SalesLandingPage = () => {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <SectionHeading
               eyebrow="Galeri"
-              title="Visual Rivere Kostaycation IPB"
+              title="Visual Rivere Kinara Kost Bogor"
             />
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {GALLERY.map(([file, alt], index) => (
@@ -619,7 +619,7 @@ const SalesLandingPage = () => {
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <SectionHeading
               title="Kenali Rivere Lebih Dekat"
-              description="Lihat progress pembangunan Rivere Kostaycation IPB dalam video berikut."
+              description="Lihat progress pembangunan Rivere Kinara Kost Bogor dalam video berikut."
             />
             <div className="overflow-hidden rounded-2xl border border-primary/15 bg-primary shadow-[0_20px_55px_rgba(7,39,29,0.16)] sm:rounded-3xl">
               <ViewportVideo
@@ -783,7 +783,7 @@ const SalesLandingPage = () => {
       <footer className="bg-primary py-10 text-white">
         <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 md:grid-cols-3 md:items-center lg:px-8">
           <div>
-            <p className="font-bold">Rivere Kostaycation IPB</p>
+            <p className="font-bold">Rivere Kinara Kost Bogor</p>
             <p className="mt-1 text-xs text-white/60">
               PT Kinara Land Indonesia
             </p>
